@@ -1,0 +1,61 @@
+FUENTES Y LICENCIAS DEL TALLER
+Introducción al análisis de imágenes médicas con Python
+Consulta: 6 de noviembre de 2026
+
+PLANTILLA
+Archivo: datos/mni152_2mm.nii.gz
+Generado con nilearn.datasets.load_mni152_template(resolution=2), Nilearn 0.12.1.
+La documentación describe una plantilla T1 MNI152 sin cráneo, de intensidad reescalada,
+derivada de ICBM152 2009 asimétrica versión a. Se conserva la affine al guardar NIfTI.
+La copia de 2 mm es un remuestreo educativo; no es un estudio individual, ni una cohorte.
+La cabecera suministrada por Nilearn declara unidad desconocida; esta copia derivada
+declara mm porque la documentación del proveedor especifica la resolución en mm.
+No se cambian valores ni affine al completar ese campo de la cabecera.
+Documentación:
+https://nilearn.github.io/0.12.1/modules/generated/nilearn.datasets.load_mni152_template.html
+Fuente y permiso del atlas:
+https://www.bic.mni.mcgill.ca/ServicesAtlases/ICBM152NLin2009
+
+AVISO ÍNTEGRO DE LICENCIA DE MCGILL
+Copyright (C) 1993–2004 Louis Collins, McConnell Brain Imaging Centre, Montreal Neurological Institute, McGill University. Permission to use, copy, modify, and distribute this software and its documentation for any purpose and without fee is hereby granted, provided that the above copyright notice appear in all copies. The authors and McGill University make no representations about the suitability of this software for any purpose. It is provided “as is” without express or implied warranty.
+The authors are not responsible for any data loss, equipment damage, property loss, or injury to subjects or patients resulting from the use or misuse of this software package.
+
+REFERENCIAS DEL ATLAS SOLICITADAS POR EL PROVEEDOR
+VS Fonov, AC Evans, K Botteron, CR Almli, RC McKinstry, DL Collins and BDCG.
+Unbiased average age-appropriate atlases for pediatric studies. NeuroImage 54(1), 2011.
+https://doi.org/10.1016/j.neuroimage.2010.07.033
+VS Fonov, AC Evans, RC McKinstry, CR Almli and DL Collins.
+Unbiased nonlinear average age-appropriate brain templates from birth to adulthood.
+NeuroImage 47, Supplement 1, 2009, S102.
+https://doi.org/10.1016/S1053-8119(09)70884-5
+
+OTROS MATERIALES
+Las figuras de resonancia derivan de la plantilla indicada arriba.
+La matriz pequeña, la colina matemática, el perfil y el ruido se generan con código
+y no proceden de pacientes. El anexo de privacidad es conceptual y no implementa
+un proceso de anonimización apto para datos reales.
+No se incluyen archivos de pacientes del disco o Google Drive del facilitador.
+
+DOCUMENTACIÓN OFICIAL CONSULTADA
+https://nipy.org/nibabel/coordinate_systems.html
+https://dicom.nema.org/medical/dicom/current/output/chtml/part15/chapter_E.html
+https://pydicom.github.io/pydicom/stable/auto_examples/metadata_processing/plot_anonymize.html
+https://scikit-learn.org/stable/modules/cross_validation.html#cross-validation-iterators-for-grouped-data
+https://numpy.org/doc/stable/reference/routines.fft.html
+https://machine-learning-honduras.org/
+https://machine-learning-honduras.org/inscripcion/
+https://machine-learning-honduras.org/programa/
+https://indico.ictp.it/event/11536/
+
+BIBLIOTECAS
+Nilearn, NumPy, Matplotlib, NiBabel y SciPy se instalan desde sus distribuidores;
+no se incluyen copias de sus paquetes en esta entrega. Cada biblioteca mantiene
+su propia licencia. La licencia del software no sustituye la licencia del atlas.
+
+AMPLIACIÓN VISUAL REVISADA EL 16 DE NOVIEMBRE DE 2026
+https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.hist.html
+https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.contour.html
+https://docs.scipy.org/doc/scipy/reference/generated/scipy.ndimage.gaussian_filter.html
+https://docs.scipy.org/doc/scipy/reference/generated/scipy.ndimage.uniform_filter.html
+https://docs.scipy.org/doc/scipy/reference/generated/scipy.ndimage.median_filter.html
+https://docs.scipy.org/doc/scipy/reference/generated/scipy.ndimage.sobel.html
