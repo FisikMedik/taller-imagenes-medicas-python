@@ -84,7 +84,7 @@ En JupyterLab, abre `Taller_imagenes_medicas.ipynb` y ejecuta las celdas en orde
 
 ### Comprobación de esta edición
 
-Las 24 celdas se ejecutaron localmente utilizando la plantilla incluida. El entorno de comprobación utilizó Python 3.12.14, Nilearn 0.12.1, NumPy 2.5.4, Matplotlib 3.11.2, NiBabel 5.4.2 y SciPy 1.18.1. El cuaderno conserva las salidas de esa ejecución. La ejecución completa en Google Colab y la carga alternativa de la plantilla mediante Nilearn no se probaron en esta revisión.
+Las 24 celdas se ejecutaron localmente utilizando la plantilla incluida. El entorno de comprobación utilizó Python 3.12.14, Nilearn 0.12.1, NumPy 2.5.4, Matplotlib 3.11.2, NiBabel 5.4.2 y SciPy 1.18.1. El cuaderno conserva las salidas de esa ejecución. También se ejecutaron las 24 celdas desde el enlace público en Google Colab el 16 de noviembre de 2026, con un entorno de CPU y la carga alternativa de la plantilla mediante Nilearn. Se comprobó que la última celda terminó y mostró 232 posiciones sustituidas de un corte de 11 583 píxeles.
 
 `requirements.txt` mantiene intervalos de versiones compatibles; no es una copia congelada de todas las dependencias del entorno de comprobación.
 
