@@ -1,18 +1,33 @@
 FUENTES Y LICENCIAS DEL TALLER
 Introducción al análisis de imágenes médicas con Python
-Consulta: 6 de noviembre de 2026
+Consulta inicial: 6 de noviembre de 2026
+Revisión editorial y de procedencia: 16 de noviembre de 2026
 
 PLANTILLA
 Archivo: datos/mni152_2mm.nii.gz
 Generado con nilearn.datasets.load_mni152_template(resolution=2), Nilearn 0.12.1.
-La documentación describe una plantilla T1 MNI152 sin cráneo, de intensidad reescalada,
-derivada de ICBM152 2009 asimétrica versión a. Se conserva la affine al guardar NIfTI.
+Denominación utilizada: plantilla T1 MNI152 distribuida con Nilearn 0.12.1.
+Es una referencia sin cráneo (skullstripped), de intensidad reescalada.
+Se conserva la affine al guardar NIfTI.
 La copia de 2 mm es un remuestreo educativo; no es un estudio individual, ni una cohorte.
 La cabecera suministrada por Nilearn declara unidad desconocida; esta copia derivada
 declara mm porque la documentación del proveedor especifica la resolución en mm.
 No se cambian valores ni affine al completar ese campo de la cabecera.
+SHA-256 de la copia de 2 mm incluida:
+a5f0ddb2d173ffb7b34a511fa6bcfe71e27218a54125092917a6d9630bc4513a
+
+NOTA SOBRE LA IDENTIFICACIÓN DE LA VARIANTE
+La documentación de load_mni152_template en Nilearn 0.12.1 describe la plantilla
+como ICBM152 2009a asimétrica. Sin embargo, el código de esa misma versión carga
+el archivo interno mni_icbm152_t1_tal_nlin_sym_09a_converted.nii.gz.
+Se conserva esta discrepancia entre descripción y nombre interno sin resolverla
+por inferencia ni afirmar categóricamente una variante simétrica o asimétrica.
+Registrar la versión, el procedimiento y la huella identifica la copia utilizada;
+la huella no certifica por sí sola su interpretación científica.
 Documentación:
 https://nilearn.github.io/0.12.1/modules/generated/nilearn.datasets.load_mni152_template.html
+Código fuente de la versión utilizada:
+https://github.com/nilearn/nilearn/blob/0.12.1/nilearn/datasets/struct.py
 Fuente y permiso del atlas:
 https://www.bic.mni.mcgill.ca/ServicesAtlases/ICBM152NLin2009
 
@@ -34,6 +49,10 @@ Las figuras de resonancia derivan de la plantilla indicada arriba.
 La matriz pequeña, la colina matemática, el perfil y el ruido se generan con código
 y no proceden de pacientes. El anexo de privacidad es conceptual y no implementa
 un proceso de anonimización apto para datos reales.
+Los esquemas de registro, las siluetas y los mapas de etiquetas geométricas son
+ilustraciones conceptuales ficticias: no reconstruyen el método completo de
+ICBM152 ni representan un atlas anatómico validado. Las curvas de nivel sobre
+la plantilla muestran igualdad de intensidad, no límites anatómicos validados.
 No se incluyen archivos de pacientes del disco o Google Drive del facilitador.
 
 DOCUMENTACIÓN OFICIAL CONSULTADA
@@ -59,3 +78,49 @@ https://docs.scipy.org/doc/scipy/reference/generated/scipy.ndimage.gaussian_filt
 https://docs.scipy.org/doc/scipy/reference/generated/scipy.ndimage.uniform_filter.html
 https://docs.scipy.org/doc/scipy/reference/generated/scipy.ndimage.median_filter.html
 https://docs.scipy.org/doc/scipy/reference/generated/scipy.ndimage.sobel.html
+
+REFERENCIAS PRIMARIAS Y OFICIALES DE LA INTRODUCCIÓN DEL MANUAL
+MNI152 lineal: historia y construcción de la referencia.
+https://www.bic.mni.mcgill.ca/ServicesAtlases/ICBM152Lin
+ICBM152 no lineal de 2009: versiones, muestreo y construcción iterativa.
+https://www.bic.mni.mcgill.ca/ServicesAtlases/ICBM152NLin2009
+Fonov y colaboradores (2011): artículo primario de métodos y datos; documenta
+también la cohorte ICBM de 152 adultos jóvenes de 18 a 43,5 años.
+https://pmc.ncbi.nlm.nih.gov/articles/PMC2962759/
+Nilearn 0.12.1: naturaleza de la biblioteca y ejemplos de uso.
+https://nilearn.github.io/0.12.1/introduction.html
+NiBabel: arreglo, cabecera y transformación affine de una imagen.
+https://nipy.org/nibabel/nibabel_images.html
+NiBabel: campos de NIfTI, unidades y transformaciones espaciales.
+https://nipy.org/nibabel/nifti_images.html
+NiBabel: orientación de los ejes y as_closest_canonical.
+https://nipy.org/nibabel/image_orientation.html
+NIfTI Data Format Working Group: preguntas frecuentes del formato NIfTI-1.
+https://nifti.nimh.nih.gov/nifti-1/documentation/faq/
+Python: lenguaje, variables, funciones y módulos.
+https://docs.python.org/3/tutorial/
+NumPy: introducción a los arreglos multidimensionales.
+https://numpy.org/doc/stable/user/absolute_beginners.html
+Matplotlib: figuras, ejes y uso inicial.
+https://matplotlib.org/stable/users/explain/quick_start.html
+Matplotlib: representación de matrices mediante imshow.
+https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.imshow.html
+SciPy: procesamiento multidimensional de imágenes.
+https://docs.scipy.org/doc/scipy/reference/ndimage.html
+Nilearn: ejemplo de atlas probabilístico y de etiquetas, Harvard-Oxford.
+https://nilearn.github.io/stable/modules/generated/nilearn.datasets.fetch_atlas_harvard_oxford.html
+TemplateFlow: identificación de plantillas y consulta de metadatos.
+https://www.templateflow.org/python-client/master/notebooks/01_quickstart.html
+Scikit-learn: prevención de fuga de información.
+https://scikit-learn.org/stable/common_pitfalls.html#data-leakage
+
+FUENTE EDITABLE DEL MANUAL
+Guia_visual_imagenes_medicas.tex contiene la fuente principal en LaTeX.
+Fuente_LaTeX_manual.zip reúne la fuente y sus recursos; el README incluido
+explica cómo compilar el proyecto con XeLaTeX localmente o en Overleaf.
+Las referencias científicas y los avisos de licencia se conservan en la edición
+del manual y deben mantenerse al redistribuir los datos derivados.
+Instrucciones oficiales para subir un proyecto LaTeX completo:
+https://www.overleaf.com/learn/Uploading_a_project
+Selección del compilador en Overleaf:
+https://docs.overleaf.com/getting-started/recompiling-your-project/selecting-a-tex-live-version-and-latex-compiler

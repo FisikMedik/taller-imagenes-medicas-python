@@ -1,0 +1,2861 @@
+\input{estilo.tex}
+
+\begin{document}
+
+\LibroCover
+
+\frontmatter
+
+\chapter*{Aprender a mirar,\\antes de transformar}
+
+Este manual acompaña el taller introductorio de imágenes médicas con Python de Juan Calderón, en la escuela de Machine Learning y Data Science en Honduras. Está escrito para estudiantes y para quien facilita la sesión: no presupone conocimientos de programación, procesamiento de imágenes ni neuroimagen.
+
+
+Primero observamos; después preguntamos qué números producen esa imagen. Cada tutorial enlaza una idea, instrucciones de Python, resultados e interpretación. Encontrarás preguntas resueltas, cambios pequeños que puedes probar y explicaciones de los errores habituales. Las fórmulas se traducen a ejemplos numéricos antes de usarse.
+
+
+\needspace{6\baselineskip}
+
+\begin{Idea}{Dos recursos que se complementan}
+
+El PDF permite estudiar con calma. El cuaderno Taller\_imagenes\_medicas.ipynb permite ejecutar, modificar y comparar. Sus 24 lecciones conservan explicaciones de cada línea y salidas ya calculadas. Los tutoriales de este libro indican las lecciones correspondientes; algunos fragmentos necesitan las variables creadas antes en el cuaderno.
+
+
+\end{Idea}
+
+Una sesión de una hora utiliza una selección de demostraciones y variaciones. No pretende agotar el libro. Para el estudio autónomo, avanza por capítulos, vuelve a ejecutar los ejemplos y registra tus predicciones. La duración dependerá de las repeticiones y de tu experiencia; puedes distribuir el recorrido en varias sesiones.
+
+
+\needspace{6\baselineskip}
+
+\begin{Practica}{Tu primera ejecución, paso a paso}
+
+Abre el repositorio enlazado al final de esta introducción y pulsa Abrir en Google Colab. Inicia sesión en Google si se solicita. Pulsa el triángulo de la primera celda o Mayús + Enter y espera a que aparezcan las imágenes. La primera celda prepara las bibliotecas y carga la plantilla; no necesita GPU ni montar Drive. Continúa de arriba abajo. Para conservar cambios, usa Archivo $\rightarrow$ Guardar una copia en Drive. La guía separada de GitHub y Colab explica esos pasos con más detalle.
+
+
+\end{Practica}
+
+\begin{itemize}
+
+\item Antes del taller: observa el capítulo 1 y lee las bases del capítulo 2. Abre el cuaderno y ejecuta su primera celda para preparar el entorno.
+
+\item Durante el taller: sigue las imágenes y cambia un parámetro por vez. Ejecuta las celdas en orden: una variable creada antes puede ser necesaria después.
+
+\item Después: completa las preguntas resueltas y repite los filtros con otra intensidad de ruido. Explica cada resultado con tus propias palabras.
+
+\end{itemize}
+
+La referencia utilizada es una plantilla cerebral pública. Los dibujos didácticos, regiones ficticias, matrices pequeñas y ruido simulado están identificados como tales. La portada es una ilustración conceptual generada con IA; las figuras científicas del interior se calculan a partir de datos o modelos matemáticos documentados.
+
+
+El libro reproduce las celdas completas de cálculo y dibujo seleccionadas, con sus salidas textuales. Las ilustraciones se han maquetado para la lectura impresa: algunas amplían el ejemplo mediante diagramas, otros cortes o comparaciones adicionales. El pie identifica qué se está representando; la presentación puede diferir de la salida gráfica del cuaderno.
+
+
+\Fuente{Edición revisada: 16 de noviembre de 2026. Material de iniciación; las operaciones mostradas no constituyen una evaluación diagnóstica. Fuentes, licencias y procedencia al final del manual y en el repositorio.}
+
+\href{https://github.com/FisikMedik/taller-imagenes-medicas-python}{Repositorio y materiales actualizados · FisikMedik en GitHub}
+
+\tableofcontents
+
+\mainmatter
+
+\chapter[La referencia cerebral]{Una imagen, muchas preguntas}
+
+\needspace{6\baselineskip}
+
+\begin{Idea}{Al terminar este capítulo}
+
+Distinguirás una imagen individual, una plantilla, un atlas y un sistema de coordenadas. Sabrás qué representa MNI152 y por qué se utiliza en este taller.
+
+
+\end{Idea}
+
+Mira primero esta galería. Cada panel es un plano horizontal diferente del mismo volumen. La anatomía visible cambia al subir o bajar por él. Los números z expresan la posición de esos planos en milímetros dentro de la referencia, no el número de una persona.
+
+
+\Figura{19_mosaico_cortes.png}{Cambiar la posición del corte revela regiones distintas de un único volumen. Las nueve vistas mantienen la misma ventana 0–1. En axial y coronal, izquierda y derecha de la imagen corresponden a L y R; en sagital, la horizontal avanza de posterior a anterior. Las coordenadas de los títulos son milímetros del espacio de la plantilla.}{.57}
+
+\section{La imagen con la que vamos a aprender}
+
+El primer resultado del taller es una imagen cerebral en escala de grises. Parece una fotografía, pero su organización es distinta: contiene números distribuidos en una rejilla tridimensional. El programa selecciona un plano de esa rejilla y asigna un tono a cada número. Por eso conviene hacer tres preguntas antes de experimentar: ¿de dónde procede el archivo?, ¿qué representa cada valor? y ¿cómo se relaciona su posición con el espacio?
+
+
+Trabajaremos con una plantilla T1 MNI152 distribuida por Nilearn 0.12.1 y preparada para este material con un espaciado de 2 mm. T1 indica el tipo de contraste de resonancia magnética de la referencia. La plantilla reúne información anatómica de un conjunto de participantes; no es el examen clínico de una persona concreta. La función utilizada devuelve una versión a la que ya se han retirado las estructuras externas al cerebro mediante procesamiento previo. En inglés se describe como skullstripped. \hyperlink{refR4}{[4]}
+
+
+Esta elección permite concentrarnos en leer archivos, explorar cortes, dibujar histogramas y observar qué hacen los filtros. No necesitamos recopilar estudios clínicos para entender esas operaciones. Tampoco obtendremos, a partir de esta única referencia, un conjunto de pacientes con el que demostrar que un clasificador aprende a diagnosticar. Una imagen de práctica y una cohorte de investigación cumplen funciones diferentes.
+
+
+La escala de grises es una traducción visual. El negro no significa siempre ausencia de tejido, y el blanco no es una etiqueta de enfermedad. En este archivo los valores están reescalados; un valor de 0,8 no equivale a un 80 \% de probabilidad de pertenecer a un tejido. Mantendremos separadas tres cosas: el número almacenado, el tono que elegimos para mostrarlo y la interpretación que podríamos intentar justificar con información adicional. \hyperlink{refR5}{[5]}
+
+
+\needspace{6\baselineskip}
+
+\begin{Idea}{Ejemplo ficticio}
+
+Dos casillas contienen 0,3 y 0,8. Si ambas se muestran con una escala de 0 a 1, la segunda será más clara. Si estrechamos la ventana de visualización, puede verse blanca por saturación aunque su número siga siendo 0,8. Cambió la presentación, no la medición almacenada.
+
+
+\end{Idea}
+
+\needspace{6\baselineskip}
+
+\begin{Practica}{Comprueba y razona}
+
+Si se muestran 95 cortes de esta plantilla, ¿tenemos 95 participantes?
+
+
+Respuesta. No. Son 95 posiciones de una misma rejilla tridimensional en ese eje. El número de planos de un archivo no es el número de personas que originaron una plantilla ni el tamaño de una cohorte para aprendizaje automático.
+
+
+\end{Practica}
+
+\section{De muchas imágenes a una referencia común}
+
+MNI corresponde al Montreal Neurological Institute e ICBM al International Consortium for Brain Mapping. El número 152 se relaciona con la cohorte de referencia de 152 adultos jóvenes del proyecto ICBM. Fonov y colaboradores describen participantes de 18 a 43,5 años en esa base. El nombre conserva la procedencia colectiva; no indica que cada archivo descargado contenga 152 volúmenes separados ni que represente por igual todas las edades y poblaciones. \hyperlink{refR3}{[3]}
+
+
+Combinar imágenes requiere acordar qué posiciones se van a comparar. Imaginemos dos dibujos del mismo objeto, uno desplazado respecto del otro. Si promediamos sus casillas sin alinearlos, aparecerá una forma doble o borrosa. El registro de imágenes estima una transformación que busca hacer corresponder sus estructuras. En una explicación elemental podemos pensar en desplazar, girar o cambiar la escala; un registro no lineal permite además ajustes locales de forma. Esta analogía no sustituye la evaluación de un registro real.
+
+
+La referencia MNI152 lineal y la familia ICBM152 no lineal de 2009 tienen una historia relacionada, pero no son el mismo archivo. La primera se construyó registrando linealmente los estudios de la cohorte a una referencia previa. La documentación de McGill explica que las versiones de 2009 se obtuvieron mediante iteraciones: se ajustaban las imágenes individuales a una referencia y se construía una nueva referencia para la siguiente ronda. También hubo correcciones de intensidad y otros pasos de preparación. \hyperlink{refR1}{[1]} \hyperlink{refR2}{[2]}
+
+
+Por tanto, promedio describe un resultado colectivo, pero no resume todo el procedimiento. La colocación de las estructuras, la interpolación y la forma de actualizar la referencia influyen en el resultado. El taller utiliza el producto distribuido; no reconstruye la plantilla original. Esta distinción evita confundir una operación sencilla de NumPy, como calcular una media, con una metodología de investigación que incluye decisiones geométricas, controles y múltiples etapas.
+
+
+\Figura{01_registro_promedio.png}{Tres siluetas ficticias se trasladan a un centro común antes de promediarlas. El color final resume su coincidencia. Es una ilustración del principio de registro, no una reproducción del algoritmo usado para construir MNI152.}{.42}
+
+\needspace{6\baselineskip}
+
+\begin{Idea}{Experimento conceptual ficticio}
+
+Dibuja un círculo en dos cuadrículas y desplaza uno tres casillas. Calcula primero el promedio sin moverlo y luego después de alinear los centros. Compara la anchura de los bordes. El experimento explica la necesidad de correspondencia espacial, no demuestra que los cerebros sean círculos ni reproduce ICBM152.
+
+
+\end{Idea}
+
+\needspace{6\baselineskip}
+
+\begin{Practica}{Comprueba y razona}
+
+¿Un promedio de participantes llamados sanos define cómo debe ser cualquier cerebro sano?
+
+
+Respuesta. No. Resume una muestra y un procedimiento. Una referencia útil para coordinar análisis no convierte toda diferencia individual en enfermedad ni garantiza que la misma plantilla sea adecuada para cualquier población o pregunta.
+
+
+\end{Practica}
+
+\section{Imagen individual, plantilla, atlas y espacio}
+
+Una imagen individual procede del estudio de una persona, con una adquisición y un procesamiento determinados. Describe ese estudio, no una población completa. Una plantilla es una imagen de referencia que se utiliza, por ejemplo, como destino de alineación o como fondo para mostrar resultados. Puede elaborarse a partir de muchas personas, como ocurre con la familia que utilizamos, pero la palabra plantilla describe su función y no obliga a que siempre sea un promedio poblacional.
+
+
+Para esta introducción, llamaremos atlas a un recurso que añade una organización interpretativa: regiones identificadas, nombres, etiquetas o mapas probabilísticos. En la literatura, atlas y plantilla también se usan con cierto solapamiento; hay que revisar qué contiene cada recurso. En un atlas de etiquetas, el número 4 puede significar la región cuyo nombre aparece junto al código 4 en una tabla. En una imagen de intensidad, un 4 representa un valor de imagen. Los atlas probabilísticos pueden almacenar varios mapas, cuyo significado depende de su construcción; no son automáticamente probabilidades de enfermedad. \hyperlink{refR13}{[13]}
+
+
+Un espacio de referencia es el sistema con el que expresamos posiciones. Decir espacio MNI sitúa las coordenadas con relación a una referencia cerebral, pero todavía conviene precisar qué plantilla y versión se usaron. RAS+ describe la dirección positiva de tres ejes: derecha, anterior y superior. Es una convención de coordenadas, no el nombre de una plantilla. Dos imágenes pueden usar RAS+ y seguir sin estar alineadas anatómicamente. \hyperlink{refR8}{[8]}
+
+
+Esta separación resuelve una confusión frecuente: tener dos archivos de igual tamaño no demuestra que sus casillas correspondan a los mismos lugares. Una imagen puede tener distinta orientación, origen o referencia. Antes de superponer un atlas y una imagen hay que comprobar su correspondencia espacial; no basta con que ambos se llamen MNI o terminen en .nii.gz. En el taller evitaremos asignar nombres anatómicos a una máscara creada únicamente por comparación de intensidades.
+
+
+\Figura{02_plantilla_etiquetas.png}{Una plantilla anatómica ofrece intensidades; un mapa de etiquetas asigna categorías a regiones. A la izquierda se muestra la plantilla pública. A la derecha, las regiones A, B y C son dibujos geométricos ficticios, no un atlas anatómico real ni una segmentación del cerebro mostrado.}{.42}
+
+\needspace{6\baselineskip}
+
+\begin{Idea}{Analogía ficticia de un plano urbano}
+
+Una fotografía de una calle se parece, por su papel, a una observación individual. Un plano de referencia ayuda a situarse. Sus distritos coloreados y su leyenda se parecen a un atlas. Las coordenadas de la cuadrícula permiten describir posiciones. La analogía organiza funciones; no afirma que una plantilla cerebral sea una fotografía promediada de una ciudad.
+
+
+\end{Idea}
+
+\needspace{6\baselineskip}
+
+\begin{Practica}{Comprueba y razona}
+
+Una máscara señala todas las casillas mayores que 0,75. ¿Es ya un atlas?
+
+
+Respuesta. No. Es el resultado de una regla numérica. Para considerarla una delimitación anatómica harían falta una definición, evidencia y validación adecuadas; el umbral por sí solo no aporta esas condiciones.
+
+
+\end{Practica}
+
+\section{Por qué necesitamos el apellido de la plantilla}
+
+Decir que se utilizó MNI152 es un comienzo, pero puede resultar insuficiente para reproducir un análisis. McGill publica varias referencias de la familia ICBM152 de 2009: versiones a, b y c, con variantes simétricas y asimétricas y diferencias de muestreo o procesamiento. Las versiones a y c se distribuyen con rejillas de 1 mm y la b con 0,5 mm. Estos números describen rejillas de referencia; no convierten un estudio individual en una adquisición de esa resolución. \hyperlink{refR2}{[2]}
+
+
+Una versión simétrica y otra asimétrica no son nombres intercambiables. Tampoco lo son 2009a y 2009c. Herramientas como TemplateFlow distinguen las referencias mediante identificadores explícitos y proporcionan metadatos de procedencia. Para comenzar no hace falta memorizar todas las variantes: sí conviene aprender a guardar el nombre preciso, la fuente, la versión del programa y las transformaciones aplicadas. \hyperlink{refR14}{[14]}
+
+
+En este material usaremos la denominación prudente «plantilla T1 MNI152 distribuida por Nilearn 0.12.1». Hay una discrepancia documental que merece conservarse: la página de esa función describe una ICBM152 2009a asimétrica, mientras que el código de esa versión carga un archivo cuyo nombre incluye sym\_09a. No resolvemos esa diferencia interpretando solamente el nombre. Registramos ambas evidencias y el archivo concreto utilizado, sin afirmar una variante de simetría que no hemos podido confirmar de manera independiente. \hyperlink{refR4}{[4]} \hyperlink{refR5}{[5]}
+
+
+El archivo del taller fue preparado en una rejilla de 2 mm. Su ficha debe incluir esa derivación y la huella SHA-256 del archivo entregado. Una huella es un identificador calculado a partir de los bytes: sirve para comprobar que dos copias son idénticas. No demuestra que un dato sea científicamente correcto, pero permite investigar si dos resultados distintos usaron realmente el mismo archivo.
+
+
+\needspace{6\baselineskip}
+
+\begin{Idea}{Ejemplo ficticio de reproducibilidad}
+
+Ana escribe «usé MNI152» y obtiene una matriz de cierto tamaño. Bruno utiliza otra variante y observa dimensiones diferentes. Antes de buscar un error matemático, comparan fuente, versión, espaciado y huella. La diferencia puede estar en la entrada, aunque ambos programas funcionen correctamente.
+
+
+\end{Idea}
+
+\needspace{6\baselineskip}
+
+\begin{Practica}{Comprueba y razona}
+
+¿Cambiar el nombre de un archivo a MNI152 lo coloca en espacio MNI?
+
+
+Respuesta. No. El nombre no realiza un registro ni modifica la geometría. La procedencia, los metadatos y las operaciones efectuadas deben justificar cómo se relaciona la imagen con la referencia.
+
+
+\end{Practica}
+
+\chapter[Herramientas y archivos]{Herramientas, archivos y primeras instrucciones}
+
+\needspace{6\baselineskip}
+
+\begin{Idea}{Al terminar este capítulo}
+
+Reconocerás el papel de cada biblioteca, leerás un archivo NIfTI y relacionarás su matriz con su geometría. Podrás seguir el código sin memorizarlo.
+
+
+\end{Idea}
+
+\section{Qué aporta Nilearn y qué hace la función de carga}
+
+Nilearn es una biblioteca de Python para trabajar con neuroimágenes, incluyendo visualización, preparación de datos y análisis estadístico o aprendizaje automático. Una biblioteca reúne herramientas reutilizables; no es por sí misma un conjunto de pacientes ni un modelo ya entrenado para cualquier problema. Algunas funciones permiten obtener datos de ejemplo o referencias, y otras realizan operaciones sobre imágenes. Saber cuál se está llamando ayuda a interpretar el resultado. \hyperlink{refR6}{[6]}
+
+
+La instrucción load\_mni152\_template(resolution=2) pide la referencia incorporada al paquete en una rejilla con espaciado de 2 mm. En la versión 0.12.1, la función lee el archivo incluido, convierte sus intensidades a números de tipo float32, las divide por el máximo y remuestrea si se solicitó un espaciado diferente de 1 mm. Devuelve un objeto de imagen NIfTI. No registra nuevas personas, no reconstruye el promedio de los 152 participantes y no vuelve a ejecutar una extracción cerebral sobre datos clínicos. \hyperlink{refR5}{[5]}
+
+
+Remuestrear significa representar una imagen sobre otra rejilla. Si una nueva posición no coincide con una muestra original, se estima su valor mediante interpolación. Pedir una rejilla más fina genera más posiciones, pero no recupera información que la adquisición original nunca midió. Pedir 2 mm facilita aquí el manejo de un volumen pequeño; es una decisión didáctica documentada, no una receta universal de procesamiento.
+
+
+La división por el máximo ocurre antes del remuestreo. Por eso no exigimos que la imagen resultante tenga exactamente un máximo igual a 1: en la copia de este taller se observa aproximadamente 0,988235. Esta cifra describe el archivo comprobado. No es una constante de todas las resonancias ni una puntuación clínica. Para trabajar sin depender de una descarga durante la sesión, el cuaderno busca primero la copia incluida en la carpeta datos y utiliza Nilearn como alternativa si esa copia falta.
+
+
+\needspace{6\baselineskip}
+
+\begin{Idea}{Analogía ficticia de una cuadrícula}
+
+Tenemos un dibujo sobre papel cuadriculado y queremos describirlo con casillas de otro tamaño. Debemos decidir cómo estimar los nuevos valores. Que el papel tenga más casillas no significa que hayamos observado nuevos detalles del objeto original.
+
+
+\end{Idea}
+
+\needspace{6\baselineskip}
+
+\begin{Practica}{Comprueba y razona}
+
+¿Cargar la plantilla con Nilearn demuestra que hemos utilizado aprendizaje automático?
+
+
+Respuesta. No. Hemos llamado una función para obtener una imagen de referencia. El nombre de la biblioteca no cambia la naturaleza de la operación; entrenamiento, validación y predicción requieren un diseño adicional.
+
+
+\end{Practica}
+
+\section{Un equipo de herramientas con responsabilidades distintas}
+
+Python es el lenguaje con el que expresamos las instrucciones. Una variable, como datos, es un nombre al que asociamos un valor u objeto para utilizarlo después. Una función recibe argumentos y realiza una tarea. La instrucción import permite acceder a una biblioteca instalada; no descarga automáticamente cualquier paquete que falte. Estos conceptos bastan para empezar a seguir las celdas sin aprender todo el lenguaje de una vez. \hyperlink{refR12}{[12]}
+
+
+NiBabel abre el archivo neuroimagen y conserva la relación entre los datos, la cabecera y su geometría. NumPy permite trabajar con la matriz de números: consultar sus dimensiones, seleccionar un corte, calcular percentiles o comparar valores con un umbral. En import numpy as np, np es solamente un nombre abreviado que elegimos para escribir las llamadas de forma más cómoda. La abreviatura no cambia los datos. \hyperlink{refR7}{[7]} \hyperlink{refR9}{[9]}
+
+
+SciPy aporta procedimientos científicos. En este taller usaremos su módulo ndimage para filtros y derivadas de imágenes. Matplotlib transforma los resultados en figuras con paneles, ejes, títulos y barras de color. Nilearn proporciona la referencia cuando hace falta y dispone de otras herramientas de neuroimagen que quedan fuera de esta introducción. Cada biblioteca tiene más funciones que las que aprenderemos aquí; asignarles un papel principal es una ayuda didáctica, no una frontera absoluta. \hyperlink{refR6}{[6]} \hyperlink{refR10}{[10]} \hyperlink{refR11}{[11]}
+
+
+El cuaderno organiza texto, código y resultados. Una celda de código ejecuta instrucciones; una celda de texto explica qué buscamos y cómo interpretar lo obtenido. Los resultados guardados permiten leer el material antes de ejecutarlo. Para reproducirlo, conviene empezar desde el principio: una celda posterior puede utilizar variables creadas en otra anterior. Si el programa indica que datos no está definido, primero revisa si ejecutaste la celda que lo crea.
+
+
+\Figura{04_bibliotecas.png}{En esta práctica, NiBabel abre el NIfTI, NumPy representa sus números, SciPy calcula transformaciones y Matplotlib las dibuja. Las flechas muestran un recorrido de trabajo; no implican que toda tarea deba utilizar las cuatro bibliotecas.}{.42}
+
+\needspace{6\baselineskip}
+
+\begin{Idea}{Recorrido del archivo a una figura}
+
+NiBabel abre la imagen; NumPy selecciona una lámina; SciPy crea una versión suavizada; Matplotlib muestra ambas con la misma escala. Esa cadena deja claro dónde se modifica un arreglo y dónde solo se decide cómo dibujarlo. Ningún paso necesita atribuir al programa una interpretación anatómica automática.
+
+
+\end{Idea}
+
+\needspace{6\baselineskip}
+
+\begin{Practica}{Comprueba y razona}
+
+Si el gráfico cambia después de ajustar vmin y vmax, ¿SciPy filtró la imagen?
+
+
+Respuesta. No necesariamente. Esos parámetros controlan la traducción de valores a tonos en la visualización. Para afirmar que hubo filtrado debe existir una operación que calcule nuevos valores, como gaussian\_filter.
+
+
+\end{Practica}
+
+\section{Un vocabulario mínimo para leer Python}
+
+Una variable es un nombre asociado a un valor: k = 46 permite reutilizar ese número. El signo = asigna; == compara y responde verdadero o falso. Un texto va entre comillas. Un comentario empieza con \# y explica el código sin ejecutarse. Un punto accede a algo que pertenece a un objeto o biblioteca: np.mean pide la función mean de NumPy.
+
+
+Una función recibe entradas entre paréntesis y devuelve un resultado. Un argumento es una entrada concreta: en print(2 + 3), la entrada es el resultado de sumar. Un argumento con nombre, como sigma=1.2, aclara qué opción se modifica. La sangría agrupa las instrucciones de un bucle for, una condición if o una función definida con def. Respeta los espacios al copiar código.
+
+
+\begin{Codigo}{Código · tres ideas en cuatro líneas}
+valor = 2 + 3
+print(valor)
+print(valor == 5)
+print("valor")
+\end{Codigo}
+
+\begin{Salida}{Salida · número, comparación y texto}
+5
+True
+valor
+\end{Salida}
+
+La primera línea calcula 5 y lo asocia a valor. La segunda muestra ese número. La tercera compara y devuelve True, que significa verdadero. La última muestra las letras porque las comillas las convierten en texto. False significa falso. Una lista agrupa elementos entre corchetes; una matriz de NumPy permite organizar números por ejes y operar sobre ellos.
+
+
+\section{NIfTI guarda números y también dónde están}
+
+NIfTI es un formato empleado para intercambiar imágenes de neuroimagen. La extensión .nii puede reunir cabecera y datos en un solo archivo; .nii.gz añade compresión gzip sin pérdida. No es una captura de pantalla ni una garantía de anonimización. El formato permite conservar información espacial que una figura exportada normalmente no transmite con el mismo detalle. \hyperlink{refR15}{[15]}
+
+
+Para trabajar con NiBabel pensaremos en tres componentes: el arreglo de valores, una cabecera con metadatos y una matriz afín que relaciona posiciones del arreglo con coordenadas espaciales. El arreglo responde cuánto vale cada casilla. La cabecera informa, entre otras cosas, dimensiones, tipo numérico y unidades. La afín indica cómo ubicar las casillas. Conservar solo el arreglo y olvidar su geometría puede impedir una superposición correcta con otras imágenes. \hyperlink{refR7}{[7]} \hyperlink{refR16}{[16]}
+
+
+Un píxel es una muestra de una imagen bidimensional; un vóxel es su equivalente volumétrico. En la copia del taller, shape es (99, 117, 95): hay esas cantidades de muestras en los tres ejes del arreglo. El espaciado es (2, 2, 2) mm. Son conceptos diferentes: dimensiones cuentan casillas; espaciado relaciona pasos entre sus centros con distancia. El producto 99 × 117 × 95 da 1 100 385 posiciones, incluyendo el fondo de la rejilla.
+
+
+Los índices de Python empiezan en cero. El índice k = 46 identifica una posición de la tercera dimensión; no significa 46 mm. Para este archivo, ya orientado de forma canónica, z = 2k - 72. Así, k = 46 corresponde a z = 20 mm y k = 56 a z = 40 mm. Esta relación procede de su afín concreta. En otra imagen puede haber otras escalas, traslaciones o ejes oblicuos: no se debe reutilizar la fórmula sin comprobarla.
+
+
+\needspace{6\baselineskip}
+
+\begin{Idea}{Cálculo resuelto con el archivo del taller}
+
+Moverse diez posiciones en la tercera dimensión supone 10 × 2 = 20 mm entre centros. No significa que el cerebro haya cambiado ni que se haya adquirido una imagen nueva: seleccionamos otro plano dentro del volumen disponible.
+
+
+\end{Idea}
+
+\needspace{6\baselineskip}
+
+\begin{Practica}{Comprueba y razona}
+
+Dos archivos tienen shape (99, 117, 95). ¿Podemos concluir que sus tamaños físicos coinciden?
+
+
+Respuesta. No. También necesitamos conocer su espaciado y geometría. Incluso con el mismo espaciado, su origen, orientación o referencia pueden diferir. Igual cantidad de casillas no garantiza correspondencia espacial.
+
+
+\end{Practica}
+
+\section{DICOM y NIfTI: funciones distintas}
+
+DICOM significa Digital Imaging and Communications in Medicine. Es un estándar para representar e intercambiar imágenes médicas y su información asociada. Una serie puede distribuirse en múltiples archivos o contener varias imágenes por archivo. NIfTI, Neuroimaging Informatics Technology Initiative, es un formato frecuente en neuroimagen que organiza un arreglo y su información espacial. La terminación .nii.gz indica un archivo NIfTI comprimido con gzip; la compresión no convierte el volumen en una imagen plana.
+
+
+\Figura{18_dicom_nifti.png}{DICOM y NIfTI conservan valores junto a información necesaria para interpretarlos. DICOM puede contener una o múltiples imágenes por archivo; NIfTI suele representar un volumen o una serie. La conversión debe conservar la geometría y no sustituye un proceso de desidentificación.}{.34}
+
+Usamos NIfTI porque podemos cargar el volumen, seleccionar un plano mediante índices y conservar la relación con coordenadas físicas. Convertir DICOM a NIfTI exige interpretar correctamente la serie, orientación y geometría. La conversión no es una anonimización: cabeceras, píxeles, rostro y archivos acompañantes pueden conservar información identificable. El anexo de privacidad explica qué revisar antes de publicar datos reales.
+
+
+\section{La primera lectura: código, salida e interpretación}
+
+Ejecuta este bloque cuando estén instaladas las dependencias del taller y el cuaderno se encuentre junto a la carpeta datos. La ruta señala el archivo local distribuido. Esta primera inspección evita depender de cómo se vea una imagen en pantalla para decidir su tamaño u orientación. El objetivo no es memorizar comandos: es aprender a preguntar al archivo antes de procesarlo.
+
+
+La función as\_closest\_canonical reordena o invierte los ejes cuando corresponde para aproximar la organización canónica RAS+. No alinea cerebros de personas diferentes ni elimina por sí sola toda oblicuidad. En la copia proporcionada los ejes ya son R, A y S. La última columna de su afín sitúa el centro del primer vóxel en (-98, -134, -72) mm; la diagonal de valor 2 expresa el paso entre centros en cada dirección. \hyperlink{refR17}{[17]}
+
+
+Si los números no coinciden, no fuerces la salida para que se parezca al libro. Comprueba qué archivo abriste, su procedencia y la versión utilizada. Más adelante compararemos resultados al cambiar un parámetro cada vez. Esa costumbre permite relacionar una decisión del código con un efecto visible y explicar qué cambió sin atribuirle conclusiones que el experimento no puede sostener.
+
+
+\Figura{05_afin_indices_mm.png}{La afín real de la plantilla transforma el índice (49, 57, 46) en (0, -20, 20) mm. En esta rejilla ortogonal, cada eje tiene paso de 2 mm y un desplazamiento distinto. RAS orienta las coordenadas positivas hacia derecha, anterior y superior.}{.42}
+
+\begin{Codigo}{Código · leer el archivo y su geometría}
+import nibabel as nib
+import numpy as np
+imagen = nib.load("datos/mni152_2mm.nii.gz")
+imagen = nib.as_closest_canonical(imagen)
+datos = imagen.get_fdata(dtype=np.float32)
+print("Dimensiones:", datos.shape)
+print("Orientación:", nib.aff2axcodes(imagen.affine))
+print("Afín:")
+print(imagen.affine)
+\end{Codigo}
+
+\Etiqueta{Cada instrucción, explicada}
+
+\begin{itemize}
+
+\item Línea 1: importa NiBabel con el nombre corto nib.
+
+\item Línea 2: importa NumPy con el nombre corto np.
+
+\item Línea 3: abre el archivo local y conserva datos y geometría en imagen.
+
+\item Línea 4: solicita una organización de ejes cercana a la canónica.
+
+\item Línea 5: obtiene el arreglo de intensidades en coma flotante de 32 bits.
+
+\item Línea 6: muestra cuántas posiciones tiene cada dimensión.
+
+\item Línea 7: consulta hacia dónde aumentan los ejes del arreglo.
+
+\item Línea 8: imprime un rótulo para separar el siguiente resultado.
+
+\item Línea 9: muestra la transformación entre índices y coordenadas espaciales.
+
+\end{itemize}
+
+\begin{Salida}{Salida · archivo incluido en el taller}
+Dimensiones: (99, 117, 95)
+Orientación: ('R', 'A', 'S')
+Afín:
+[[   2.    0.    0.  -98.]
+ [   0.    2.    0. -134.]
+ [   0.    0.    2.  -72.]
+ [   0.    0.    0.    1.]]
+\end{Salida}
+
+La salida describe la copia de 2 mm incluida en el taller, no todos los archivos llamados MNI152. Para esta afín: x = 2i - 98, y = 2j - 134 y z = 2k - 72, en milímetros.
+
+
+\needspace{6\baselineskip}
+
+\begin{Practica}{Calcula antes de seguir}
+
+Sustituye mentalmente (i, j, k) por (49, 57, 46) y calcula la posición antes de continuar.
+
+
+La posición es (0, -20, 20) mm. Cada componente usa el índice correspondiente y la traslación de su fila.
+
+
+\end{Practica}
+
+\needspace{6\baselineskip}
+
+\begin{Practica}{Comprueba y razona}
+
+¿Qué hemos aprendido al ejecutar este bloque?
+
+
+Respuesta. Hemos identificado el archivo, convertido sus intensidades en un arreglo y comprobado dimensiones y geometría. Todavía no hemos segmentado un tejido, entrenado un modelo ni emitido una interpretación clínica.
+
+
+\end{Practica}
+
+\chapter[Píxeles y cortes]{De los números a los cortes}
+
+\needspace{6\baselineskip}
+
+\begin{Idea}{Al terminar este capítulo}
+
+Relacionarás una casilla con su tono, distinguirás filas y columnas y podrás mover un plano dentro del volumen.
+
+
+\end{Idea}
+
+\section{De una tabla de números a una imagen: leer y cambiar un píxel}
+
+\Fuente{Tutorial 1 · Lecciones del cuaderno: 2, 3}
+
+Antes de reconocer un cerebro, conviene construir una imagen que podamos entender por completo. La matriz juguete tiene seis filas y seis columnas: contiene treinta y seis números. Cada casilla ocupará una posición en la pantalla y su valor decidirá el tono que veremos. Con la escala elegida, cero se representa en negro y cinco en blanco; los valores intermedios reciben grises intermedios. Píxel nombra ese elemento de una imagen bidimensional. No significa que el objeto real esté hecho de pequeños cuadrados: es la forma en que lo representamos mediante muestras.
+
+
+Una posición y un valor responden preguntas diferentes. La posición indica dónde buscar; el valor indica qué contiene esa casilla. Python empieza a contar en cero. Así, juguete[2, 3] pide la tercera fila y la cuarta columna, cuyo valor es cuatro. Los corchetes no buscan el cuarto número de toda la tabla. El primer índice elige una fila y el segundo una columna. Los números impresos encima de los cuadrados permiten comprobar esta lectura sin confiar solamente en el brillo percibido.
+
+
+La instrucción imshow traduce una matriz en una imagen. Aquí fijamos el mapa de colores gris y los extremos cero y cinco para que el mismo número conserve el mismo tono en todas las comparaciones. La opción de interpolación nearest deja visibles los bloques; evita que la presentación invente transiciones suaves entre ellos. origin="lower" coloca la fila cero abajo. Esta decisión de presentación explica por qué la tabla escrita y la imagen pueden parecer invertidas verticalmente: las coordenadas deben leerse con los números de los ejes, no por costumbre.
+
+
+Para modificar un píxel conservando una referencia, primero hacemos una copia. modificada = juguete.copy() crea una matriz independiente y después modificada[fila, columna] = 0 cambia una sola casilla. Es una operación sobre los datos, no sobre el contraste de la pantalla. Guardar el original permite responder qué cambió, dónde cambió y cuánto cambió. Esta pequeña disciplina será útil cuando añadamos ruido y comparemos filtros: todas las alternativas deben partir de una entrada conocida, cuya identidad podamos comprobar.
+
+
+\needspace{6\baselineskip}
+
+\begin{Idea}{Antes de ejecutar}
+
+Ejecutar la celda 1 para disponer de np y plt. La celda 2 crea juguete; la celda 3 necesita esa matriz. No se utiliza información de pacientes.
+
+
+\end{Idea}
+
+\begin{Codigo}{Celda 2 · Una imagen pequeña es una tabla de números}
+juguete = np.array([[0,0,0,0,0,0], [0,1,1,2,2,0], [0,1,3,4,2,0], [0,1,3,5,2,0], [0,1,1,2,2,0], [0,0,0,0,0,0]], dtype=float)
+fig, ax = plt.subplots(figsize=(5, 4.5), layout="constrained")
+ax.imshow(juguete, cmap="gray", vmin=0, vmax=5, interpolation="nearest")
+for fila in range(6):
+    for columna in range(6):
+        ax.text(columna, fila, int(juguete[fila, columna]), ha="center", va="center", color="#f25b42", fontsize=13)
+ax.set(title="36 píxeles: cada gris representa un número", xlabel="Columna", ylabel="Fila", xticks=range(6), yticks=range(6))
+plt.show()
+\end{Codigo}
+
+\Etiqueta{Cada línea de esta celda}
+
+\begin{itemize}
+
+\item Línea 1. Construye una matriz decimal de 6 por 6; cada lista interior es una fila.
+
+\item Línea 2. Reserva espacio para una sola imagen.
+
+\item Línea 3. Convierte 0 a negro y 5 a blanco; nearest mantiene visibles las casillas.
+
+\item Línea 4. Recorre las filas 0, 1, 2, 3, 4 y 5.
+
+\item Línea 5. En cada fila recorre sus seis columnas.
+
+\item Línea 6. Escribe el número en el centro de su píxel.
+
+\item Línea 7. Identifica los ejes como índices, no milímetros.
+
+\item Línea 8. Muestra números y grises en la misma figura.
+
+\end{itemize}
+
+\begin{Codigo}{Celda 3 · Leer y cambiar un píxel}
+fila = 2
+columna = 3
+print("Valor original:", juguete[fila, columna])
+modificada = juguete.copy()
+modificada[fila, columna] = 0
+fig, ax = plt.subplots(1, 2, figsize=(8, 3.7), layout="constrained")
+for panel, matriz, titulo in zip(ax, [juguete, modificada], ["Original", "Copia con un píxel en cero"]):
+    panel.imshow(matriz, cmap="gray", vmin=0, vmax=5, interpolation="nearest")
+    panel.set(title=titulo, xlabel="Columna", ylabel="Fila")
+plt.show()
+print("El original sigue valiendo:", juguete[fila, columna])
+\end{Codigo}
+
+\Etiqueta{Cada línea de esta celda}
+
+\begin{itemize}
+
+\item Línea 1. Guarda el índice de fila que vamos a consultar.
+
+\item Línea 2. Guarda el índice de columna; los índices empiezan en cero.
+
+\item Línea 3. Lee el valor 4 de la casilla elegida.
+
+\item Línea 4. Crea una matriz independiente del original.
+
+\item Línea 5. Cambia una sola casilla de la copia a negro.
+
+\item Línea 6. Crea dos paneles para comparar.
+
+\item Línea 7. Recorre ambas matrices con sus nombres.
+
+\item Línea 8. Usa exactamente la misma escala de grises en ambas.
+
+\item Línea 9. Describe cada imagen y sus índices.
+
+\item Línea 10. Presenta la comparación.
+
+\item Línea 11. Comprueba que la primera matriz no cambió.
+
+\end{itemize}
+
+\begin{Salida}{Salida textual de la celda completa}
+Valor original: 4.0
+El original sigue valiendo: 4.0
+\end{Salida}
+
+\Figura{toy_matrix_gray.png}{Ejemplo ficticio: una matriz de 6 × 6 y su representación en escala de grises. La posición conserva la información espacial; el tono representa el valor.}{.28}
+
+\Figura{pixel_change.png}{Cambiar una copia modifica un píxel sin alterar la matriz original. La escala visual se mantiene para comparar.}{.28}
+
+\Etiqueta{Interpreta el resultado}
+
+En la primera figura se puede recorrer cada casilla y anticipar su gris. En la comparación de la celda 3, la casilla que antes valía cuatro pasa a negro en la copia. El resto permanece igual porque no lo hemos seleccionado. Las dos líneas de salida dicen que el valor original sigue siendo 4.0: el punto decimal indica el tipo numérico usado, no una diferencia respecto de cuatro. La evidencia de la modificación está en la imagen de la copia y en la asignación explícita.
+
+
+\needspace{6\baselineskip}
+
+\begin{Practica}{Cambia una sola cosa}
+
+En la celda 3 cambia fila a 3 y columna a 3. Predice el valor antes de ejecutar; después confirma qué cuadrado desaparece en la copia. Restablece los valores originales al terminar.
+
+
+\end{Practica}
+
+\needspace{6\baselineskip}
+
+\begin{Idea}{Pregunta resuelta}
+
+¿Qué significa juguete[3, 3] y por qué no es la tercera fila y la tercera columna?
+
+
+Respuesta. Selecciona la cuarta fila y la cuarta columna, porque los índices comienzan en cero. Contiene cinco. Sustituirlo por cero cambia esa casilla de la copia; copy() conserva el original.
+
+
+\end{Idea}
+
+\clearpage
+
+\section{Del píxel al vóxel: localizar un corte en un volumen}
+
+\Fuente{Tutorial 2 · Lecciones del cuaderno: 4, 5, 6}
+
+Una imagen tridimensional añade una tercera dirección a la tabla anterior. Podemos imaginar una pila ordenada de cortes, pero el archivo guarda una sola matriz con tres índices. Un vóxel representa un elemento de volumen. En la plantilla del taller hay 99 muestras en el primer eje, 117 en el segundo y 95 en el tercero. Esta forma describe cuántos elementos existen; todavía no informa cuánto espacio ocupa cada uno. Por eso necesitamos tanto la matriz como la información geométrica que acompaña al archivo.
+
+
+El espaciado indica la distancia entre centros de muestras consecutivas. Aquí es de dos milímetros en las tres direcciones. Un salto de diez índices corresponde, por tanto, a veinte milímetros en ese eje. Estos números no deben deducirse del tamaño de una figura impresa ni del aumento de la pantalla: se consultan en la imagen. Tampoco equivalen por sí solos a la capacidad del estudio para distinguir detalles anatómicos. El muestreo, la adquisición y el procesamiento participan en la resolución efectiva.
+
+
+La matriz afín conecta direcciones de la tabla con posiciones físicas. En este archivo, x = 2i - 98, y = 2j - 134 y z = 2k - 72, con coordenadas en milímetros. Por ejemplo, el índice (49, 57, 46) corresponde a (0, -20, 20). Los desplazamientos negativos no son errores: expresan posiciones respecto del origen del sistema de referencia. Las letras R, A y S indican hacia dónde aumentan los índices: derecha, anterior y superior. No describen necesariamente el orden de lectura de una pantalla clínica.
+
+
+Un corte axial fija k y muestra x frente a y; uno coronal fija j y muestra x frente a z; uno sagital fija i y muestra y frente a z. La transposición .T adapta filas y columnas al dibujo elegido. La conversión inicial a una orientación canónica facilita este ejemplo, pero no registra dos cerebros entre sí ni garantiza que cualquier archivo carezca de inclinación. El cuaderno comprueba que la parte espacial de esta afín es diagonal. Si una imagen distinta no cumple esa condición, estas fórmulas simplificadas y sus extensiones deben revisarse.
+
+
+\needspace{6\baselineskip}
+
+\begin{Idea}{Antes de ejecutar}
+
+Ejecutar la celda 1 para cargar imagen y datos. La celda 4 crea pasos, affine, x, y, z y extension; las celdas 5 y 6 reutilizan esa geometría.
+
+
+\end{Idea}
+
+\begin{Codigo}{Celda 4 · Del píxel al volumen y los milímetros}
+forma = datos.shape
+pasos = np.array(imagen.header.get_zooms()[:3])
+affine = imagen.affine
+orientacion = nib.aff2axcodes(affine)
+assert orientacion == ("R", "A", "S")
+assert np.allclose(affine[:3, :3], np.diag(pasos))
+x = affine[0, 3] + pasos[0] * np.arange(forma[0])
+y = affine[1, 3] + pasos[1] * np.arange(forma[1])
+z = affine[2, 3] + pasos[2] * np.arange(forma[2])
+extension = [x[0]-pasos[0]/2, x[-1]+pasos[0]/2, y[0]-pasos[1]/2, y[-1]+pasos[1]/2]
+print("Forma:", forma, "| tamaño de voxel en mm:", pasos, "| orientación:", orientacion)
+print("Affine:\n", affine, "\nÍndice (49,57,46) en mm:", nib.affines.apply_affine(affine, [49,57,46]))
+\end{Codigo}
+
+\Etiqueta{Cada línea de esta celda}
+
+\begin{itemize}
+
+\item Línea 1. Cuenta los vóxeles del volumen en sus tres ejes.
+
+\item Línea 2. Lee los tres tamaños de vóxel, documentados en milímetros para esta plantilla.
+
+\item Línea 3. Guarda la transformación de índices a coordenadas físicas.
+
+\item Línea 4. Obtiene las letras de orientación de los ejes.
+
+\item Línea 5. Detiene el cuaderno si esta imagen no está orientada como esperamos.
+
+\item Línea 6. Comprueba que esta plantilla es ortogonal y tiene pasos positivos; nuestro visor no cubre imágenes oblicuas.
+
+\item Línea 7. Calcula la coordenada x del centro de cada columna.
+
+\item Línea 8. Calcula la coordenada y del centro de cada fila axial.
+
+\item Línea 9. Calcula la coordenada z del centro de cada corte axial.
+
+\item Línea 10. Usa los bordes exteriores de los píxeles, medio paso más allá de sus centros.
+
+\item Línea 11. Resume cantidad, tamaño y orientación sin confundirlos.
+
+\item Línea 12. Muestra la transformación y un ejemplo concreto.
+
+\end{itemize}
+
+\begin{Salida}{Salida textual de la celda completa}
+Forma: (99, 117, 95) | tamaño de voxel en mm: [2. 2. 2.] | orientación: ('R', 'A', 'S')
+Affine:
+ [[   2.    0.    0.  -98.]
+ [   0.    2.    0. -134.]
+ [   0.    0.    2.  -72.]
+ [   0.    0.    0.    1.]] 
+Índice (49,57,46) en mm: [  0. -20.  20.]
+\end{Salida}
+
+\begin{Codigo}{Celda 5 · Tres cortes con orientación física}
+i, j, k = 49, 57, 46
+cortes = [datos[:, :, k].T, datos[:, j, :].T, datos[i, :, :].T]
+extensiones = [extension, [x[0]-1,x[-1]+1,z[0]-1,z[-1]+1], [y[0]-1,y[-1]+1,z[0]-1,z[-1]+1]]
+titulos = [f"Axial z={z[k]:.0f} mm", f"Coronal y={y[j]:.0f} mm", f"Sagital x={x[i]:.0f} mm"]
+etiquetas = [("x mm · L → R", "y mm · P → A"), ("x mm · L → R", "z mm · I → S"), ("y mm · P → A", "z mm · I → S")]
+fig, ax = plt.subplots(1, 3, figsize=(12, 4.6), layout="constrained")
+for panel, corte_local, limites, titulo, etiqueta in zip(ax, cortes, extensiones, titulos, etiquetas):
+    panel.imshow(corte_local, cmap="gray", origin="lower", extent=limites, vmin=0, vmax=1, aspect="equal")
+    panel.set(title=titulo, xlabel=etiqueta[0], ylabel=etiqueta[1])
+plt.show()
+\end{Codigo}
+
+\Etiqueta{Cada línea de esta celda}
+
+\begin{itemize}
+
+\item Línea 1. Elige un punto para mostrar cortes axial, coronal y sagital.
+
+\item Línea 2. Crea las tres matrices 2D sin modificar el volumen.
+
+\item Línea 3. Declara los bordes en mm; 1 mm es medio vóxel de esta plantilla.
+
+\item Línea 4. Escribe la posición física fija de cada plano.
+
+\item Línea 5. Nombra el eje horizontal y vertical de cada plano.
+
+\item Línea 6. Abre tres paneles con espacio para las unidades.
+
+\item Línea 7. Reúne los datos de cada vista en un mismo recorrido.
+
+\item Línea 8. Mantiene la proporción física y la escala de intensidad.
+
+\item Línea 9. Añade posición y orientación comprobables.
+
+\item Línea 10. Muestra los tres cortes en sus coordenadas físicas.
+
+\end{itemize}
+
+\begin{Codigo}{Celda 6 · Mover un corte}
+k_nuevo = 56
+assert 0 <= k_nuevo < forma[2]
+fig, ax = plt.subplots(1, 2, figsize=(9, 4.6), layout="constrained")
+for panel, indice in zip(ax, [46, k_nuevo]):
+    panel.imshow(datos[:, :, indice].T, cmap="gray", origin="lower", extent=extension, vmin=0, vmax=1)
+    panel.set(title=f"k={indice} · z={z[indice]:.0f} mm", xlabel="x mm · L → R", ylabel="y mm · P → A")
+plt.show()
+print("Desplazamiento en z:", z[k_nuevo] - z[46], "mm")
+\end{Codigo}
+
+\Etiqueta{Cada línea de esta celda}
+
+\begin{itemize}
+
+\item Línea 1. Cambia este entero entre 0 y 94; con 56 veremos un plano 20 mm más superior.
+
+\item Línea 2. Comprueba el rango antes de extraer el corte.
+
+\item Línea 3. Crea dos paneles con idéntico tamaño.
+
+\item Línea 4. Compara la referencia con el índice elegido.
+
+\item Línea 5. Dibuja cada corte con la misma escala y orientación.
+
+\item Línea 6. Relaciona explícitamente índice y milímetros.
+
+\item Línea 7. Presenta el cambio de posición.
+
+\item Línea 8. Resta las coordenadas para medir cuánto nos movimos.
+
+\end{itemize}
+
+\begin{Salida}{Salida textual de la celda completa}
+Desplazamiento en z: 20.0 mm
+\end{Salida}
+
+\Figura{03_voxel_corte.png}{Un vóxel representa volumen. En este ejemplo, sus lados de 2 mm delimitan 8 mm$^3$. Al fijar un índice del volumen obtenemos una matriz bidimensional; los números de esa matriz son ficticios y sólo ilustran su organización.}{.42}
+
+\Figura{volume_slices.png}{Tres planos de la misma plantilla: axial, coronal y sagital. La transposición usada al dibujar coloca los ejes en la dirección esperada.}{.29}
+
+\Etiqueta{Interpreta el resultado}
+
+La salida permite auditar lo que se ve: forma, tamaño del vóxel, orientación y afín están disponibles antes de dibujar. En la galería, las tres vistas pertenecen al mismo volumen de referencia y sus ejes están expresados en milímetros. Las etiquetas L$\rightarrow$R, P$\rightarrow$A e I$\rightarrow$S explican el sentido creciente. No se ha cambiado la anatomía al mostrar otra vista; se ha seleccionado otra sección del mismo conjunto de números. Pasar del corte 46 al 56 desplaza el plano axial de z=20 a z=40 mm; no cambia el espaciado.
+
+
+\needspace{6\baselineskip}
+
+\begin{Practica}{Cambia una sola cosa}
+
+En la celda 6 cambia el segundo corte de 56 a 51 y predice el desplazamiento respecto del 46. Ejecuta y comprueba que son diez milímetros. Mantén los índices dentro de la forma del volumen.
+
+
+\end{Practica}
+
+\needspace{6\baselineskip}
+
+\begin{Idea}{Pregunta resuelta}
+
+¿Por qué el índice (0, 0, 0) no corresponde necesariamente a la coordenada física (0, 0, 0)?
+
+
+Respuesta. Porque los índices localizan muestras dentro de la matriz y la afín sitúa esa matriz físicamente. Aquí el primer vóxel está centrado en (-98, -134, -72) mm; el origen físico no coincide con la esquina del archivo.
+
+
+\end{Idea}
+
+\chapter[Contar y seleccionar]{Contraste, histogramas y selección}
+
+\needspace{6\baselineskip}
+
+\begin{Idea}{Al terminar este capítulo}
+
+Separarás apariencia de datos. Construirás un histograma, interpretarás sus ejes y usarás percentiles y máscaras sin confundirlos con diagnósticos.
+
+
+\end{Idea}
+
+\section{Contraste: cambiar la ventana por la que miramos los mismos datos}
+
+\Fuente{Tutorial 3 · Lecciones del cuaderno: 7}
+
+Una matriz no viene acompañada de un único brillo obligatorio. Para verla necesitamos una regla que transforme números en colores. La ventana de visualización fija un extremo inferior y uno superior: en gris, el inferior aparece negro y el superior blanco. Los valores comprendidos entre ambos se reparten a lo largo de la escala. Elegir esta ventana es comparable a ajustar una regla de lectura. Puede hacer visibles pequeñas diferencias o esconderlas, aunque la matriz almacenada permanezca exactamente igual.
+
+
+En la ventana de cero a uno, un valor 0.5 ocupa la mitad de la escala. En la ventana de 0.35 a 0.90 ocupa aproximadamente el 27 \% del recorrido desde negro hacia blanco. En la ventana de 0.60 a 0.80 queda por debajo del mínimo y se muestra negro. Ninguna de esas apariencias cambia el número 0.5. Los valores mayores que el extremo superior también se saturan visualmente: pueden aparecer igualmente blancos aunque sus intensidades sean diferentes.
+
+
+En resonancia magnética, la intensidad de una imagen convencional depende de la adquisición, la secuencia y el procesamiento. No es una cantidad universal cuyo mismo valor tenga siempre el mismo significado clínico. La plantilla pública utilizada está procesada y reescalada, por eso aquí trabajamos cómodamente con valores de cero a uno. Esto no implica que todas las resonancias estén en ese intervalo, ni que 0.8 identifique un tejido específico en cualquier estudio. La barra de colores describe esta representación y este archivo.
+
+
+Es esencial separar tres operaciones: elegir una ventana para mostrar, reescalar numéricamente una matriz y transformar sus valores mediante un filtro. Este tutorial realiza solamente la primera. Los límites vmin y vmax pertenecen al dibujo; no son instrucciones de recorte sobre corte. Cuando comparemos filtros fijaremos la misma ventana en todos los paneles para que un cambio de brillo refleje mejor las diferencias de sus matrices. De otro modo, la presentación podría compensar cambios y hacernos creer que dos resultados son más semejantes de lo que son.
+
+
+\needspace{6\baselineskip}
+
+\begin{Idea}{Antes de ejecutar}
+
+Ejecutar las celdas 1 y 4. Esta celda crea corte a partir del plano axial 46 y será la referencia de todos los análisis bidimensionales posteriores.
+
+
+\end{Idea}
+
+\begin{Codigo}{Celda 7 · Cambiar el contraste sin cambiar los datos}
+corte = datos[:, :, 46].T.copy()
+ventanas = [(0, 1), (0.35, 0.9), (0.6, 0.8)]
+fig, ax = plt.subplots(1, 3, figsize=(12, 4.5), layout="constrained")
+for panel, ventana in zip(ax, ventanas):
+    panel.imshow(corte, cmap="gray", origin="lower", extent=extension, vmin=ventana[0], vmax=ventana[1])
+    panel.set(title=f"vmin={ventana[0]} · vmax={ventana[1]}", xlabel="x mm · L → R", ylabel="y mm · P → A")
+plt.show()
+print("Los datos siguen siendo los mismos:", np.array_equal(corte, datos[:, :, 46].T))
+\end{Codigo}
+
+\Etiqueta{Cada línea de esta celda}
+
+\begin{itemize}
+
+\item Línea 1. Guarda una copia 2D del corte de referencia para las próximas operaciones.
+
+\item Línea 2. Define tres pares de negro y blanco, de ventana amplia a estrecha.
+
+\item Línea 3. Reserva tres paneles para los mismos datos.
+
+\item Línea 4. Recorre las tres ventanas sin cambiar corte.
+
+\item Línea 5. Cambia solo cómo se asignan números a grises.
+
+\item Línea 6. Muestra los límites elegidos y la orientación.
+
+\item Línea 7. Permite comparar contraste y saturación.
+
+\item Línea 8. Verifica que la visualización no modificó el corte.
+
+\end{itemize}
+
+\begin{Salida}{Salida textual de la celda completa}
+Los datos siguen siendo los mismos: True
+\end{Salida}
+
+\Figura{contrast_windows.png}{La misma matriz se muestra con distintas ventanas. vmin y vmax modifican la traducción a tonos; no sustituyen los datos originales.}{.30}
+
+\Etiqueta{Interpreta el resultado}
+
+Los tres paneles muestran el mismo corte, con la misma posición física y el mismo número de píxeles. La ventana estrecha intensifica algunas diferencias de brillo y satura otras regiones. La comprobación final devuelve True porque la matriz sigue coincidiendo con el corte extraído del volumen. Es una verificación más sólida que decir simplemente que las imágenes se parecen: compara los valores numéricos que originaron la visualización.
+
+
+\needspace{6\baselineskip}
+
+\begin{Practica}{Cambia una sola cosa}
+
+Sustituye la tercera ventana por (0.75, 0.95). Predice qué ocurrirá con un píxel de valor 0.7 y con otro de 1.0. Ejecuta y conserva una nota de los límites usados para cada panel.
+
+
+\end{Practica}
+
+\needspace{6\baselineskip}
+
+\begin{Idea}{Pregunta resuelta}
+
+¿Un área que se ve más blanca después de cambiar vmin y vmax ha aumentado su intensidad almacenada?
+
+
+Respuesta. No. Cambió la correspondencia entre intensidad y gris. Para demostrar un cambio numérico habría que comparar las matrices. La comprobación True confirma que en este ejercicio todos los valores permanecen iguales.
+
+
+\end{Idea}
+
+\clearpage
+
+\section{Construir un histograma a mano y comprobarlo con Python}
+
+\Fuente{Tutorial 4 · Lecciones del cuaderno: 8}
+
+Un histograma responde cuántos valores caen dentro de cada intervalo. Empecemos sin computadora: recorre la matriz pequeña, marca cada cero y cuenta veinte. Repite para los unos y los doses; hay seis de cada uno. Después aparecen dos treses, un cuatro y un cinco. La suma veinte más seis más seis más dos más uno más uno da treinta y seis, exactamente la cantidad de casillas. Esa igualdad es una comprobación sencilla de que no hemos olvidado ni contado dos veces un píxel.
+
+
+Para dibujarlo ponemos las intensidades en el eje horizontal y los conteos en el vertical. La barra ubicada en cero llega a veinte porque veinte píxeles tienen ese valor; no significa que exista un píxel de intensidad veinte. La barra de intensidad cinco tiene altura uno. Leer ambos ejes en voz alta resulta especialmente útil para principiantes: “valor del píxel” y “cantidad de píxeles con ese valor” son dos magnitudes diferentes. El histograma resume frecuencias, no reproduce la forma espacial de la imagen.
+
+
+El código convierte la tabla en una secuencia mediante ravel. Esta operación permite contar todos sus elementos sin decidir en qué fila o columna estaban. Después define bordes en -0.5, 0.5, 1.5 y así sucesivamente hasta 5.5. De este modo cada intensidad entera queda en el centro de su intervalo. NumPy incluye el extremo izquierdo y excluye el derecho, salvo en el último intervalo, que también incluye su extremo derecho. Aquí la elección evita ambigüedades porque los valores enteros no coinciden con las fronteras.
+
+
+Un resumen siempre deja algo fuera. Si intercambiáramos dos píxeles de la matriz sin cambiar sus valores, el histograma sería idéntico aunque la imagen pudiera verse diferente. Podemos incluso reorganizar todas las casillas y conservar exactamente las mismas seis barras. Por eso un histograma sirve para estudiar la distribución de intensidades, pero no basta para localizar una estructura. Esta limitación nos ayudará a comprender por qué un umbral produce una selección basada en valores y necesita volver al espacio de la imagen para interpretarse.
+
+
+\needspace{6\baselineskip}
+
+\begin{Idea}{Antes de ejecutar}
+
+Ejecutar la celda 2 para disponer de juguete. El histograma corresponde a sus 36 píxeles, no al cerebro.
+
+
+\end{Idea}
+
+\begin{Codigo}{Celda 8 · Construir un histograma contando píxeles}
+valores_juguete = juguete.ravel()
+limites_juguete = np.arange(-0.5, 6.5, 1)
+conteos, limites = np.histogram(valores_juguete, bins=limites_juguete)
+fig, ax = plt.subplots(figsize=(7, 4), layout="constrained")
+ax.bar(np.arange(6), conteos, color="#197f85", edgecolor="white")
+for intensidad, cantidad in zip(np.arange(6), conteos):
+    ax.text(intensidad, cantidad + 0.3, str(cantidad), ha="center")
+ax.set(title="Histograma del juguete: 36 píxeles", xlabel="Intensidad", ylabel="Cantidad de píxeles", xticks=range(6), ylim=(0,23))
+plt.show()
+print("Conteos de 0 a 5:", conteos, "| suma:", conteos.sum())
+\end{Codigo}
+
+\Etiqueta{Cada línea de esta celda}
+
+\begin{itemize}
+
+\item Línea 1. Reúne los 36 números en una lista, sin importar dónde estaban sus píxeles.
+
+\item Línea 2. Crea intervalos centrados en los valores enteros 0 a 5.
+
+\item Línea 3. Cuenta los valores dentro de cada intervalo y devuelve sus límites.
+
+\item Línea 4. Abre un panel para las barras.
+
+\item Línea 5. Dibuja una barra por intensidad con altura igual al conteo.
+
+\item Línea 6. Recorre intensidades y conteos juntos.
+
+\item Línea 7. Escribe el conteo sobre cada barra.
+
+\item Línea 8. Etiqueta ejes y deja espacio sobre la barra mayor.
+
+\item Línea 9. Muestra el resumen numérico de la imagen.
+
+\item Línea 10. Comprueba que los conteos suman los 36 píxeles.
+
+\end{itemize}
+
+\begin{Salida}{Salida textual de la celda completa}
+Conteos de 0 a 5: [20  6  6  2  1  1] | suma: 36
+\end{Salida}
+
+\Figura{07_intervalos_manuales.png}{Los mismos 36 píxeles se agrupan en seis o en tres intervalos. Los conteos cambian de [20, 6, 6, 2, 1, 1] a [26, 8, 2], pero su suma permanece en 36.}{.42}
+
+\Figura{06_histograma_sin_espacio.png}{Reordenar las 36 intensidades cambia la imagen, pero conserva sus conteos: 20, 6, 6, 2, 1 y 1. El histograma resume la distribución de valores y no conserva su ubicación.}{.42}
+
+\Etiqueta{Interpreta el resultado}
+
+La salida [20 6 6 2 1 1] reproduce el conteo manual y confirma que la suma es 36. La primera barra domina porque más de la mitad de la imagen es cero. El intervalo de las intensidades altas contiene pocos elementos, aunque algunos sean muy visibles en el dibujo. Una región pequeña y brillante puede llamar mucho la atención visual sin contribuir un gran número de píxeles al histograma.
+
+
+\needspace{6\baselineskip}
+
+\begin{Practica}{Cambia una sola cosa}
+
+Cambia únicamente el valor cinco de la matriz juguete por dos, vuelve a ejecutar el histograma y predice dos cambios: la barra de cinco bajará a cero y la de dos subirá a siete. Después restaura la matriz.
+
+
+\end{Practica}
+
+\needspace{6\baselineskip}
+
+\begin{Idea}{Pregunta resuelta}
+
+¿Pueden dos imágenes con aspecto diferente tener exactamente el mismo histograma?
+
+
+Respuesta. Sí. El histograma cuenta valores, pero descarta sus posiciones. Reorganizar los mismos treinta y seis números modifica la imagen y conserva las barras. La distribución de intensidades no sustituye la información espacial.
+
+
+\end{Idea}
+
+\clearpage
+
+\section{Histograma de la resonancia: decidir qué contamos y con cuántos intervalos}
+
+\Fuente{Tutorial 5 · Lecciones del cuaderno: 9, 10}
+
+El salto desde la matriz pequeña a la resonancia no cambia la pregunta: seguimos contando valores. Lo que cambia es el número de muestras y la variedad de intensidades. El corte axial tiene 117 filas y 99 columnas, es decir, 11 583 píxeles. Muchos pertenecen al fondo exterior de la plantilla. Si contamos toda la matriz, el gran grupo cercano a cero puede dominar el gráfico y comprimir visualmente las diferencias entre las intensidades del objeto que deseamos explorar.
+
+
+El cuaderno define soporte = corte > 1e-6. El número 1e-6 significa una millonésima y aquí sirve para excluir ceros y valores diminutos del fondo. Al aplicar esta regla quedan 4 859 píxeles y se excluyen 6 724. Es una selección práctica para esta plantilla preprocesada; no es un algoritmo validado que encuentre cerebro en cualquier estudio. Una imagen con ruido, fondo distinto o tejidos de baja intensidad podría necesitar otra estrategia. Siempre debemos describir la regla y el conjunto al que se aplicó.
+
+
+La expresión corte[soporte] extrae los valores de las posiciones seleccionadas y los reúne para contarlos. En este ejercicio todos proceden de un solo corte bidimensional, no de los 95 planos del volumen. Esta precisión afecta cualquier porcentaje posterior: el denominador será el tamaño de ese soporte de corte. El histograma que incluye todo y el que excluye fondo responden preguntas distintas, aunque partan de la misma matriz. No es correcto compararlos sin anunciar qué muestras entran en cada uno.
+
+
+Después mantenemos esos mismos valores y cambiamos el número de intervalos. Veinte intervalos entre cero y uno tienen anchura 0.05; ochenta tienen anchura 0.0125. Los intervalos más estrechos reúnen menos intensidades diferentes y revelan irregularidades finas, pero suelen contener menos píxeles cada uno. Los anchos ofrecen un resumen más compacto. Cambiar bins no modifica los datos ni crea estructuras anatómicas nuevas. Las barras pueden cambiar mucho de altura simplemente porque se está repartiendo el mismo total entre más recipientes.
+
+
+\needspace{6\baselineskip}
+
+\begin{Idea}{Antes de ejecutar}
+
+Ejecutar las celdas 1, 4 y 7 para obtener corte. La celda 9 crea soporte y valores, que también usarán los percentiles.
+
+
+\end{Idea}
+
+\begin{Codigo}{Celda 9 · Leer el histograma de una resonancia}
+soporte = corte > 1e-6
+valores = corte[soporte]
+fig, ax = plt.subplots(figsize=(8, 4), layout="constrained")
+ax.hist(valores, bins=20, range=(0, 1), color="#197f85", edgecolor="white")
+ax.set(title="Histograma MRI del corte k=46", xlabel="Intensidad reescalada", ylabel="Cantidad de píxeles")
+plt.show()
+print("Píxeles del corte:", corte.size, "| analizados:", valores.size, "| excluidos:", corte.size-valores.size)
+\end{Codigo}
+
+\Etiqueta{Cada línea de esta celda}
+
+\begin{itemize}
+
+\item Línea 1. Selecciona píxeles por encima de 0.000001; crea una matriz de verdadero o falso.
+
+\item Línea 2. Extrae únicamente las intensidades de las casillas seleccionadas.
+
+\item Línea 3. Crea un gráfico de tamaño cómodo para leer los ejes.
+
+\item Línea 4. Cuenta las intensidades en 20 intervalos del rango 0 a 1.
+
+\item Línea 5. Evita confundir intensidad con coordenada espacial.
+
+\item Línea 6. Presenta la distribución de intensidades.
+
+\item Línea 7. Explicita qué se contó y qué se dejó fuera.
+
+\end{itemize}
+
+\begin{Salida}{Salida textual de la celda completa}
+Píxeles del corte: 11583 | analizados: 4859 | excluidos: 6724
+\end{Salida}
+
+\begin{Codigo}{Celda 10 · Comparar veinte y ochenta intervalos}
+cuentas20, _ = np.histogram(valores, bins=20, range=(0, 1))
+cuentas80, _ = np.histogram(valores, bins=80, range=(0, 1))
+tope = 1.12 * max(cuentas20.max(), cuentas80.max())
+fig, ax = plt.subplots(1, 2, figsize=(10, 4), layout="constrained")
+for panel, numero_bins in zip(ax, [20, 80]):
+    panel.hist(valores, bins=numero_bins, range=(0, 1), color="#197f85", edgecolor="white")
+    panel.set(title=f"{numero_bins} bins · mismos {valores.size} valores", xlabel="Intensidad", ylabel="Cantidad de píxeles", ylim=(0,tope))
+plt.show()
+\end{Codigo}
+
+\Etiqueta{Cada línea de esta celda}
+
+\begin{itemize}
+
+\item Línea 1. Cuenta primero los bins amplios para obtener una referencia vertical.
+
+\item Línea 2. Cuenta los bins estrechos sobre exactamente los mismos valores.
+
+\item Línea 3. Elige un límite vertical común que permite ver todas las barras.
+
+\item Línea 4. Abre dos histogramas uno junto al otro.
+
+\item Línea 5. Repite el dibujo con 20 y 80 intervalos.
+
+\item Línea 6. Modifica solo la agrupación del histograma.
+
+\item Línea 7. Mantiene iguales rango horizontal y escala vertical.
+
+\item Línea 8. Muestra que una misma distribución puede verse más lisa o dentada.
+
+\end{itemize}
+
+\Figura{08_fondo_y_soporte.png}{El fondo cercano a cero domina el histograma completo. La segunda gráfica excluye valores $\leq$ 0,000001 y permite examinar el resto. Se usan los mismos 20 intervalos, pero escalas verticales distintas: hay que leer sus ejes antes de comparar alturas.}{.42}
+
+\Etiqueta{Interpreta el resultado}
+
+Primero observa la gran contribución del fondo y después el detalle que se distingue al excluirlo. La figura impresa utiliza 20 intervalos en ambos paneles y diferentes escalas verticales para que se aprecie cada distribución; compara sus ejes antes de comparar alturas. La salida textual documenta total, analizados y excluidos. En la salida gráfica de la celda 10 se comparan además 20 y 80 intervalos, manteniendo iguales límites de ejes. La suma de los conteos del soporte sigue siendo 4 859, pues todos sus valores están dentro del rango representado.
+
+
+\needspace{6\baselineskip}
+
+\begin{Practica}{Cambia una sola cosa}
+
+Compara veinte y ochenta intervalos sin cambiar soporte, rango ni corte. Señala una barra y explica por qué su altura no puede interpretarse como una cantidad de tejido comparable directamente con una barra de anchura diferente.
+
+
+\end{Practica}
+
+\needspace{6\baselineskip}
+
+\begin{Idea}{Pregunta resuelta}
+
+¿Excluir el fondo equivale a haber segmentado de manera fiable el cerebro?
+
+
+Respuesta. No. La regla excluye intensidades casi nulas de esta plantilla, pero no se ha validado anatómicamente. Segmentar una estructura requiere definirla y evaluar errores frente a una referencia adecuada, además de producir una selección.
+
+
+\end{Idea}
+
+\clearpage
+
+\section{De un percentil a una máscara: convertir una regla en una selección visible}
+
+\Fuente{Tutorial 6 · Lecciones del cuaderno: 11}
+
+Un percentil resume la posición de un valor dentro de una lista ordenada. Para entender el percentil noventa, imagina ordenar las intensidades del soporte desde la menor hasta la mayor y buscar un punto cercano al noventa por ciento de ese recorrido. El resultado es un valor de intensidad, llamado aquí umbral. El número noventa describe una posición porcentual; no afirma que el umbral sea 0.90. En esta plantilla el valor obtenido ronda 0.878431 porque depende de la distribución concreta que acabamos de contar.
+
+
+Una vez calculado el umbral, regresamos a cada posición de la imagen y preguntamos si su intensidad es mayor o igual que él. La respuesta puede ser verdadera o falsa. Ese conjunto de respuestas forma una máscara con la misma altura y anchura que corte. Al mostrarla en gris, las posiciones verdaderas aparecen blancas y las falsas negras. La máscara no contiene las intensidades originales: contiene el resultado de aplicar una condición. Es una forma sencilla de convertir una decisión numérica en una región que podemos localizar.
+
+
+La condición completa combina dos requisitos mediante el símbolo \&: pertenecer al soporte y alcanzar el umbral. Así preservamos explícitamente la población sobre la que definimos el percentil. Después contamos los verdaderos con mascara.sum() y dividimos entre valores.size. El porcentaje responde: ¿qué fracción del soporte seleccionado superó la regla? Si dividiéramos entre todos los píxeles, incluyendo el fondo, obtendríamos otra cantidad. Escribir el denominador junto al resultado evita una confusión frecuente al comunicar medidas de imagen.
+
+
+No debemos esperar que el percentil noventa seleccione exactamente el diez por ciento. Muchos píxeles pueden compartir la misma intensidad, y la condición incluye todos los empatados con el umbral. Además, el método de percentil puede interpolar entre posiciones de la lista. En este corte se seleccionan 523 de 4 859 píxeles, aproximadamente el 10.76 \%. La diferencia respecto del diez por ciento no demuestra un fallo del código. Demuestra que una regla sobre valores discretos y repetidos no garantiza una fracción exacta de posiciones.
+
+
+\needspace{6\baselineskip}
+
+\begin{Idea}{Antes de ejecutar}
+
+Ejecutar la celda 9 para disponer de soporte y valores. Conservar el corte axial original; este tutorial no usa la imagen con ruido.
+
+
+\end{Idea}
+
+\begin{Codigo}{Celda 11 · De un percentil a una máscara por umbral}
+percentil = 90
+assert 0 <= percentil <= 100
+umbral = np.percentile(valores, percentil)
+mascara = soporte & (corte >= umbral)
+porcentaje = 100 * mascara.sum() / valores.size
+fig, ax = plt.subplots(1, 2, figsize=(10, 4.4), layout="constrained")
+ax[0].hist(valores, bins=40, range=(0, 1), color="#197f85", edgecolor="white")
+ax[0].axvline(umbral, color="#d65a37", linewidth=2, label=f"p{percentil} = {umbral:.3f}")
+ax[0].legend()
+ax[0].set(xlabel="Intensidad", ylabel="Cantidad de píxeles", title="Elegir un valor de corte")
+ax[1].imshow(mascara, cmap="gray", origin="lower", extent=extension, vmin=0, vmax=1, interpolation="nearest")
+ax[1].set(title=f"Seleccionado: {porcentaje:.2f}% del soporte", xlabel="x mm · L → R", ylabel="y mm · P → A")
+plt.show()
+print("Umbral:", round(float(umbral),6), "| seleccionados:", int(mascara.sum()), "| denominador:", valores.size)
+\end{Codigo}
+
+\Etiqueta{Cada línea de esta celda}
+
+\begin{itemize}
+
+\item Línea 1. Cambia este número a 50 o 75 para probar un umbral diferente.
+
+\item Línea 2. Comprueba que el percentil esté en su rango válido.
+
+\item Línea 3. Busca el valor de intensidad correspondiente al percentil elegido.
+
+\item Línea 4. Selecciona las casillas del soporte cuya intensidad alcanza o supera el umbral.
+
+\item Línea 5. Calcula el porcentaje sobre el soporte declarado, no sobre toda la imagen.
+
+\item Línea 6. Prepara un histograma y una imagen binaria.
+
+\item Línea 7. Dibuja las intensidades usadas para elegir el umbral.
+
+\item Línea 8. Señala el umbral como una posición en el eje de intensidad.
+
+\item Línea 9. Muestra la etiqueta del umbral.
+
+\item Línea 10. Distingue el gráfico de intensidades de la imagen espacial.
+
+\item Línea 11. Dibuja seleccionado en blanco y no seleccionado en negro.
+
+\item Línea 12. Explicita el denominador y la orientación.
+
+\item Línea 13. Presenta la relación entre umbral numérico y selección espacial.
+
+\item Línea 14. Conserva los conteos para una revisión reproducible.
+
+\end{itemize}
+
+\begin{Salida}{Salida textual de la celda completa}
+Umbral: 0.878431 | seleccionados: 523 | denominador: 4859
+\end{Salida}
+
+\Figura{09_percentiles_recta.png}{Con el método lineal de NumPy, P25=10, P50=20 y P75=30 para estos cinco valores. Una ventana [10, 30] satura los extremos al dibujar: 0 y 10 parecen negros, mientras que 30 y 40 parecen blancos. Ningún valor se borra.}{.42}
+
+\Figura{threshold_masks.png}{El percentil 90 fija el umbral mostrado en el histograma. La máscara selecciona el 10,76 \% de las posiciones del soporte: los empates en el valor de corte explican que no sea exactamente el 10 \%.}{.28}
+
+\Etiqueta{Interpreta el resultado}
+
+En el histograma, la línea vertical marca el umbral calculado. En el panel derecho, la máscara revela dónde están las posiciones que lo alcanzan. Ambas figuras muestran dos aspectos de la misma operación: el histograma explica el criterio por intensidad y la máscara recupera su localización espacial. Una selección puede aparecer fragmentada porque lugares alejados entre sí pueden tener valores parecidos. No hemos impuesto continuidad, forma ni pertenencia a una estructura.
+
+
+\needspace{6\baselineskip}
+
+\begin{Practica}{Cambia una sola cosa}
+
+Cambia percentil de 90 a 75 y después a 50. Compara umbral, cantidad seleccionada y forma de la máscara; mantén el mismo soporte. Regresa a 90 para reproducir las salidas del libro.
+
+
+\end{Practica}
+
+\needspace{6\baselineskip}
+
+\begin{Idea}{Pregunta resuelta}
+
+¿Por qué 523 píxeles seleccionados no significan que el 10.76 \% del cerebro esté enfermo?
+
+
+Respuesta. Porque la condición solo describe una intensidad relativa. No contiene una definición de enfermedad y se aplica a un soporte de un único corte de una plantilla. El porcentaje mide nuestra selección, no un diagnóstico.
+
+
+\end{Idea}
+
+\chapter[Curvas de nivel]{Curvas de nivel sobre el cerebro}
+
+\needspace{6\baselineskip}
+
+\begin{Idea}{Al terminar este capítulo}
+
+Interpretarás una línea de igual intensidad, la compararás con una máscara y entenderás por qué una curva puede pasar entre centros de píxeles.
+
+
+\end{Idea}
+
+\section{Curvas de nivel: seguir una misma intensidad en una colina sencilla}
+
+\Fuente{Tutorial 7 · Lecciones del cuaderno: 12}
+
+Una curva de nivel une posiciones donde una función tiene el mismo valor. Un mapa topográfico usa curvas de igual altura; en una imagen podemos usar curvas de igual intensidad. Para aprender la idea sin distracciones anatómicas, creamos una colina matemática: el centro tiene valor uno y los valores disminuyen suavemente al alejarnos. La dibujamos desde arriba con colores y elegimos cuatro niveles: 0.2, 0.4, 0.6 y 0.8. Cada línea seguirá uno de esos valores, aunque pase entre las muestras de la cuadrícula.
+
+
+La función exp(-(x$^2$ + y$^2$)/2) depende de la distancia al centro. Puntos a la misma distancia tienen el mismo resultado; por eso las curvas son aproximadamente circulares al dibujarlas sobre nuestra malla. La curva 0.8 rodea una región pequeña cerca del máximo, mientras la curva 0.2 queda más lejos. No necesitamos calcular toda la función a mano para interpretarla: basta comprobar que en el centro x e y valen cero, el exponente es cero y exp(0) vale uno. Al alejarnos, el exponente se vuelve más negativo.
+
+
+El código evalúa la función en 61 posiciones de cada dirección. linspace crea las coordenadas y meshgrid forma las combinaciones de x e y para cada muestra. imshow colorea la tabla resultante, mientras contour calcula trayectorias correspondientes a los niveles solicitados. Las etiquetas numéricas colocadas sobre las líneas indican el valor seguido. El gráfico usa coordenadas sintéticas, sin unidades médicas. Aunque la comparación con una montaña ayuda, no estamos mostrando altura real de un órgano ni construyendo una superficie anatómica.
+
+
+Una curva de igual intensidad no es automáticamente un borde. La primera responde “¿dónde vale 0.6?”, mientras un detector de bordes pregunta “¿dónde cambia con rapidez?”. Son preguntas diferentes. En nuestra colina suave pueden dibujarse curvas en muchas posiciones sin que exista una discontinuidad. Si usamos pasos de intensidad iguales entre curvas, una separación espacial menor sugiere cambios más rápidos; aun así, la línea individual sigue representando un valor fijo. Esta distinción será central cuando lleguemos al gradiente y a Sobel.
+
+
+\needspace{6\baselineskip}
+
+\begin{Idea}{Antes de ejecutar}
+
+Ejecutar la celda 1 para np y plt. La colina se crea dentro de esta celda y no necesita la resonancia.
+
+
+\end{Idea}
+
+\begin{Codigo}{Celda 12 · Curvas de nivel en una superficie sencilla}
+eje = np.linspace(-3, 3, 61)
+X, Y = np.meshgrid(eje, eje)
+colina = np.exp(-(X**2 + Y**2)/2)
+niveles = [0.2, 0.4, 0.6, 0.8]
+fig, ax = plt.subplots(figsize=(6, 4.8), layout="constrained")
+ax.imshow(colina, origin="lower", extent=[-3.05,3.05,-3.05,3.05], cmap="gray", vmin=0, vmax=1)
+lineas = ax.contour(eje, eje, colina, levels=niveles, cmap="autumn", linewidths=1.6)
+ax.clabel(lineas, inline=True, fontsize=10, fmt="%.1f")
+ax.set(title="Una colina y sus curvas de igual valor", xlabel="x artificial", ylabel="y artificial")
+plt.show()
+\end{Codigo}
+
+\Etiqueta{Cada línea de esta celda}
+
+\begin{itemize}
+
+\item Línea 1. Crea 61 posiciones igualmente espaciadas de -3 a 3, sin unidades médicas.
+
+\item Línea 2. Forma una cuadrícula con la posición horizontal y vertical de cada punto.
+
+\item Línea 3. Da el valor más alto al centro y valores menores al alejarse; es una imagen artificial.
+
+\item Línea 4. Elige cuatro intensidades crecientes para dibujar curvas.
+
+\item Línea 5. Crea una vista del mapa artificial.
+
+\item Línea 6. Sitúa los bordes medio paso fuera de los centros de la cuadrícula.
+
+\item Línea 7. Une lugares de igual valor usando coordenadas de los centros.
+
+\item Línea 8. Escribe el valor de intensidad de cada curva.
+
+\item Línea 9. Indica que no estamos viendo coordenadas anatómicas.
+
+\item Línea 10. Presenta el equivalente visual de un mapa de nivel.
+
+\end{itemize}
+
+\Figura{10_colina_y_niveles.png}{La misma función gaussiana se representa como superficie y como mapa visto desde arriba. Cada curva conecta posiciones con igual altura numérica o intensidad. Las coordenadas y la superficie son ficticias.}{.42}
+
+\Etiqueta{Interpreta el resultado}
+
+Empieza leyendo una etiqueta: todos los puntos de la línea marcada 0.4 corresponden aproximadamente a ese nivel de la función. La curva no representa todo el interior, ni su grosor representa un área medida. Es una línea calculada y dibujada con un espesor elegido para que se vea. Los píxeles coloreados muestran las muestras de la función; las curvas añaden una lectura continua estimada entre ellas mediante el procedimiento de contorno.
+
+
+\needspace{6\baselineskip}
+
+\begin{Practica}{Cambia una sola cosa}
+
+Sustituye los cuatro niveles por [0.3, 0.5, 0.7]. Predice cuántas curvas principales aparecerán y qué zonas rodearán. Restablece [0.2, 0.4, 0.6, 0.8] para comparar con la figura del libro.
+
+
+\end{Practica}
+
+\needspace{6\baselineskip}
+
+\begin{Idea}{Pregunta resuelta}
+
+¿La curva de nivel 0.8 debe ser necesariamente el borde más fuerte de la imagen?
+
+
+Respuesta. No. 0.8 indica intensidad, no rapidez de cambio. Una región clara puede ser relativamente plana. Para valorar cambios locales necesitamos comparar vecinos o aproximar derivadas, como haremos con el gradiente.
+
+
+\end{Idea}
+
+\clearpage
+
+\section{Curvas de nivel sobre la plantilla cerebral: líneas de igualdad y regiones por umbral}
+
+\Fuente{Tutorial 8 · Lecciones del cuaderno: 13, 14}
+
+Ahora aplicamos la misma operación al corte cerebral de la plantilla. El fondo gris muestra intensidades de la resonancia y encima dibujamos curvas correspondientes a 0.4, 0.6 y 0.8. La pregunta es idéntica a la de la colina: ¿por dónde pasan esos valores? Lo nuevo es la complejidad del campo de intensidades. Un mismo nivel puede aparecer en muchas regiones separadas; sus curvas pueden formar varios lazos separados o aproximarse a otras. Esta complejidad no modifica la definición matemática.
+
+
+Para que la superposición tenga sentido, imagen y curvas deben compartir coordenadas. Nuestro corte se creó transponiendo datos[:, :, 46], por lo que sus columnas corresponden a x y sus filas a y. contour(x, y, corte, ...) recibe esas coordenadas de los centros. imshow utiliza extension, cuyos límites están medio píxel por fuera de los centros extremos. Con el espaciado de dos milímetros, ese margen es de un milímetro. Si se dibujaran curvas en índices y la imagen en milímetros, podrían aparecer desplazadas o con una escala incorrecta.
+
+
+Los valores elegidos pertenecen a esta plantilla reescalada; no son umbrales médicos universales. Dos regiones distintas pueden compartir intensidad, y una estructura puede contener un intervalo de intensidades. Por eso no podemos concluir que cada línea sea una frontera anatómica validada. La figura es útil para observar cómo se distribuye un campo de números en el espacio. Mantener visible la imagen original debajo de las curvas permite comprobar qué patrones siguen y qué detalles resultan difíciles de describir solo con niveles fijos.
+
+
+La segunda comparación fija el nivel en 0.7. A un lado se dibuja la curva de igualdad; al otro, una máscara de los píxeles del soporte cuya intensidad es mayor o igual que 0.7. Una línea representa el nivel, mientras una región incluye posiciones que cumplen una desigualdad. No son el mismo objeto ni tienen la misma dimensión visual. Además, contour interpola entre muestras para localizar la línea, mientras la máscara decide sobre cada píxel. Por eso sus límites no tienen que coincidir exactamente cuadrado por cuadrado.
+
+
+\needspace{6\baselineskip}
+
+\begin{Idea}{Antes de ejecutar}
+
+Ejecutar las celdas 1, 4, 7 y 9. Se usan el corte real de la plantilla, las coordenadas físicas x e y y su soporte.
+
+
+\end{Idea}
+
+\begin{Codigo}{Celda 13 · Curvas de nivel sobre la resonancia}
+niveles_mri = [0.4, 0.6, 0.8]
+colores_nivel = ["#29d3dc", "#f5b642", "#f06b52"]
+fig, ax = plt.subplots(figsize=(6.2, 5.3), layout="constrained")
+ax.imshow(corte, cmap="gray", origin="lower", extent=extension, vmin=0, vmax=1)
+lineas = ax.contour(x, y, corte, levels=niveles_mri, colors=colores_nivel, linewidths=0.9)
+for color, nivel_actual in zip(colores_nivel, niveles_mri):
+    ax.plot([], [], color=color, linewidth=2, label=f"Nivel {nivel_actual}")
+ax.legend(loc="upper right", fontsize=11)
+ax.set(title="Curvas de igual intensidad en MRI", xlabel="x mm · L → R", ylabel="y mm · P → A")
+plt.show()
+\end{Codigo}
+
+\Etiqueta{Cada línea de esta celda}
+
+\begin{itemize}
+
+\item Línea 1. Define intensidades crecientes de esta plantilla reescalada.
+
+\item Línea 2. Asigna un color distinto a cada uno de los tres niveles.
+
+\item Línea 3. Abre una imagen grande para ver las líneas.
+
+\item Línea 4. Dibuja el corte con sus bordes físicos.
+
+\item Línea 5. Dibuja curvas sobre centros x e y, cada nivel con un color.
+
+\item Línea 6. Empareja colores e intensidades para construir una leyenda legible.
+
+\item Línea 7. Crea una muestra de línea para la leyenda; las listas vacías no añaden datos a la imagen.
+
+\item Línea 8. Identifica los tres colores sin implicar que representan tejidos.
+
+\item Línea 9. Mantiene unidades y orientación.
+
+\item Línea 10. Muestra cómo niveles numéricos se convierten en líneas.
+
+\end{itemize}
+
+\begin{Codigo}{Celda 14 · Una curva no es lo mismo que una máscara}
+nivel = 0.7
+region = soporte & (corte >= nivel)
+fig, ax = plt.subplots(1, 2, figsize=(9, 4.8), layout="constrained")
+ax[0].imshow(corte, cmap="gray", origin="lower", extent=extension, vmin=0, vmax=1)
+ax[0].contour(x, y, corte, levels=[nivel], colors=["#f5b642"], linewidths=1)
+ax[1].imshow(region, cmap="gray", origin="lower", extent=extension, vmin=0, vmax=1, interpolation="nearest")
+for panel, titulo in zip(ax, [f"Curva de nivel {nivel}", f"Máscara de valores ≥ {nivel}"]):
+    panel.set(title=titulo, xlabel="x mm · L → R", ylabel="y mm · P → A")
+plt.show()
+\end{Codigo}
+
+\Etiqueta{Cada línea de esta celda}
+
+\begin{itemize}
+
+\item Línea 1. Fija un valor común para comparar la curva y la región seleccionada.
+
+\item Línea 2. Crea una máscara booleana con una regla de intensidad.
+
+\item Línea 3. Reserva un panel para líneas y otro para áreas.
+
+\item Línea 4. Mantiene la imagen de fondo para las curvas.
+
+\item Línea 5. Traza solamente la curva del nivel elegido.
+
+\item Línea 6. Dibuja las áreas que satisfacen la desigualdad.
+
+\item Línea 7. Recorre los dos conceptos para etiquetarlos.
+
+\item Línea 8. Conserva las mismas coordenadas en ambos.
+
+\item Línea 9. Compara una línea con una selección de píxeles.
+
+\end{itemize}
+
+\Figura{11_curvas_cerebro.png}{Las curvas 0,4, 0,6 y 0,8 se superponen al corte axial k=46, situado en z=20 mm. Se calculan con las intensidades de la plantilla y se muestran en coordenadas físicas. Un nivel puede producir varias curvas y no constituye por sí mismo una etiqueta anatómica.}{.60}
+
+\Figura{12_zoom_curva_interpolada.png}{En esta vecindad cerebral de 7×7, los números se muestran redondeados a un decimal, pero el nivel 0,6 se calcula con los valores completos. Los puntos indican centros de vóxeles separados 2 mm. La línea estima el cruce del nivel entre centros vecinos; no son mediciones nuevas.}{.48}
+
+\Figura{level_mask.png}{La curva de nivel 0,7 representa igualdad de intensidad; la máscara selecciona píxeles del soporte con intensidad mayor o igual que 0,7. Una trayectoria interpolada y una selección discreta no son el mismo objeto.}{.30}
+
+\Etiqueta{Interpreta el resultado}
+
+Recorre una de las líneas de color y localiza varios grupos desconectados del mismo nivel. Esa repetición muestra que la intensidad no identifica una ubicación única. Después compara la curva de 0.7 con la máscara: las zonas blancas son áreas seleccionadas, no líneas engrosadas. Si una región tiene intensidad uniformemente alta, puede quedar dentro de la máscara aunque no aparezca una curva atravesando su interior. La curva suele delimitar transiciones de ese nivel según la interpolación.
+
+
+\needspace{6\baselineskip}
+
+\begin{Practica}{Cambia una sola cosa}
+
+Cambia nivel de 0.7 a 0.8 en la celda 14. Predice que la región seleccionada se reducirá o conservará su tamaño, aunque las líneas puedan cambiar de forma y de cantidad. Usa el mismo corte y los mismos ejes.
+
+
+\end{Practica}
+
+\needspace{6\baselineskip}
+
+\begin{Idea}{Pregunta resuelta}
+
+¿Por qué la línea de nivel y el contorno escalonado de la máscara no coinciden exactamente en todos los píxeles?
+
+
+Respuesta. contour interpola una trayectoria donde se cumple la igualdad entre muestras. La máscara aplica una desigualdad a posiciones discretas dentro del soporte. Una línea estimada y una selección de cuadrados no coinciden necesariamente píxel por píxel.
+
+
+\end{Idea}
+
+\chapter[Ruido y filtros]{Ruido y filtros: qué se gana y qué se pierde}
+
+\needspace{6\baselineskip}
+
+\begin{Idea}{Al terminar este capítulo}
+
+Calcularás una media y una mediana, interpretarás sigma y compararás filtros sobre exactamente la misma imagen ruidosa.
+
+
+\end{Idea}
+
+\section{Crear ruido controlado para comparar operaciones con una entrada conocida}
+
+\Fuente{Tutorial 9 · Lecciones del cuaderno: 15}
+
+Para estudiar un filtro necesitamos saber qué imagen recibió. En este experimento conservamos el corte original y creamos otra versión sumándole pequeñas variaciones aleatorias. De esta forma conocemos el punto de partida y podemos atribuir las diferencias a la perturbación añadida y al procesamiento posterior. El ruido hace visible una dificultad habitual: cambios locales que no pertenecen al patrón que deseamos observar. Aquí es una herramienta pedagógica controlada, no una reproducción exacta de cómo se genera el ruido en un equipo de resonancia.
+
+
+El generador produce una matriz del mismo tamaño que corte con distribución normal, media cero y desviación estándar 0.06. Media cero significa que las variaciones no se diseñan para aumentar sistemáticamente el brillo; unas son positivas y otras negativas. La desviación describe su escala típica en las unidades relativas de intensidad de este ejemplo. No significa que todos los cambios valgan 0.06 ni que ninguno pueda superar ese valor. Tampoco es un porcentaje de pacientes o de píxeles alterados: se genera una variación en cada posición.
+
+
+La semilla 2026 permite repetir la misma realización al ejecutar nuevamente la celda con el mismo generador y configuración. Esto es útil porque dos filtros deben recibir la misma matriz si queremos comparar sus efectos. Cambiar el ruido entre paneles introduciría otra causa de diferencia. Una semilla no elimina el azar del modelo ni demuestra que un método funcione bien ante todos los ruidos posibles; solo fija una muestra reproducible para este ejercicio. Una evaluación general requeriría otros datos y condiciones.
+
+
+Sumar ruido puede producir valores negativos o superiores a uno. El cuaderno los conserva: no recorta la matriz. La figura sigue usando una ventana de cero a uno, de modo que esos extremos pueden saturarse al mostrarse. Esta separación entre datos y visualización retoma el tutorial de contraste. También se perturba el fondo, porque la suma se aplica a toda la matriz. Por ello no debe reutilizarse despreocupadamente la regla “mayor que cero” para afirmar que ahora localizamos el cerebro: el fondo ruidoso puede contener valores positivos.
+
+
+\needspace{6\baselineskip}
+
+\begin{Idea}{Antes de ejecutar}
+
+Ejecutar las celdas 1, 4 y 7. La variable ruidosa se construye a partir de corte y será la entrada compartida de las celdas 16–21.
+
+
+\end{Idea}
+
+\begin{Codigo}{Celda 15 · Añadir ruido artificial de manera reproducible}
+semilla = 2026
+sigma_ruido = 0.06
+rng = np.random.default_rng(semilla)
+ruido = rng.normal(0, sigma_ruido, size=corte.shape).astype(np.float32)
+ruidosa = corte + ruido
+fig, ax = plt.subplots(1, 2, figsize=(9, 4.8), layout="constrained")
+for panel, matriz, titulo in zip(ax, [corte, ruidosa], ["Referencia pública", "Referencia + ruido artificial"]):
+    panel.imshow(matriz, cmap="gray", origin="lower", extent=extension, vmin=0, vmax=1)
+    panel.set(title=titulo, xlabel="x mm · L → R", ylabel="y mm · P → A")
+plt.show()
+print("Mínimo y máximo de la matriz ruidosa:", round(float(ruidosa.min()),3), round(float(ruidosa.max()),3))
+\end{Codigo}
+
+\Etiqueta{Cada línea de esta celda}
+
+\begin{itemize}
+
+\item Línea 1. Guarda el punto de partida de la secuencia pseudoaleatoria.
+
+\item Línea 2. Define la dispersión del ruido en unidades de intensidad, no en píxeles ni milímetros.
+
+\item Línea 3. Crea un generador reproducible que no modifica el generador global.
+
+\item Línea 4. Genera un número de ruido por píxel con el mismo tamaño que el corte.
+
+\item Línea 5. Suma el ruido a una nueva matriz y preserva corte.
+
+\item Línea 6. Abre una comparación de referencia y perturbación.
+
+\item Línea 7. Usa exactamente las matrices que compararemos después.
+
+\item Línea 8. Mantiene la misma ventana para no ocultar diferencias con un autoajuste.
+
+\item Línea 9. Identifica referencia y simulación.
+
+\item Línea 10. Muestra el efecto de la perturbación.
+
+\item Línea 11. Hace visible que no recortamos los datos al intervalo de visualización.
+
+\end{itemize}
+
+\begin{Salida}{Salida textual de la celda completa}
+Mínimo y máximo de la matriz ruidosa: -0.239 1.11
+\end{Salida}
+
+\Figura{14_ruido_y_detalle.png}{Al suavizar este objeto ficticio, disminuyen las fluctuaciones del ruido y también baja y se ensancha la barra brillante de tres píxeles. El perfil corresponde a la línea marcada. La referencia exacta se conoce porque el objeto y el ruido fueron generados para el ejemplo.}{.42}
+
+\Etiqueta{Interpreta el resultado}
+
+La salida gráfica de la celda 15 compara el corte cerebral original con su copia perturbada bajo la misma ventana. La salida textual informa aproximadamente -0.239 y 1.11 como mínimo y máximo de la matriz ruidosa: no se ha aplicado un recorte numérico a cero y uno. La figura impresa añade un experimento distinto, con un objeto ficticio, para hacer visibles el ruido y la pérdida de detalles tras suavizar. No atribuyas los extremos numéricos del corte cerebral a ese objeto. En ambos casos, varios valores pueden verse igualmente negros o blancos por la ventana fija; consulta los números para conocer los datos.
+
+
+\needspace{6\baselineskip}
+
+\begin{Practica}{Cambia una sola cosa}
+
+Cambia sigma\_ruido de 0.06 a 0.12, ejecuta y observa la mayor variación. Si quieres comparar filtros después, vuelve a ejecutar sus celdas para que todos reciban la nueva ruidosa. Restaura 0.06 para reproducir el libro.
+
+
+\end{Practica}
+
+\needspace{6\baselineskip}
+
+\begin{Idea}{Pregunta resuelta}
+
+¿Por qué fijar la semilla ayuda a comparar filtros, pero no prueba que uno sea universalmente mejor?
+
+
+Respuesta. La semilla permite que todos reciban la misma perturbación y que podamos repetirla. Seguimos estudiando un solo corte y un ruido artificial. La reproducibilidad no sustituye evaluar otros datos, condiciones y objetivos.
+
+
+\end{Idea}
+
+\clearpage
+
+\section{Filtro de media: calcular una vecindad y comprender el desenfoque}
+
+\Fuente{Tutorial 10 · Lecciones del cuaderno: 23, 18}
+
+Un filtro local calcula un nuevo valor usando una vecindad alrededor de cada posición. En un filtro de media de tres por tres intervienen nueve números. Se suman y se divide entre nueve; el resultado sustituye al valor central en la imagen de salida. Después la ventana se desplaza y se repite el procedimiento. La entrada se conserva como referencia. Imaginar una pequeña ventana que recorre la matriz ayuda a entender cómo una regla sencilla puede transformar todos los píxeles de una imagen.
+
+
+El ejemplo manual tiene ocho valores diez y un valor noventa en el centro. Su suma es 170 y su media es 170/9, aproximadamente 18.89. El centro pasa de noventa a un valor mucho más cercano a sus vecinos, pero el noventa también influirá en otras ventanas que lo incluyan. Por eso el filtro no borra sin consecuencias un punto intenso: distribuye su contribución entre cálculos próximos. Cuando una región brillante limita con otra oscura, sus valores se mezclan en las ventanas que cruzan la frontera.
+
+
+Esta mezcla puede reducir fluctuaciones pequeñas, aunque también suaviza detalles verdaderos. Una línea fina, una esquina o una estructura pequeña pueden perder contraste. El filtro no sabe cuál cambio es ruido y cuál pertenece al objeto. Su regla depende de las intensidades locales, no de una comprensión médica. Elegir el tamaño de la vecindad significa elegir cuánta información espacial mezclamos. Una ventana mayor reúne más vecinos y puede producir un suavizado más extendido; eso no garantiza un resultado más adecuado para el objetivo.
+
+
+En la resonancia usamos uniform\_filter con tamaño tres. Como corte es bidimensional, tamaño tres representa una ventana de tres por tres, no un cubo de tres por tres por tres. En los límites de la imagen faltan vecinos exteriores y hace falta una regla de borde; aquí se utiliza reflexión. Es importante anunciarla, porque los valores de los extremos pueden depender de esa elección. La comparación incluye también Gauss y mediana, pero sus parámetros no representan exactamente la misma fuerza de suavizado.
+
+
+\needspace{6\baselineskip}
+
+\begin{Idea}{Antes de ejecutar}
+
+Para la cuenta manual basta la celda 1. La comparación sobre RM de la celda 18 necesita además corte, ruidosa y las celdas 16–17 para ndimage, gauss y mediana. La celda 23 es una ampliación del recorrido de una hora.
+
+
+\end{Idea}
+
+\begin{Codigo}{Celda 23 · Ampliación para calcular media y mediana a mano}
+vecindad = np.array([[10,10,10],[10,90,10],[10,10,10]], dtype=float)
+promedio_manual = vecindad.mean()
+mediana_manual = np.median(vecindad)
+fig, ax = plt.subplots(1, 2, figsize=(8, 4), layout="constrained")
+ax[0].imshow(vecindad, cmap="gray", vmin=0, vmax=100, interpolation="nearest")
+for fila in range(3):
+    for columna in range(3):
+        ax[0].text(columna, fila, int(vecindad[fila,columna]), ha="center", va="center", color="#f25b42", fontsize=19)
+ax[0].set(title="Ocho valores 10 y un valor 90", xticks=range(3), yticks=range(3))
+ax[1].axis("off")
+ax[1].text(0.08, 0.65, f"Media = 170 / 9 = {promedio_manual:.2f}\n\nMediana = {mediana_manual:.0f}", fontsize=19, va="center")
+plt.show()
+\end{Codigo}
+
+\Etiqueta{Cada línea de esta celda}
+
+\begin{itemize}
+
+\item Línea 1. Define una vecindad artificial de tres filas por tres columnas.
+
+\item Línea 2. Suma sus nueve valores y divide por nueve.
+
+\item Línea 3. Ordena los nueve valores y toma el central.
+
+\item Línea 4. Crea un panel numérico y otro para los resultados.
+
+\item Línea 5. Dibuja cada casilla de esta escala artificial de 0 a 100.
+
+\item Línea 6. Recorre las tres filas de la vecindad.
+
+\item Línea 7. Recorre las tres columnas de cada fila.
+
+\item Línea 8. Escribe los valores para que se puedan contar a mano.
+
+\item Línea 9. Identifica la vecindad usada.
+
+\item Línea 10. Oculta ejes en el panel explicativo.
+
+\item Línea 11. Muestra ambos cálculos con números grandes.
+
+\item Línea 12. Relaciona el valor extremo con dos respuestas distintas.
+
+\end{itemize}
+
+\begin{Codigo}{Celda 18 · Comparar media Gauss y mediana con la misma entrada}
+media = ndimage.uniform_filter(ruidosa, size=3, mode="reflect")
+matrices = [ruidosa, media, gauss, mediana]
+titulos = ["Entrada con ruido", "Media 3 × 3", f"Gauss σ={sigma_pixeles} px", f"Mediana {tamano} × {tamano}"]
+fig, ax = plt.subplots(2, 2, figsize=(9, 9), layout="constrained")
+for panel, matriz, titulo in zip(ax.ravel(), matrices, titulos):
+    panel.imshow(matriz, cmap="gray", origin="lower", extent=extension, vmin=0, vmax=1)
+    panel.set(title=titulo, xlabel="x mm · L → R", ylabel="y mm · P → A")
+plt.show()
+\end{Codigo}
+
+\Etiqueta{Cada línea de esta celda}
+
+\begin{itemize}
+
+\item Línea 1. Promedia por igual los nueve valores de cada vecindad 3 por 3.
+
+\item Línea 2. Reúne la misma entrada y los resultados obtenidos con ella.
+
+\item Línea 3. Explicita parámetros para hacer la comparación reproducible.
+
+\item Línea 4. Distribuye las cuatro vistas en dos filas y dos columnas.
+
+\item Línea 5. Aplana solo la lista de paneles para recorrerlos de uno en uno.
+
+\item Línea 6. Fija la escala común y evita normalizar por separado cada resultado.
+
+\item Línea 7. Identifica la operación y mantiene orientación física.
+
+\item Línea 8. Ofrece una comparación visual honesta de los filtros.
+
+\end{itemize}
+
+\Figura{mean3x3.png}{Ocho valores 10 y un valor 90 forman una vecindad ficticia. La suma es 170, la media 18,89 y la mediana 10. Así se puede comprobar a mano el cálculo.}{.30}
+
+\Figura{13_pesos_media_gauss.png}{Ambos núcleos suman uno y conservan una región uniforme. La media da 1/9 a las nueve posiciones; el ejemplo gaussiano favorece el centro. Este gaussiano está truncado a 3×3 y normalizado para ilustrar sus pesos; no es el núcleo completo predeterminado de gaussian\_filter.}{.42}
+
+\Etiqueta{Interpreta el resultado}
+
+La figura de la cuenta manual muestra los nueve valores y permite comprobar 170/9 con lápiz. El diagrama de pesos que sigue explica cómo se reparte la contribución de cada vecino: una media uniforme usa pesos iguales y el gaussiano da más peso a posiciones cercanas. En la salida gráfica de la celda 18, compara además sobre el cerebro una región relativamente uniforme y otra con estructuras pequeñas. La primera puede verse menos granulada; en la segunda, algunas separaciones pueden perder nitidez. Ambas consecuencias nacen de mezclar información vecina.
+
+
+\needspace{6\baselineskip}
+
+\begin{Practica}{Cambia una sola cosa}
+
+En la vecindad manual cambia el centro de 90 a 900. Calcula antes la nueva media: (900 + 8×10)/9. Observa que el número mostrado cambia aunque el blanco del gráfico pueda saturarse por su escala fija.
+
+
+\end{Practica}
+
+\needspace{6\baselineskip}
+
+\begin{Idea}{Pregunta resuelta}
+
+¿Por qué un promedio puede reducir un punto aislado intenso y al mismo tiempo ensanchar su influencia?
+
+
+Respuesta. El punto participa en varias ventanas: sus vecinos bajos reducen la media de su centro, pero él aumenta las medias cercanas. El filtro redistribuye influencia espacial; no borra únicamente un dato aislado.
+
+
+\end{Idea}
+
+\clearpage
+
+\section{Filtro gaussiano: dar más peso a los vecinos cercanos}
+
+\Fuente{Tutorial 11 · Lecciones del cuaderno: 16}
+
+El filtro gaussiano también combina valores vecinos, pero no concede el mismo peso a todos. Las posiciones más cercanas al centro influyen más y las más lejanas influyen menos, siguiendo una distribución con forma de campana. Esos pesos se normalizan para que una región constante permanezca constante. La idea puede entenderse sin derivar la fórmula: en lugar de repartir nueve votos idénticos, usamos un promedio ponderado cuya influencia disminuye suavemente con la distancia. El cálculo se repite a lo largo de la imagen.
+
+
+El parámetro sigma controla la anchura espacial de esa campana. En gaussian\_filter se expresa en unidades de muestra de la matriz, que aquí son píxeles del corte. Sigma 1.2 no significa una ventana de 1.2 por 1.2 ni un porcentaje de ruido. Es una medida de dispersión del núcleo de pesos. Al pasar a sigma 2.4, la influencia se distribuye a distancias mayores y el suavizado suele ser más extendido. La implementación usa un soporte finito para aproximar la campana; no debemos interpretar sigma como su diámetro total.
+
+
+Nuestra imagen tiene dos milímetros entre centros en ambos ejes del plano. Por eso sigma 1.2 píxeles corresponde a 2.4 milímetros por eje, y sigma 2.4 píxeles a 4.8 milímetros. Es una conversión de unidades del parámetro, no una declaración de la nueva resolución clínica ni del ancho total del filtro. Para otro espaciado habría que convertir cada eje por separado. Por ejemplo, una escala física deseada de tres milímetros con pasos de uno y dos milímetros requiere sigmas de tres y 1.5 muestras, respectivamente.
+
+
+Aplicamos el filtro al corte bidimensional ruidoso. No está mezclando cortes vecinos del volumen. Si se aplicara a datos tridimensionales, el conjunto de vecinos y el significado de cada eje serían diferentes. Además, utilizamos números de punto flotante para conservar resultados fraccionarios y reflexión en el borde. Estas decisiones importan para reproducir la figura. El suavizado se calcula sobre la matriz completa; no estamos filtrando exclusivamente una máscara cerebral ni suponiendo que el algoritmo conoce los límites anatómicos.
+
+
+\needspace{6\baselineskip}
+
+\begin{Idea}{Antes de ejecutar}
+
+Ejecutar la celda 15 para disponer de ruidosa y la celda 4 para pasos. Esta celda importa ndimage, que reutilizan varios tutoriales posteriores.
+
+
+\end{Idea}
+
+\begin{Codigo}{Celda 16 · Suavizar con un filtro gaussiano}
+from scipy import ndimage
+sigma_pixeles = 1.2
+assert 0 < sigma_pixeles <= 4
+gauss = ndimage.gaussian_filter(ruidosa, sigma=sigma_pixeles, mode="reflect")
+gauss_amplio = ndimage.gaussian_filter(ruidosa, sigma=2.4, mode="reflect")
+fig, ax = plt.subplots(1, 3, figsize=(12, 4.5), layout="constrained")
+for panel, matriz, titulo in zip(ax, [ruidosa, gauss, gauss_amplio], ["Con ruido", f"Gauss σ={sigma_pixeles} px", "Gauss σ=2.4 px"]):
+    panel.imshow(matriz, cmap="gray", origin="lower", extent=extension, vmin=0, vmax=1)
+    panel.set(title=titulo, xlabel="x mm · L → R", ylabel="y mm · P → A")
+plt.show()
+print("Sigma físico del primer filtro:", sigma_pixeles * pasos[0], "mm por eje del plano")
+\end{Codigo}
+
+\Etiqueta{Cada línea de esta celda}
+
+\begin{itemize}
+
+\item Línea 1. Importa herramientas de procesamiento de imágenes.
+
+\item Línea 2. Elige la anchura espacial del filtro; prueba después 0.6 o 2.4.
+
+\item Línea 3. Limita el control del ejercicio a un intervalo razonable.
+
+\item Línea 4. Promedia con pesos gaussianos sobre la misma imagen ruidosa.
+
+\item Línea 5. Crea una segunda versión con suavizado más amplio para observar pérdida de detalle.
+
+\item Línea 6. Reserva una fila con ruido y dos escalas de suavizado.
+
+\item Línea 7. Empareja imágenes con sus parámetros.
+
+\item Línea 8. Conserva la misma ventana 0 a 1 en todos los paneles.
+
+\item Línea 9. Mantiene las coordenadas del corte.
+
+\item Línea 10. Permite comparar reducción de variaciones y pérdida de detalle.
+
+\item Línea 11. Convierte píxeles a mm usando el tamaño comprobado de esta plantilla.
+
+\end{itemize}
+
+\begin{Salida}{Salida textual de la celda completa}
+Sigma físico del primer filtro: 2.4 mm por eje del plano
+\end{Salida}
+
+\Figura{17_sigma_fisica.png}{La extensión física $\sigma$=3 mm equivale a 3 píxeles en una rejilla de 1 mm y a 1 píxel en una rejilla de 3 mm. El círculo de radio 3 mm marca la misma distancia física. Es un esquema de muestreo de una gaussiana, no una comparación entre adquisiciones clínicas.}{.42}
+
+\Figura{gaussian_sigmas.png}{Al aumentar sigma se extiende la mezcla espacial: disminuye la variación local y también puede perderse detalle fino. Todos los paneles conservan la misma escala de grises.}{.29}
+
+\Etiqueta{Interpreta el resultado}
+
+Los tres paneles presentan la misma entrada ruidosa y dos versiones suavizadas, todos con ventana de cero a uno. Busca primero la textura granulada y después detalles estrechos. Con sigma mayor suelen disminuir las fluctuaciones, pero también se reducen diferencias espaciales que quizá deseábamos preservar. La línea “Sigma físico del primer filtro: 2.4 mm por eje del plano” comprueba la conversión para este archivo. No debe copiarse ese número a otra imagen sin consultar su espaciado.
+
+
+\needspace{6\baselineskip}
+
+\begin{Practica}{Cambia una sola cosa}
+
+Modifica sigma\_pixeles de 1.2 a 0.6 y luego a 2.0. Calcula sus equivalentes físicos antes de ejecutar. Mantén la misma ruidosa y la ventana 0–1 para comparar únicamente el efecto de la anchura del filtro.
+
+
+\end{Practica}
+
+\needspace{6\baselineskip}
+
+\begin{Idea}{Pregunta resuelta}
+
+¿Sigma 1.2 significa lo mismo físicamente en una imagen de 1 mm y en otra de 2 mm por píxel?
+
+
+Respuesta. No. Sigma 1.2 representa muestras: equivale a 1.2 mm con pasos de 1 mm y a 2.4 mm con pasos de 2 mm. Para conservar la escala física se convierte cada eje por separado.
+
+
+\end{Idea}
+
+\clearpage
+
+\section{Mediana y ruido de impulsos: ordenar antes de elegir}
+
+\Fuente{Tutorial 12 · Lecciones del cuaderno: 17, 24}
+
+La mediana se obtiene ordenando una lista y escogiendo su valor central. Para nueve números, elegimos el quinto después de ordenarlos. En la vecindad con ocho valores diez y un noventa, el quinto valor es diez. Esto explica por qué la mediana no reacciona al extremo igual que la media: no suma todas las intensidades para producir una fracción. Es una operación no lineal basada en el orden. Un valor muy alto puede cambiar de magnitud sin cambiar quién ocupa la posición central.
+
+
+El filtro de mediana aplica esa regla a una vecindad en cada posición de la imagen. Con tamaño tres en nuestro corte usa nueve valores y produce un nuevo centro; luego avanza. Suele resultar útil frente a valores aislados muy distintos de su entorno, pero no identifica por sí mismo qué es un error. Una estructura verdadera pequeña o delgada también puede quedar en minoría dentro de la ventana y ser reemplazada. Aumentar el tamaño puede eliminar más puntos aislados y también alterar más detalles reales.
+
+
+Para observar un caso diferente del ruido normal aditivo, la ampliación crea impulsos. Parte del corte original, escoge sin repetición aproximadamente el dos por ciento de sus posiciones y sustituye una mitad por cero y la otra por uno. En este corte se eligen 232 posiciones de 11 583. La sustitución no garantiza que las 232 cambien numéricamente: una posición de fondo que ya era cero sigue siendo cero al asignarle cero. El mensaje del cuaderno hace explícita esta distinción entre intervenir una posición y alterar su valor.
+
+
+Después aplicamos media, Gauss y mediana a la misma imagen con impulsos. La comparación se interpreta dentro de ese experimento, sin mezclarla con la imagen de ruido aditivo. Los filtros reciben igual entrada y se muestran con igual ventana; eso permite atribuir diferencias a las operaciones elegidas. Sin embargo, los tamaños utilizados no equivalen a una optimización de cada método. Las figuras ilustran por qué el tipo de perturbación importa y por qué no existe una única operación que podamos llamar la mejor para cualquier imagen.
+
+
+\needspace{6\baselineskip}
+
+\begin{Idea}{Antes de ejecutar}
+
+Ejecutar las celdas 15 y 16 para ruidosa y ndimage. La ampliación de impulsos usa corte limpio, no ruidosa, y crea su propio generador. La cuenta manual de la celda 23 complementa este tutorial.
+
+
+\end{Idea}
+
+\begin{Codigo}{Celda 17 · Usar la mediana de una vecindad}
+tamano = 3
+assert tamano in [3, 5, 7]
+mediana = ndimage.median_filter(ruidosa, size=tamano, mode="reflect")
+fig, ax = plt.subplots(1, 2, figsize=(9, 4.8), layout="constrained")
+for panel, matriz, titulo in zip(ax, [ruidosa, mediana], ["Con ruido", f"Mediana {tamano} × {tamano}"]):
+    panel.imshow(matriz, cmap="gray", origin="lower", extent=extension, vmin=0, vmax=1)
+    panel.set(title=titulo, xlabel="x mm · L → R", ylabel="y mm · P → A")
+plt.show()
+\end{Codigo}
+
+\Etiqueta{Cada línea de esta celda}
+
+\begin{itemize}
+
+\item Línea 1. Elige un lado impar para la vecindad; usa 3 o 5 en el ejercicio.
+
+\item Línea 2. Acepta solo tamaños impares pequeños para esta demostración.
+
+\item Línea 3. Reemplaza cada casilla por la mediana de su vecindad sobre la misma imagen ruidosa.
+
+\item Línea 4. Abre dos vistas comparables.
+
+\item Línea 5. Recorre la entrada y el resultado.
+
+\item Línea 6. Usa la misma escala para no exagerar el cambio.
+
+\item Línea 7. Expresa el tamaño del vecindario y las coordenadas.
+
+\item Línea 8. Presenta el resultado del filtro no lineal.
+
+\end{itemize}
+
+\begin{Codigo}{Celda 24 · Ampliación para observar ruido de impulsos}
+rng_impulsos = np.random.default_rng(2026)
+numero_impulsos = round(0.02 * corte.size)
+posiciones_impulsos = rng_impulsos.choice(corte.size, size=numero_impulsos, replace=False)
+impulsos = corte.copy()
+mitad = numero_impulsos // 2
+impulsos.flat[posiciones_impulsos[:mitad]] = 0
+impulsos.flat[posiciones_impulsos[mitad:]] = 1
+resultados = [impulsos, ndimage.uniform_filter(impulsos, 3), ndimage.gaussian_filter(impulsos, 1.2), ndimage.median_filter(impulsos, 3)]
+titulos = ["Impulsos: 2% de posiciones", "Media 3 × 3", "Gauss σ=1.2 px", "Mediana 3 × 3"]
+fig, ax = plt.subplots(2, 2, figsize=(9, 9), layout="constrained")
+for panel, matriz, titulo in zip(ax.ravel(), resultados, titulos):
+    panel.imshow(matriz, cmap="gray", origin="lower", extent=extension, vmin=0, vmax=1)
+    panel.set(title=titulo, xlabel="x mm · L → R", ylabel="y mm · P → A")
+plt.show()
+print("Posiciones sustituidas:", numero_impulsos, "de", corte.size, "| no necesariamente todas cambian de valor")
+\end{Codigo}
+
+\Etiqueta{Cada línea de esta celda}
+
+\begin{itemize}
+
+\item Línea 1. Crea un generador propio, independiente del usado para el ruido normal.
+
+\item Línea 2. Calcula cuántas posiciones únicas sustituiremos, redondeando al entero más cercano.
+
+\item Línea 3. Escoge posiciones sin repetirlas.
+
+\item Línea 4. Preserva el corte de referencia y crea la nueva entrada artificial.
+
+\item Línea 5. Divide el conjunto de posiciones en dos grupos de tamaño similar.
+
+\item Línea 6. Coloca ceros en el primer grupo de posiciones.
+
+\item Línea 7. Coloca unos en el segundo grupo.
+
+\item Línea 8. Aplica los tres filtros a la misma entrada, con el modo reflect por defecto.
+
+\item Línea 9. Declara la perturbación y los parámetros.
+
+\item Línea 10. Coloca entrada y resultados en cuatro paneles legibles.
+
+\item Línea 11. Recorre cada comparación sin cambiar la entrada.
+
+\item Línea 12. Mantiene la misma ventana de intensidad en todos.
+
+\item Línea 13. Conserva orientación y coordenadas.
+
+\item Línea 14. Muestra cómo responden los filtros a posiciones extremas aisladas.
+
+\item Línea 15. Distingue posiciones asignadas de valores efectivamente distintos.
+
+\end{itemize}
+
+\begin{Salida}{Salida textual de la celda completa}
+Posiciones sustituidas: 232 de 11583 | no necesariamente todas cambian de valor
+\end{Salida}
+
+\Figura{median_filter.png}{La misma plantilla con ruido gaussiano antes y después de una mediana de 3 × 3. El filtro modifica la textura y puede modificar detalles finos.}{.32}
+
+\Figura{noise_impulse_filters.png}{Ruido de impulsos en el 2 \% de posiciones y tres filtros aplicados a esa misma entrada: media, gaussiano y mediana. La mediana responde de forma distinta a puntos aislados; no se muestra aquí una referencia limpia.}{.52}
+
+\Etiqueta{Interpreta el resultado}
+
+En la mediana sobre ruido aditivo, observa qué fluctuaciones desaparecen y si cambian detalles estrechos. Después examina los puntos aislados del experimento de impulsos. La mediana puede suprimir muchos de ellos cuando la mayoría de los vecinos pertenece al patrón circundante. La media tiende a repartir su influencia y el filtro gaussiano lo hace con pesos. Estas descripciones son más precisas que afirmar que un filtro “limpia” y otro “falla” sin especificar el objetivo.
+
+
+\needspace{6\baselineskip}
+
+\begin{Practica}{Cambia una sola cosa}
+
+En la celda 17 cambia el tamaño de tres a cinco y compara el detalle conservado. En la ampliación, cambia 0.02 a 0.05 para aumentar posiciones sustituidas; regenera todos los resultados desde esa misma entrada.
+
+
+\end{Practica}
+
+\needspace{6\baselineskip}
+
+\begin{Idea}{Pregunta resuelta}
+
+¿Por qué cambiar el valor central de 90 a 900 altera la media del ejemplo, pero deja su mediana en diez?
+
+
+Respuesta. La media incluye directamente el extremo en la suma. La mediana elige el quinto valor ordenado, que sigue siendo diez entre ocho dieces y un extremo. Si cambian suficientes vecinos, la mediana también puede cambiar.
+
+
+\end{Idea}
+
+\chapter[Bordes]{Perfiles, cambios y bordes}
+
+\needspace{6\baselineskip}
+
+\begin{Idea}{Al terminar este capítulo}
+
+Relacionarás el cambio de intensidad con la pendiente de un perfil y reconocerás cómo responde Sobel al ruido y al suavizado.
+
+
+\end{Idea}
+
+\section{Antes de Sobel: leer un perfil y medir diferencias entre vecinos}
+
+\Fuente{Tutorial 13 · Lecciones del cuaderno: 19}
+
+Un perfil es una secuencia de intensidades a lo largo de una dirección. En lugar de observar toda la imagen de una vez, imaginamos recorrer una fila y anotar sus valores. Nuestro perfil artificial comienza con cinco ceros y continúa con cinco unos. El gráfico superior permite reconocer una zona constante baja, un salto y una zona constante alta. La pregunta ahora no es qué parte tiene mayor intensidad, sino entre qué vecinos cambia el valor. Esta diferencia de pregunta separa brillo de borde.
+
+
+np.diff resta cada valor al siguiente. Con diez muestras produce nueve diferencias porque existen nueve pares consecutivos. Entre dos ceros el resultado es cero; entre el último cero y el primer uno es uno; entre dos unos vuelve a ser cero. El cambio aparece entre las posiciones cuatro y cinco, cuyo centro se ubica en 4.5. Por eso las barras del gráfico inferior están a mitad de camino entre muestras. Colocarlas directamente sobre los diez puntos originales daría una impresión equivocada de qué cantidad se calculó.
+
+
+El signo de una diferencia indica si la intensidad aumenta o disminuye al avanzar. Al mostrar su valor absoluto conservamos la magnitud del cambio y descartamos el sentido. Un salto de cero a uno y otro de uno a cero producen la misma magnitud, aunque signos opuestos. En este ejemplo el eje horizontal está en índices de muestras, no en milímetros. Para expresar una tasa física habría que dividir la diferencia entre la distancia correspondiente. Esa conversión no se aplica automáticamente en el código mostrado.
+
+
+Esta idea anticipa el gradiente, que reúne cambios direccionales. En una imagen podemos cambiar al movernos horizontal o verticalmente; una estructura no tiene por qué estar alineada con una sola dirección. También anticipa una limitación: el ruido introduce cambios vecinos y puede generar respuestas grandes sin corresponder a un límite anatómico. Por eso detectar cambios es una operación matemática útil, pero interpretar sus causas exige contexto. El próximo tutorial combinará dos direcciones y mostrará el efecto de suavizar antes de medirlas.
+
+
+\needspace{6\baselineskip}
+
+\begin{Idea}{Antes de ejecutar}
+
+Ejecutar la celda 1 para np y plt. El perfil artificial es independiente del cerebro y permite explicar el cambio local con diez muestras.
+
+
+\end{Idea}
+
+\begin{Codigo}{Celda 19 · Un borde es un cambio entre vecinos}
+perfil = np.array([0,0,0,0,0,1,1,1,1,1], dtype=float)
+diferencias = np.diff(perfil)
+posiciones = np.arange(perfil.size)
+centros_pares = np.arange(diferencias.size) + 0.5
+fig, ax = plt.subplots(2, 1, figsize=(8, 5), layout="constrained")
+ax[0].step(posiciones, perfil, where="mid", color="#197f85")
+ax[0].set(title="Intensidad de una fila artificial", ylabel="Intensidad", xticks=posiciones)
+ax[1].bar(centros_pares, np.abs(diferencias), width=0.5, color="#d65a37")
+ax[1].set(title="Cambio entre vecinos", xlabel="Posición entre muestras", ylabel="Diferencia absoluta", xticks=centros_pares)
+plt.show()
+\end{Codigo}
+
+\Etiqueta{Cada línea de esta celda}
+
+\begin{itemize}
+
+\item Línea 1. Crea una fila artificial con un salto de intensidad.
+
+\item Línea 2. Calcula valor siguiente menos valor anterior para nueve pares vecinos.
+
+\item Línea 3. Numera las diez muestras del perfil original.
+
+\item Línea 4. Sitúa cada diferencia entre las dos muestras que compara.
+
+\item Línea 5. Separa valores y cambios en dos gráficos.
+
+\item Línea 6. Muestra la intensidad por posición como escalones.
+
+\item Línea 7. Identifica el perfil original.
+
+\item Línea 8. Dibuja la magnitud del cambio sin distinguir signo positivo o negativo.
+
+\item Línea 9. Sitúa correctamente las diferencias entre muestras.
+
+\item Línea 10. Relaciona el salto con un pico de cambio.
+
+\end{itemize}
+
+\Figura{15_perfiles_y_cambios.png}{Una fila uniforme puede ser brillante y tener cambio nulo. La rampa cambia 0,125 por paso. El salto concentra un cambio de 1 en una sola transición. Las tres gráficas de cada fila comparten escala para permitir una comparación directa.}{.42}
+
+\Etiqueta{Interpreta el resultado}
+
+La zona de intensidad uno es brillante, pero su interior no produce cambios: todos sus vecinos tienen el mismo valor. Solo destaca la transición entre la región baja y la alta. Esta observación responde a una confusión frecuente: una región clara no es necesariamente una región con borde fuerte. La intensidad describe nivel; la diferencia describe variación local. En un perfil largo pueden coexistir zonas altas planas y zonas bajas que cambian rápidamente.
+
+
+\needspace{6\baselineskip}
+
+\begin{Practica}{Cambia una sola cosa}
+
+Invierte el perfil para comenzar con cinco unos y terminar con cinco ceros. Observa que la diferencia cambia de signo, pero su valor absoluto conserva la altura. Después restaura el perfil original.
+
+
+\end{Practica}
+
+\needspace{6\baselineskip}
+
+\begin{Idea}{Pregunta resuelta}
+
+¿Por qué obtenemos nueve diferencias si el perfil contiene diez intensidades?
+
+
+Respuesta. Porque diez muestras forman nueve pares consecutivos. La primera diferencia compara posiciones cero y uno; la última, ocho y nueve. Es una relación entre muestras, por eso las barras se sitúan en centros de pares.
+
+
+\end{Idea}
+
+\clearpage
+
+\section{Sobel y suavizado: comparar respuestas de borde con una escala común}
+
+\Fuente{Tutorial 14 · Lecciones del cuaderno: 20, 21}
+
+Sobel aproxima cambios espaciales mediante una combinación de diferencias y pesos locales. Calculamos una respuesta horizontal dx y otra vertical dy. En nuestra matriz corte, axis=1 recorre columnas, relacionadas con x, y axis=0 recorre filas, relacionadas con y. No debemos trasladar esos números de eje a cualquier arreglo sin comprobar su organización. Las respuestas pueden ser positivas o negativas según el sentido del cambio. La primera figura muestra sus valores absolutos para comparar magnitudes sin que los signos dominen los colores.
+
+
+La magnitud combinada se calcula como la raíz cuadrada de dx al cuadrado más dy al cuadrado. Esta regla reúne dos componentes perpendiculares, de modo semejante a calcular la longitud de una flecha con desplazamientos horizontal y vertical. Si ambas son cero, no hay respuesta local; si alguna aumenta, la magnitud puede aumentar. Los valores resultantes son respuestas del operador aplicado. No están normalizados automáticamente a cero y uno ni calibrados como intensidad por milímetro. Por eso un valor superior a uno no implica un error aunque la imagen original estuviera reescalada.
+
+
+Para comparar imágenes de respuesta fijamos una escala común. Los paneles de dx, dy y magnitud usan el mismo máximo; después los gradientes antes y después de suavizar comparten otro máximo calculado entre ambos. Si cada panel se reescalara por separado hasta su propio blanco o amarillo, un resultado débil podría parecer tan fuerte como otro mayor. Mantener iguales los límites de color evita esa compensación visual. La barra debe decir “respuesta Sobel”, porque no representa la intensidad original de la resonancia.
+
+
+La segunda etapa aplica un filtro gaussiano de sigma 1.2 a la misma ruidosa y calcula Sobel sobre esa salida. Después usa el umbral absoluto 0.6 en ambas magnitudes. Las máscaras resultantes seleccionan posiciones con respuesta al menos 0.6; no son máscaras de tejido ni curvas de nivel de la RM. Suavizar suele reducir respuestas causadas por fluctuaciones rápidas, pero también puede disminuir bordes auténticos. Usar la misma entrada inicial, escala y regla de umbral permite observar ese compromiso sin cambiar varias condiciones a la vez.
+
+
+\needspace{6\baselineskip}
+
+\begin{Idea}{Antes de ejecutar}
+
+Ejecutar las celdas 15 y 16 para la entrada ruidosa y ndimage. La celda 20 crea gradiente; la celda 21 compara ese resultado con Sobel después de un Gauss fijo de sigma 1.2.
+
+
+\end{Idea}
+
+\begin{Codigo}{Celda 20 · Medir cambios con Sobel en dos direcciones}
+dx = ndimage.sobel(ruidosa, axis=1, mode="reflect")
+dy = ndimage.sobel(ruidosa, axis=0, mode="reflect")
+gradiente = np.sqrt(dx**2 + dy**2)
+escala_bordes = float(gradiente.max())
+fig, ax = plt.subplots(1, 3, figsize=(12, 4.5), layout="constrained")
+for panel, matriz, titulo in zip(ax, [np.abs(dx), np.abs(dy), gradiente], ["Cambio horizontal |dx|", "Cambio vertical |dy|", "Magnitud √(dx² + dy²)"]):
+    vista = panel.imshow(matriz, cmap="magma", origin="lower", extent=extension, vmin=0, vmax=escala_bordes)
+    panel.set(title=titulo, xlabel="x mm · L → R", ylabel="y mm · P → A")
+fig.colorbar(vista, ax=ax, shrink=0.8, label="Respuesta Sobel")
+plt.show()
+\end{Codigo}
+
+\Etiqueta{Cada línea de esta celda}
+
+\begin{itemize}
+
+\item Línea 1. Mide cambio horizontal sobre la misma imagen ruidosa de antes.
+
+\item Línea 2. Mide cambio vertical sobre esa imagen.
+
+\item Línea 3. Combina ambos cambios en una magnitud no negativa.
+
+\item Línea 4. Guarda un máximo común que reutilizaremos al comparar antes y después del suavizado.
+
+\item Línea 5. Abre tres vistas de componentes y magnitud.
+
+\item Línea 6. Muestra magnitudes para comparar sin confundir signos.
+
+\item Línea 7. Conserva una escala numérica común en los tres paneles y guarda su representación.
+
+\item Línea 8. Identifica el tipo de cambio y la orientación.
+
+\item Línea 9. Muestra una única escala de color compartida por los tres mapas.
+
+\item Línea 10. Muestra que el ruido también produce cambios fuertes entre vecinos.
+
+\end{itemize}
+
+\begin{Codigo}{Celda 21 · Suavizar antes de detectar bordes}
+suave_bordes = ndimage.gaussian_filter(ruidosa, sigma=1.2, mode="reflect")
+dx_suave = ndimage.sobel(suave_bordes, axis=1, mode="reflect")
+dy_suave = ndimage.sobel(suave_bordes, axis=0, mode="reflect")
+gradiente_suave = np.sqrt(dx_suave**2 + dy_suave**2)
+maximo_comun = max(float(gradiente.max()), float(gradiente_suave.max()), 1e-12)
+umbral_borde = 0.6
+mapas = [gradiente, gradiente_suave, gradiente >= umbral_borde, gradiente_suave >= umbral_borde]
+titulos = ["Sobel con ruido", "Sobel tras Gauss σ=1.2 px", f"Bordes ≥ {umbral_borde} antes", f"Bordes ≥ {umbral_borde} después"]
+fig, ax = plt.subplots(2, 2, figsize=(10, 9), layout="constrained")
+for indice, panel in enumerate(ax.ravel()):
+    tope_panel = maximo_comun if indice < 2 else 1
+    color_panel = "magma" if indice < 2 else "gray"
+    panel.imshow(mapas[indice], cmap=color_panel, origin="lower", extent=extension, vmin=0, vmax=tope_panel)
+    panel.set(title=titulos[indice], xlabel="x mm · L → R", ylabel="y mm · P → A")
+fig.colorbar(ax[0,0].images[0], ax=ax[0,:], shrink=0.8, label="Respuesta Sobel común")
+plt.show()
+print("Umbral compartido:", umbral_borde, "| píxeles seleccionados antes/después:", int((gradiente>=umbral_borde).sum()), int((gradiente_suave>=umbral_borde).sum()))
+\end{Codigo}
+
+\Etiqueta{Cada línea de esta celda}
+
+\begin{itemize}
+
+\item Línea 1. Fija explícitamente el suavizado a 1.2 píxeles para esta comparación.
+
+\item Línea 2. Calcula cambio horizontal después de suavizar.
+
+\item Línea 3. Calcula cambio vertical después de suavizar.
+
+\item Línea 4. Forma la magnitud con la misma fórmula que antes.
+
+\item Línea 5. Elige una escala compartida y evita un rango nulo en una imagen constante.
+
+\item Línea 6. Usa el mismo umbral absoluto de respuesta Sobel antes y después.
+
+\item Línea 7. Prepara dos magnitudes y dos selecciones con idéntica regla.
+
+\item Línea 8. Describe qué se compara y actualiza los títulos al cambiar el umbral.
+
+\item Línea 9. Separa arriba magnitudes y abajo selecciones binarias.
+
+\item Línea 10. Recorre los cuatro paneles conservando su número.
+
+\item Línea 11. Usa escala común para magnitudes y 0–1 para ambas máscaras.
+
+\item Línea 12. Usa color para magnitud y blanco/negro para selección.
+
+\item Línea 13. Muestra cada resultado sin normalización individual.
+
+\item Línea 14. Mantiene nombres, orientación y unidades espaciales.
+
+\item Línea 15. Usa el primer mapa para explicar la escala idéntica de las dos magnitudes superiores.
+
+\item Línea 16. Presenta una comparación controlada antes y después.
+
+\item Línea 17. Cuenta la selección sobre el corte completo en ambos casos.
+
+\end{itemize}
+
+\begin{Salida}{Salida textual de la celda completa}
+Umbral compartido: 0.6 | píxeles seleccionados antes/después: 2471 1495
+\end{Salida}
+
+\Figura{16_sobel_escala_comun.png}{Sobel se aplica a la plantilla de referencia, a la misma plantilla con ruido y a esa imagen ruidosa suavizada. Los tres mapas comparten límites de color. El suavizado reduce respuestas pequeñas y también puede debilitar bordes. La referencia es la plantilla, no una imagen clínica libre de ruido.}{.42}
+
+\Etiqueta{Interpreta el resultado}
+
+Con la configuración reproducida, el umbral selecciona 2 471 posiciones antes y 1 495 después del suavizado. La disminución describe cuántas respuestas superan nuestra regla; no demuestra que todas las posiciones eliminadas fueran falsas ni que las restantes sean correctas. La comparación visual debe mirar tanto la textura del mapa como la continuidad y localización de respuestas. Una evaluación de calidad necesitaría una referencia y una definición explícita de qué borde se desea recuperar.
+
+
+\needspace{6\baselineskip}
+
+\begin{Practica}{Cambia una sola cosa}
+
+Cambia umbral\_borde de 0.6 a 0.4 y luego a 0.8 en ambos resultados simultáneamente. Mantén el máximo común. Predice cómo cambiarán los conteos y observa qué respuestas débiles aparecen o desaparecen.
+
+
+\end{Practica}
+
+\needspace{6\baselineskip}
+
+\begin{Idea}{Pregunta resuelta}
+
+¿Por qué no conviene normalizar por separado los dos gradientes antes de compararlos con el mismo umbral?
+
+
+Respuesta. Cada normalización convertiría su máximo propio en uno y podría ocultar diferencias de amplitud. Conservando respuestas y escala compartida, el umbral 0.6 representa la misma cantidad del operador antes y después del suavizado.
+
+
+\end{Idea}
+
+\chapter[Procesamiento y ML]{Un recorrido completo y su conexión con ML}
+
+\needspace{6\baselineskip}
+
+\begin{Idea}{Al terminar este capítulo}
+
+Podrás explicar cada etapa de una secuencia, documentar parámetros y distinguir una demostración visual de una evaluación de aprendizaje automático.
+
+
+\end{Idea}
+
+\section{Integrar el recorrido y preparar una pregunta de aprendizaje automático}
+
+\Fuente{Tutorial 15 · Lecciones del cuaderno: 22}
+
+El recorrido comienza con una matriz y una geometría, elige una forma de visualizarla, describe intensidades, construye selecciones y aplica operaciones locales. Cada etapa responde una pregunta distinta. El histograma resume distribución; la máscara conserva posiciones que cumplen una regla; las curvas siguen valores iguales; el gradiente describe cambios. Al integrarlas no conviene sustituir una definición por otra. El primer aprendizaje útil para machine learning es poder decir qué representa cada variable, cómo se obtuvo y qué información se perdió o transformó.
+
+
+Una tarea supervisada necesita ejemplos y etiquetas relacionadas con una pregunta concreta. Si quisiéramos predecir una categoría clínica, deberíamos definir quién asigna las etiquetas, qué información se permite usar y en qué población se aplicará el resultado. El preprocesamiento puede ayudar a preparar entradas, pero no crea automáticamente una verdad clínica. La plantilla del taller es un promedio de referencia: sus cortes no constituyen pacientes independientes y no vienen acompañados de una colección de diagnósticos positivos y negativos. Por eso aquí no podemos estimar sensibilidad ni especificidad.
+
+
+Al trabajar con estudios reales, la separación de entrenamiento, validación y prueba debe respetar la unidad independiente. Si una persona aporta muchos cortes o varias visitas, repartirlos al azar entre grupos puede permitir que el modelo reconozca características de esa misma persona en lugar de generalizar a otra. Todas sus imágenes deben permanecer en el mismo grupo cuando evaluamos generalización a pacientes nuevos. GroupKFold ayuda a respetar identificadores de grupo en validación cruzada, pero no decide por nosotros qué unidad es apropiada ni garantiza por sí solo una evaluación clínica completa.
+
+
+También hay que evitar que la información de prueba influya en decisiones aprendidas. Una transformación que estima medias o parámetros a partir de varios sujetos se ajusta con entrenamiento y luego se aplica a validación o prueba. Elegir repetidamente filtros y umbrales mirando el resultado final de prueba también introduce dependencia. Antes de transferir imágenes reales a servicios externos, deben revisarse autorización y desidentificación en un entorno permitido: metadatos, identificadores, campos privados, referencias, texto incrustado en píxeles y posible información facial o archivos acompañantes. Cambiar un nombre por un código no garantiza anonimato.
+
+
+\needspace{6\baselineskip}
+
+\begin{Idea}{Antes de ejecutar}
+
+Revisar los tutoriales anteriores. Esta celda dibuja el recorrido conceptual; no entrena un modelo ni estima métricas clínicas. El anexo de privacidad del cuaderno acompaña este cierre.
+
+
+\end{Idea}
+
+\begin{Codigo}{Celda 22 · Reconstruir el recorrido completo}
+pasos_pipeline = ["Datos y permisos\nfuente y geometría", "Ver y describir\ncortes e histograma", "Elegir una operación\nventana o filtro", "Crear una medida\numbral o gradiente", "Comprobar y explicar\nparámetros y límites"]
+fig, ax = plt.subplots(figsize=(12, 2.7), layout="constrained")
+ax.set(xlim=(0,5), ylim=(0,1))
+ax.axis("off")
+for indice, texto in enumerate(pasos_pipeline):
+    ax.text(indice+0.5, 0.55, texto, ha="center", va="center", fontsize=11, color="#163b45")
+    if indice < 4:
+        ax.annotate("", xy=(indice+1.12,0.55), xytext=(indice+0.88,0.55), arrowprops={"arrowstyle":"->", "color":"#197f85", "lw":2})
+fig.suptitle("De una imagen a un resultado que se puede revisar", fontsize=14)
+plt.show()
+\end{Codigo}
+
+\Etiqueta{Cada línea de esta celda}
+
+\begin{itemize}
+
+\item Línea 1. Resume cinco preguntas que guían un análisis reproducible.
+
+\item Línea 2. Abre un espacio horizontal para el recorrido.
+
+\item Línea 3. Define coordenadas de dibujo arbitrarias, no médicas.
+
+\item Línea 4. Oculta ejes porque solo organizamos una explicación.
+
+\item Línea 5. Recorre los cinco pasos con sus posiciones.
+
+\item Línea 6. Coloca cada etapa en el centro de su espacio.
+
+\item Línea 7. Evita dibujar una flecha después del último paso.
+
+\item Línea 8. Une el paso actual con el siguiente.
+
+\item Línea 9. Expresa el propósito del recorrido.
+
+\item Línea 10. Presenta el mapa de conceptos terminado.
+
+\end{itemize}
+
+\Figura{pipeline.png}{Secuencia didáctica: elegir un plano, suavizar, calcular cambios y seleccionar valores altos. El resultado final representa la regla programada.}{.32}
+
+\Figura{20_particion_por_paciente.png}{Los seis identificadores y sus cortes son ficticios. Los tres cortes de cada persona permanecen juntos: P01–P03 en entrenamiento, P04 en validación y P05–P06 en prueba. El esquema ilustra cómo evitar que la misma persona aparezca a ambos lados de la evaluación; no propone tamaños muestrales suficientes para un estudio real.}{.42}
+
+\Etiqueta{Interpreta el resultado}
+
+La figura final organiza el recorrido como un mapa de decisiones, no como una receta universal. Al repetirlo sobre otra imagen habría que comprobar nuevamente orientación, espaciado, escala de intensidades y objetivo. Algunos parámetros adecuados para esta plantilla pueden carecer de sentido en otro estudio. El producto de este taller es comprender operaciones y sus límites, conservar entradas reproducibles y formular preguntas evaluables; no producir una herramienta diagnóstica lista para usar.
+
+
+\needspace{6\baselineskip}
+
+\begin{Practica}{Cambia una sola cosa}
+
+Dibuja tres grupos: entrenamiento, validación y prueba. Distribuye tarjetas de tres pacientes con varias imágenes cada uno, conservando juntas todas las tarjetas de una persona. Explica qué ocurriría si se mezclaran por corte.
+
+
+\end{Practica}
+
+\needspace{6\baselineskip}
+
+\begin{Idea}{Pregunta resuelta}
+
+¿Por qué muchos cortes de la plantilla no permiten calcular sensibilidad y especificidad de un diagnóstico?
+
+
+Respuesta. No hay casos independientes con etiquetas clínicas y predicciones frente a una referencia. La plantilla no aporta verdaderos o falsos positivos y negativos. Multiplicar sus cortes no crea la población necesaria para estimar esas métricas.
+
+
+\end{Idea}
+
+\appendix
+
+\chapter[Privacidad]{Privacidad antes de compartir}
+
+\needspace{6\baselineskip}
+
+\begin{Idea}{Al terminar este capítulo}
+
+Distinguirás desidentificación, seudonimización y anonimización, y conocerás las verificaciones necesarias antes de publicar imágenes de pacientes.
+
+
+\end{Idea}
+
+DICOM es un estándar que organiza imágenes médicas y la información necesaria para interpretarlas e intercambiarlas. Esa información adicional se llama metadatos: puede incluir modalidad, dimensiones, geometría, datos del estudio e identificadores personales. Una serie puede estar distribuida en muchos archivos o contener múltiples imágenes en uno. NIfTI, frecuente en neuroimagen, guarda una matriz con información espacial y otros datos de cabecera. Cambiar de formato no garantiza anonimato.
+
+
+Antes de compartir datos reales, revisa primero si su uso está autorizado. Trabaja sobre copias locales en un entorno autorizado. Aplica un procedimiento documentado de desidentificación que trate metadatos, identificadores de estudios y referencias entre archivos. Después revisa el contenido de las imágenes: el nombre de una persona puede estar escrito directamente sobre los píxeles, y una RM de cabeza puede conservar rasgos faciales. Revisa también nombres de carpetas, cabeceras NIfTI y archivos acompañantes, como documentos JSON.
+
+
+La comprobación final debe incluir una revisión independiente y el riesgo residual de identificación. Sustituir un nombre por CASO\_001 y conservar una tabla que permite recuperar la identidad es seudonimizar. La anonimización exige evaluar si sigue siendo razonable identificar a la persona con la información restante. En la práctica utilizamos una plantilla pública y datos ficticios para aprender: no es necesario subir estudios personales a Colab. Los perfiles del estándar DICOM orientan un proceso real, pero borrar unos campos no lo completa.
+
+
+\needspace{6\baselineskip}
+
+\begin{Cuidado}{Este taller ya utiliza una referencia pública}
+
+No necesitas datos personales para realizar los ejercicios. Una autorización para publicar imágenes anonimizadas exige comprobar que la copia destinada a publicación está preparada y revisada. El procedimiento descrito aquí es una guía de revisión; no certifica una herramienta ni garantiza que cualquier archivo haya quedado anónimo.
+
+
+\end{Cuidado}
+
+\section{Qué significa DICOM PS3.15}
+
+PS3.15 es la parte del estándar DICOM dedicada a perfiles de seguridad y gestión de sistemas. Su anexo E describe perfiles de confidencialidad de atributos y opciones para retirar o sustituir información identificable manteniendo la utilidad del estudio. La edición consultada es 2026d. Aplicar esas reglas a etiquetas es una parte del proceso: el estándar advierte que no garantiza por sí solo la desidentificación del objeto completo. \hyperlink{refR18}{[18]}
+
+
+\section{Identificadores técnicos: no todos significan lo mismo}
+
+SOP significa Service-Object Pair. Una clase SOP identifica el tipo de objeto y servicio DICOM, por ejemplo almacenamiento de imágenes de resonancia. La sintaxis de transferencia identifica cómo se codifican los elementos y, cuando corresponde, cómo se comprimen los píxeles. Estos identificadores describen una clase o codificación; cambiarlos arbitrariamente puede impedir leer el archivo.
+
+
+Un UID de instancia SOP, en cambio, identifica un objeto concreto. Los UID de estudio, serie e instancia pueden vincular archivos y requieren un tratamiento coherente durante la desidentificación, incluidas las referencias entre objetos. No conviene borrar todos los UID ni conservarlos todos sin distinguir su función. La configuración debe seguir el perfil y las opciones aplicables, y después comprobarse sobre la colección resultante. \hyperlink{refR18}{[18]}
+
+
+\section{Un procedimiento comprensible y verificable}
+
+\begin{itemize}
+
+\item 1. Define el destino: quién recibirá las imágenes, con qué finalidad y bajo qué autorización. Delimita qué campos y modalidades se necesitan.
+
+\item 2. Trabaja sobre copias en un entorno autorizado. Conserva los originales y una relación interna de las operaciones, sin publicar una tabla que permita recuperar identidades.
+
+\item 3. Aplica una herramienta documentada que implemente el perfil DICOM y las opciones pertinentes. Trata también secuencias, campos privados y referencias entre archivos; verifica su comportamiento con ejemplos controlados.
+
+\item 4. Inspecciona el contenido visual: textos grabados en píxeles, capturas de pantalla, anotaciones, gráficos superpuestos y rasgos faciales. El tratamiento de rostros debe comprobar que protege la identidad y conserva la utilidad necesaria.
+
+\item 5. Revisa nombres de archivo y carpeta, cabeceras NIfTI, extensiones y documentos acompañantes. La conversión a otro formato puede trasladar o conservar metadatos.
+
+\item 6. Abre la copia resultante y comprueba integridad, orientación y utilidad. Haz revisión independiente y documenta el riesgo residual antes de publicarla. Si una revisión detecta datos identificables, corrige la copia y repite las comprobaciones.
+
+\end{itemize}
+
+\needspace{6\baselineskip}
+
+\begin{Practica}{Pregunta resuelta}
+
+¿PatientName vacío y un nombre de archivo nuevo garantizan anonimato?
+
+
+No. Pueden quedar identificadores en otros atributos, referencias, píxeles, rostros o documentos asociados. La revisión debe abarcar el conjunto compartido.
+
+
+\end{Practica}
+
+\chapter[Mapa del cuaderno]{Del libro al cuaderno}
+
+\needspace{6\baselineskip}
+
+\begin{Idea}{Al terminar este capítulo}
+
+Encontrarás las 24 lecciones y sabrás qué resultado comprobar en cada etapa. Las celdas se ejecutan en orden.
+
+
+\end{Idea}
+
+El cuaderno empieza mostrando imágenes y conserva los resultados. Bajo cada bloque aparecen explicaciones línea por línea. Si una celda falla por un nombre no definido, vuelve a ejecutar su preparación. Si cambias un parámetro, vuelve a ejecutar también las celdas que dependen de ese resultado. Una salida antigua puede permanecer visible aunque el código haya cambiado: ejecútalo para actualizarla.
+
+
+\begin{longtable}{@{}p{.08\linewidth}p{.40\linewidth}p{.45\linewidth}@{}}\toprule\textbf{Celda}&\textbf{Lección}&\textbf{Qué comprobar}\\\midrule\endhead
+
+1&Primero miremos las imágenes&Tres vistas, un mismo volumen.\\\addlinespace[5pt]
+
+2&Una imagen pequeña es una tabla de números&El valor se convierte en un tono.\\\addlinespace[5pt]
+
+3&Leer y cambiar un píxel&La copia cambia y el original permanece.\\\addlinespace[5pt]
+
+4&Del píxel al volumen y los milímetros&Dimensiones, espaciado y orientación.\\\addlinespace[5pt]
+
+5&Tres cortes con orientación física&El plano fija uno de los tres índices.\\\addlinespace[5pt]
+
+6&Mover un corte&El corte cambia al variar su posición.\\\addlinespace[5pt]
+
+7&Cambiar el contraste sin cambiar los datos&La ventana cambia el aspecto, no la matriz.\\\addlinespace[5pt]
+
+8&Construir un histograma contando píxeles&Las cuentas suman el total de píxeles.\\\addlinespace[5pt]
+
+9&Leer el histograma de una resonancia&El fondo modifica la distribución.\\\addlinespace[5pt]
+
+10&Comparar veinte y ochenta intervalos&Más intervalos no crean nuevos datos.\\\addlinespace[5pt]
+
+11&De un percentil a una máscara por umbral&El umbral produce una selección numérica.\\\addlinespace[5pt]
+
+12&Curvas de nivel en una superficie sencilla&Una curva reúne igual intensidad.\\\addlinespace[5pt]
+
+13&Curvas de nivel sobre la resonancia&Las líneas se superponen al corte cerebral.\\\addlinespace[5pt]
+
+14&Una curva no es lo mismo que una máscara&Una máscara rellena una región; una curva traza un nivel.\\\addlinespace[5pt]
+
+15&Añadir ruido artificial de manera reproducible&La semilla permite repetir el ruido.\\\addlinespace[5pt]
+
+16&Suavizar con un filtro gaussiano&Sigma controla la extensión espacial.\\\addlinespace[5pt]
+
+17&Usar la mediana de una vecindad&La mediana elige el valor central ordenado.\\\addlinespace[5pt]
+
+18&Comparar media Gauss y mediana con la misma entrada&La comparación conserva entrada y escala.\\\addlinespace[5pt]
+
+19&Un borde es un cambio entre vecinos&El perfil conserva el orden de las posiciones.\\\addlinespace[5pt]
+
+20&Medir cambios con Sobel en dos direcciones&Sobel responde a cambios, incluidos los del ruido.\\\addlinespace[5pt]
+
+21&Suavizar antes de detectar bordes&Suavizar puede reducir ruido y detalle.\\\addlinespace[5pt]
+
+22&Reconstruir el recorrido completo&Cada etapa tiene parámetros documentados.\\\addlinespace[5pt]
+
+23&Ampliación para calcular media y mediana a mano&La media y la mediana se calculan a mano.\\\addlinespace[5pt]
+
+24&Ampliación para observar ruido de impulsos&La respuesta depende del tipo de ruido.\\\addlinespace[5pt]
+
+\bottomrule\end{longtable}
+
+\section{Ruta de una hora, con preparación previa}
+
+\begin{itemize}
+
+\item 0–8 min: observar la plantilla, leer la matriz pequeña y cambiar un píxel (lecciones 1–3).
+
+\item 8–18 min: geometría, planos y contraste (4–7).
+
+\item 18–30 min: histogramas, percentiles y máscaras (8–11).
+
+\item 30–38 min: curvas sintéticas y cerebrales; comparar con una región (12–14).
+
+\item 38–48 min: ruido y filtros; mantener la misma entrada (15–18).
+
+\item 48–56 min: perfiles, Sobel y suavizado (19–21).
+
+\item 56–60 min: explicar la secuencia y sus límites (22). Las ampliaciones 23–24 quedan para estudio posterior.
+
+\end{itemize}
+
+\section{Tres comprobaciones finales, con respuesta}
+
+\needspace{6\baselineskip}
+
+\begin{Practica}{1 · La imagen se ve más blanca. ¿Aumentaron los valores?}
+
+No necesariamente. Si cambiaste vmin o vmax, la traducción visual pudo saturarse. Comprueba la matriz antes de afirmar que se modificó la intensidad.
+
+
+\end{Practica}
+
+\needspace{6\baselineskip}
+
+\begin{Practica}{2 · Dos imágenes tienen el mismo histograma. ¿Son idénticas?}
+
+No. El histograma cuenta valores sin conservar su ubicación. Una permutación de posiciones puede mantener las cuentas y destruir la estructura espacial.
+
+
+\end{Practica}
+
+\needspace{6\baselineskip}
+
+\begin{Practica}{3 · Hay menos bordes después de suavizar. ¿El resultado es mejor?}
+
+Depende del objetivo. Puede haberse reducido el ruido, pero también un detalle útil. Compara con la referencia, conserva una escala común y justifica el parámetro. Una imagen agradable no demuestra mayor rendimiento de un modelo.
+
+
+\end{Practica}
+
+\chapter[Glosario y fuentes]{Glosario y fuentes para seguir aprendiendo}
+
+\needspace{6\baselineskip}
+
+\begin{Idea}{Al terminar este capítulo}
+
+Podrás consultar términos y rastrear las decisiones del material hasta documentación oficial y fuentes primarias.
+
+
+\end{Idea}
+
+\needspace{6\baselineskip}
+
+\begin{Idea}{Píxel / vóxel}
+
+Elemento de una rejilla en dos / tres dimensiones. Su valor y su posición aportan información diferente.
+
+
+\end{Idea}
+
+\needspace{6\baselineskip}
+
+\begin{Idea}{Matriz / arreglo}
+
+Colección de valores organizada por ejes. Un volumen es un arreglo tridimensional.
+
+
+\end{Idea}
+
+\needspace{6\baselineskip}
+
+\begin{Idea}{Índice / coordenada}
+
+El índice cuenta posiciones de la rejilla; la coordenada sitúa una posición en un sistema espacial.
+
+
+\end{Idea}
+
+\needspace{6\baselineskip}
+
+\begin{Idea}{Afín}
+
+Transformación que relaciona índices con coordenadas mediante una matriz. No equivale a registrar automáticamente dos cerebros.
+
+
+\end{Idea}
+
+\needspace{6\baselineskip}
+
+\begin{Idea}{Intensidad / contraste}
+
+La intensidad es el valor almacenado; el contraste describe diferencias visibles o de señal según el contexto. La ventana controla cómo se muestran los tonos.
+
+
+\end{Idea}
+
+\needspace{6\baselineskip}
+
+\begin{Idea}{Histograma / intervalo}
+
+El histograma cuenta valores agrupados en intervalos. No conserva dónde estaban esos valores.
+
+
+\end{Idea}
+
+\needspace{6\baselineskip}
+
+\begin{Idea}{Percentil / umbral}
+
+Un percentil sitúa un valor dentro de una distribución ordenada. Un umbral define una comparación para seleccionar elementos.
+
+
+\end{Idea}
+
+\needspace{6\baselineskip}
+
+\begin{Idea}{Máscara / curva de nivel}
+
+Una máscara marca elementos que cumplen una regla. Una curva representa un nivel de intensidad mediante interpolación en una rejilla.
+
+
+\end{Idea}
+
+\needspace{6\baselineskip}
+
+\begin{Idea}{Filtro / kernel}
+
+Un filtro transforma la imagen. Un kernel expresa pesos locales; no todos los filtros, como la mediana, se reducen a una suma ponderada fija.
+
+
+\end{Idea}
+
+\needspace{6\baselineskip}
+
+\begin{Idea}{Sigma / gradiente}
+
+Sigma puede describir la dispersión del ruido o el ancho espacial de un filtro: hay que indicar cuál y sus unidades. El gradiente describe cambios respecto de la posición.
+
+
+\end{Idea}
+
+\needspace{6\baselineskip}
+
+\begin{Idea}{Plantilla / atlas}
+
+La plantilla ofrece una referencia de imagen; un atlas añade organización interpretativa. El uso de los términos puede solaparse: revisa siempre el contenido.
+
+
+\end{Idea}
+
+\needspace{6\baselineskip}
+
+\begin{Idea}{Biblioteca / cuaderno}
+
+Una biblioteca reúne funciones reutilizables. Un cuaderno combina texto, código y salidas.
+
+
+\end{Idea}
+
+\needspace{6\baselineskip}
+
+\begin{Idea}{Semilla / reproducibilidad}
+
+La semilla inicializa un generador aleatorio. Repetir un resultado también requiere conservar datos, versiones, parámetros y orden de ejecución.
+
+
+\end{Idea}
+
+\section{Procedencia de imágenes y del archivo}
+
+Las 20 ilustraciones científicas nuevas se generan con NumPy, SciPy, Matplotlib y NiBabel; sus parámetros y huellas se conservan en figures\_manifest.json del paquete fuente. Se complementan con figuras calculadas del cuaderno, sin repetir una misma imagen dentro de este manual. Las etiquetas geométricas, siluetas y pacientes ilustrados son ficticios. La imagen de portada es una composición conceptual generada con la herramienta de imágenes de OpenAI; su instrucción de generación está incluida en CREDITOS\_PORTADA.txt.
+
+
+La copia datos/mni152\_2mm.nii.gz procede de load\_mni152\_template(resolution=2) en Nilearn 0.12.1. Su unidad espacial se documentó como mm en la cabecera conforme a la fuente, sin modificar intensidades ni afín por esa declaración. La descripción de simetría de la documentación y el nombre interno del archivo no coinciden; el material identifica la copia por versión y huella sin resolver esa discrepancia mediante una suposición.
+
+
+\begin{Salida}{SHA-256 · copia de datos distribuida}
+a5f0ddb2d173ffb7b34a511fa6bcfe71e272
+18a54125092917a6d9630bc4513a
+\end{Salida}
+
+La huella anterior aparece dividida en dos líneas para su lectura: concaténalas sin espacios para comparar los 64 caracteres. Los términos del recurso ICBM/MNI se conservan en FUENTES\_Y\_LICENCIAS.txt. Las figuras derivadas mantienen su atribución. La licencia de una biblioteca no sustituye la licencia del conjunto de datos.
+
+
+\section{Fuentes enlazadas}
+
+\needspace{4\baselineskip}\hypertarget{refR1}{}\textbf{[1] McGill BIC: ICBM152 linear average}\par
+
+Historia de MNI152 lineal y registro de la cohorte a MNI305.
+
+
+\href{https://www.bic.mni.mcgill.ca/ServicesAtlases/ICBM152Lin}{Consultar la fuente oficial o primaria}\par\medskip
+
+\needspace{4\baselineskip}\hypertarget{refR2}{}\textbf{[2] McGill BIC: ICBM152 nonlinear atlases version 2009}\par
+
+Construcción iterativa no lineal, versiones 2009a/b/c, simetría, muestreo y preparación.
+
+
+\href{https://www.bic.mni.mcgill.ca/ServicesAtlases/ICBM152NLin2009}{Consultar la fuente oficial o primaria}\par\medskip
+
+\needspace{4\baselineskip}\hypertarget{refR3}{}\textbf{[3] Fonov et al. (2011): Unbiased average age-appropriate atlases for pediatric studies}\par
+
+Fuente primaria de métodos; también documenta la cohorte ICBM adulta de 152 personas de 18–43,5 años. El título pediátrico no implica que MNI152 sea una plantilla pediátrica.
+
+
+\href{https://pmc.ncbi.nlm.nih.gov/articles/PMC2962759/}{Consultar la fuente oficial o primaria}\par\medskip
+
+\needspace{4\baselineskip}\hypertarget{refR4}{}\textbf{[4] Nilearn 0.12.1: load\_mni152\_template}\par
+
+Contrato de la función, extracción cerebral previa, resolución en mm y retorno NIfTI; la descripción de simetría difiere del nombre interno del archivo.
+
+
+\href{https://nilearn.github.io/0.12.1/modules/generated/nilearn.datasets.load_mni152_template.html}{Consultar la fuente oficial o primaria}\par\medskip
+
+\needspace{4\baselineskip}\hypertarget{refR5}{}\textbf{[5] Nilearn 0.12.1: código fuente de structural datasets}\par
+
+Archivo empaquetado cuyo nombre contiene sym\_09a, conversión float32, división por máximo previa al remuestreo y objeto devuelto.
+
+
+\href{https://github.com/nilearn/nilearn/blob/0.12.1/nilearn/datasets/struct.py}{Consultar la fuente oficial o primaria}\par\medskip
+
+\needspace{4\baselineskip}\hypertarget{refR6}{}\textbf{[6] Nilearn 0.12.1: Introduction}\par
+
+Nilearn como biblioteca de neuroimagen y aprendizaje estadístico; incluye datos de referencia, sin ser equivalente a esos datos.
+
+
+\href{https://nilearn.github.io/0.12.1/introduction.html}{Consultar la fuente oficial o primaria}\par\medskip
+
+\needspace{4\baselineskip}\hypertarget{refR7}{}\textbf{[7] NiBabel: Nibabel images}\par
+
+Objeto imagen con arreglo, afín y cabecera; carga y get\_fdata.
+
+
+\href{https://nipy.org/nibabel/nibabel_images.html}{Consultar la fuente oficial o primaria}\par\medskip
+
+\needspace{4\baselineskip}\hypertarget{refR8}{}\textbf{[8] NiBabel: Coordinate systems and affines}\par
+
+Índices de vóxel, RAS+, coordenadas físicas y espacio MNI respecto de una plantilla.
+
+
+\href{https://nipy.org/nibabel/coordinate_systems.html}{Consultar la fuente oficial o primaria}\par\medskip
+
+\needspace{4\baselineskip}\hypertarget{refR9}{}\textbf{[9] NumPy: The absolute basics for beginners}\par
+
+Arreglos multidimensionales y alias np.
+
+
+\href{https://numpy.org/doc/stable/user/absolute_beginners.html}{Consultar la fuente oficial o primaria}\par\medskip
+
+\needspace{4\baselineskip}\hypertarget{refR10}{}\textbf{[10] SciPy: Multidimensional image processing}\par
+
+Funciones de filtros y gradientes en scipy.ndimage.
+
+
+\href{https://docs.scipy.org/doc/scipy/reference/ndimage.html}{Consultar la fuente oficial o primaria}\par\medskip
+
+\needspace{4\baselineskip}\hypertarget{refR11}{}\textbf{[11] Matplotlib: Quick start guide}\par
+
+Figuras, ejes y representación gráfica.
+
+
+\href{https://matplotlib.org/stable/users/explain/quick_start.html}{Consultar la fuente oficial o primaria}\par\medskip
+
+\needspace{4\baselineskip}\hypertarget{refR12}{}\textbf{[12] Python: The Python Tutorial}\par
+
+Lenguaje, variables, funciones, módulos y bibliotecas.
+
+
+\href{https://docs.python.org/3/tutorial/}{Consultar la fuente oficial o primaria}\par\medskip
+
+\needspace{4\baselineskip}\hypertarget{refR13}{}\textbf{[13] Nilearn: Harvard-Oxford atlas documentation}\par
+
+Ejemplo oficial de distinción entre atlas probabilístico y atlas de etiquetas.
+
+
+\href{https://nilearn.github.io/stable/modules/generated/nilearn.datasets.fetch_atlas_harvard_oxford.html}{Consultar la fuente oficial o primaria}\par\medskip
+
+\needspace{4\baselineskip}\hypertarget{refR14}{}\textbf{[14] TemplateFlow: Quick start with TemplateFlow Client API}\par
+
+Identificadores distintos de plantillas y consulta de metadatos y licencias.
+
+
+\href{https://www.templateflow.org/python-client/master/notebooks/01_quickstart.html}{Consultar la fuente oficial o primaria}\par\medskip
+
+\needspace{4\baselineskip}\hypertarget{refR15}{}\textbf{[15] NIfTI Data Format Working Group: NIfTI-1 FAQ}\par
+
+Formato, extensión de archivo, cabecera, datos y transformaciones espaciales.
+
+
+\href{https://nifti.nimh.nih.gov/nifti-1/documentation/faq/}{Consultar la fuente oficial o primaria}\par\medskip
+
+\needspace{4\baselineskip}\hypertarget{refR16}{}\textbf{[16] NiBabel: Working with NIfTI images}\par
+
+Metadatos de NIfTI, pixdim, unidades, qform y sform.
+
+
+\href{https://nipy.org/nibabel/nifti_images.html}{Consultar la fuente oficial o primaria}\par\medskip
+
+\needspace{4\baselineskip}\hypertarget{refR17}{}\textbf{[17] NiBabel: Image voxel orientation}\par
+
+aff2axcodes y as\_closest\_canonical; cambio de organización de ejes sin confundirlo con registro anatómico.
+
+
+\href{https://nipy.org/nibabel/image_orientation.html}{Consultar la fuente oficial o primaria}\par\medskip
+
+\needspace{4\baselineskip}\hypertarget{refR18}{}\textbf{[18] DICOM PS3.15 (2026d), anexo E: Attribute Confidentiality Profiles}\par
+
+Perfiles de confidencialidad, opciones y alcance del proceso de desidentificación.
+
+
+\href{https://dicom.nema.org/medical/dicom/current/output/chtml/part15/chapter_E.html}{Consultar la fuente oficial o primaria}\par\medskip
+
+\needspace{4\baselineskip}\hypertarget{refR19}{}\textbf{[19] Python Tutorial An Informal Introduction to Python}\par
+
+\href{https://docs.python.org/3/tutorial/introduction.html}{Consultar la fuente oficial o primaria}\par\medskip
+
+\needspace{4\baselineskip}\hypertarget{refR20}{}\textbf{[20] Python Tutorial Defining Functions}\par
+
+\href{https://docs.python.org/3/tutorial/controlflow.html#defining-functions}{Consultar la fuente oficial o primaria}\par\medskip
+
+\needspace{4\baselineskip}\hypertarget{refR21}{}\textbf{[21] BIDS Common principles File format specification}\par
+
+\href{https://bids-specification.readthedocs.io/en/stable/common-principles.html#file-format-specification}{Consultar la fuente oficial o primaria}\par\medskip
+
+\needspace{4\baselineskip}\hypertarget{refR22}{}\textbf{[22] Matplotlib imshow}\par
+
+\href{https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.imshow.html}{Consultar la fuente oficial o primaria}\par\medskip
+
+\needspace{4\baselineskip}\hypertarget{refR23}{}\textbf{[23] Matplotlib subplots}\par
+
+\href{https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.subplots.html}{Consultar la fuente oficial o primaria}\par\medskip
+
+\needspace{4\baselineskip}\hypertarget{refR24}{}\textbf{[24] NumPy histogram}\par
+
+\href{https://numpy.org/doc/stable/reference/generated/numpy.histogram.html}{Consultar la fuente oficial o primaria}\par\medskip
+
+\needspace{4\baselineskip}\hypertarget{refR25}{}\textbf{[25] NumPy percentile}\par
+
+\href{https://numpy.org/doc/stable/reference/generated/numpy.percentile.html}{Consultar la fuente oficial o primaria}\par\medskip
+
+\needspace{4\baselineskip}\hypertarget{refR26}{}\textbf{[26] Matplotlib contour}\par
+
+\href{https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.contour.html}{Consultar la fuente oficial o primaria}\par\medskip
+
+\needspace{4\baselineskip}\hypertarget{refR27}{}\textbf{[27] NumPy gradient}\par
+
+\href{https://numpy.org/doc/stable/reference/generated/numpy.gradient.html}{Consultar la fuente oficial o primaria}\par\medskip
+
+\needspace{4\baselineskip}\hypertarget{refR28}{}\textbf{[28] SciPy uniform\_filter}\par
+
+\href{https://docs.scipy.org/doc/scipy/reference/generated/scipy.ndimage.uniform_filter.html}{Consultar la fuente oficial o primaria}\par\medskip
+
+\needspace{4\baselineskip}\hypertarget{refR29}{}\textbf{[29] SciPy gaussian\_filter}\par
+
+\href{https://docs.scipy.org/doc/scipy/reference/generated/scipy.ndimage.gaussian_filter.html}{Consultar la fuente oficial o primaria}\par\medskip
+
+\needspace{4\baselineskip}\hypertarget{refR30}{}\textbf{[30] NumPy Random Generator}\par
+
+\href{https://numpy.org/doc/stable/reference/random/generator.html}{Consultar la fuente oficial o primaria}\par\medskip
+
+\needspace{4\baselineskip}\hypertarget{refR31}{}\textbf{[31] NumPy Generator normal}\par
+
+\href{https://numpy.org/doc/stable/reference/random/generated/numpy.random.Generator.normal.html}{Consultar la fuente oficial o primaria}\par\medskip
+
+\needspace{4\baselineskip}\hypertarget{refR32}{}\textbf{[32] SciPy median\_filter}\par
+
+\href{https://docs.scipy.org/doc/scipy/reference/generated/scipy.ndimage.median_filter.html}{Consultar la fuente oficial o primaria}\par\medskip
+
+\needspace{4\baselineskip}\hypertarget{refR33}{}\textbf{[33] SciPy sobel}\par
+
+\href{https://docs.scipy.org/doc/scipy/reference/generated/scipy.ndimage.sobel.html}{Consultar la fuente oficial o primaria}\par\medskip
+
+\needspace{4\baselineskip}\hypertarget{refR34}{}\textbf{[34] NumPy hypot}\par
+
+\href{https://numpy.org/doc/stable/reference/generated/numpy.hypot.html}{Consultar la fuente oficial o primaria}\par\medskip
+
+\needspace{4\baselineskip}\hypertarget{refR35}{}\textbf{[35] Scikit learn Common pitfalls and recommended practices}\par
+
+\href{https://scikit-learn.org/stable/common_pitfalls.html#data-leakage}{Consultar la fuente oficial o primaria}\par\medskip
+
+\needspace{4\baselineskip}\hypertarget{refR36}{}\textbf{[36] Scikit learn GroupKFold}\par
+
+\href{https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GroupKFold.html}{Consultar la fuente oficial o primaria}\par\medskip
+
+\end{document}
