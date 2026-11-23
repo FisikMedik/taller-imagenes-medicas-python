@@ -173,7 +173,7 @@ Referencias principales:
 
 ## Relación con los materiales de la escuela
 
-La organización de esta edición —acceso web, diapositivas, Colab, ejercicios con pistas y soluciones, repositorio y fuentes— toma como referencia los [materiales publicados por la escuela](https://machine-learning-honduras.org/materiales/), los de [Edith Natalia Villegas](https://edithvillegas.github.io/introduccion-ml-redes-neuronales/) y los de [Daniela Pérez](https://dapivei.github.io/escuela-machine-learning-honduras-2026/). Son prácticas docentes observadas, no una rúbrica oficial ni una aprobación formal de este material por la organización.
+La organización de esta edición —acceso web, diapositivas, Colab, ejercicios con pistas y soluciones, repositorio y fuentes— toma como referencia los [materiales publicados por la escuela](https://machine-learning-honduras.org/materiales/), los de [Edith Natalia Villegas](https://edithvillegas.github.io/introduccion-ml-redes-neuronales/) y los de [Daniela Pinto Veizaga](https://dapivei.github.io/escuela-machine-learning-honduras-2026/). Son prácticas docentes observadas, no una rúbrica oficial ni una aprobación formal de este material por la organización.
 
 El sitio es el recurso del expositor y se mantiene en su repositorio personal. La información institucional y posibles cambios de horario corresponden a la [web oficial](https://machine-learning-honduras.org/).
 
