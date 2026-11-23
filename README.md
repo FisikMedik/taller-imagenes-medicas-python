@@ -82,7 +82,7 @@ Utiliza **Taller_en_vivo_60min.ipynb** en la sesión. Prepara su primera celda a
 | 20–35 | Histograma, percentil y máscara | Qué cuenta cada barra, por qué se excluye el fondo y qué selecciona el umbral. |
 | 35–43 | Curvas de nivel sobre el cerebro | Una curva une posiciones de igual intensidad; una máscara selecciona una región. |
 | 43–55 | Filtros y Sobel | Suavizar reduce variaciones y también puede borrar detalles; Sobel mide cambios. |
-| 55–60 | Tres preguntas resueltas | Explicar visualización, empates en percentiles y el compromiso del suavizado. |
+| 55–60 | Tres preguntas resueltas | Explicar visualización, significado de una máscara y separación por pacientes. |
 
 El cuaderno completo de 24 lecciones es material de profundización. No se pretende ejecutar y explicar todo ese recorrido durante la hora asignada.
 
@@ -115,7 +115,9 @@ En JupyterLab, abre `Taller_en_vivo_60min.ipynb` para la ruta breve o `Taller_im
 
 ### Comprobación de esta edición
 
-La revisión del 23 de noviembre de 2026 incorpora una ruta breve, una presentación y una página pública de acceso. El manual y el cuaderno completo conservan la validación de la edición anterior descrita a continuación.
+La revisión del 23 de noviembre de 2026 incorpora una ruta breve, una presentación y una página pública de acceso. Las ocho celdas del cuaderno en vivo se ejecutaron completas con el archivo local y con la carga de Nilearn; ambas rutas produjeron matrices idénticas. También se ejecutaron las ocho celdas del enlace público en Google Colab con CPU el 23 de noviembre: percentil 90 de 0.878431, 523 de 4 859 posiciones seleccionadas y conteos Sobel de 2 471/1 495 antes/después del suavizado. El entorno Colab utilizó NumPy 2.4.6, Matplotlib 3.10.0, NiBabel 5.4.2, SciPy 1.16.3 y Nilearn 0.12.1.
+
+El explorador se comprobó en pantalla de escritorio y teléfono, incluidos sus controles de teclado, cambios de corte, ventana y máscara. Sus números e histogramas coinciden con los cálculos NumPy sobre el archivo distribuido. El manual y el cuaderno completo conservan la validación de la edición anterior descrita a continuación.
 
 Las 24 celdas se ejecutaron localmente utilizando la plantilla incluida. El entorno de comprobación utilizó Python 3.12.14, Nilearn 0.12.1, NumPy 2.5.4, Matplotlib 3.11.2, NiBabel 5.4.2 y SciPy 1.18.1. El cuaderno conserva las salidas de esa ejecución. También se ejecutaron las 24 celdas desde el enlace público en Google Colab el 16 de noviembre de 2026, con un entorno de CPU y la carga alternativa de la plantilla mediante Nilearn. Se comprobó que la última celda terminó y mostró 232 posiciones sustituidas de un corte de 11 583 píxeles.
 
