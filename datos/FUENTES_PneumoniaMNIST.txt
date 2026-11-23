@@ -1,0 +1,98 @@
+PneumoniaMNIST: procedencia, licencia y controles del taller
+Consulta y descarga: 23 de noviembre de 2026.
+
+ARCHIVO DISTRIBUIDO
+Nombre: pneumoniamnist.npz
+Versión de distribución: registro Zenodo 10519652, MedMNIST+ v3.0.
+Tamaño: 4 170 669 bytes; imágenes de 28 x 28 píxeles.
+Descarga oficial:
+https://zenodo.org/records/10519652/files/pneumoniamnist.npz?download=1
+Registro y DOI:
+https://zenodo.org/records/10519652
+https://doi.org/10.5281/zenodo.10519652
+MD5 oficial y comprobado: 28209eda62fecd6e6a2d98b1501bb15f
+SHA256 calculado: e1792d3f03751cb101e99f19a63b3c1941436c988665f47853417b05be250cd8
+
+ATRIBUCIÓN Y LICENCIA
+MedMNIST: Jiancheng Yang, Rui Shi, Donglai Wei, Zequan Liu, Lin Zhao,
+Bilian Ke, Hanspeter Pfister y Bingbing Ni.
+Yang et al. MedMNIST v2 - A large-scale lightweight benchmark for 2D and
+3D biomedical image classification. Scientific Data 10, 41 (2023).
+https://doi.org/10.1038/s41597-022-01721-8
+Yang, Shi y Ni. MedMNIST Classification Decathlon: A Lightweight AutoML
+Benchmark for Medical Image Analysis. ISBI (2021), pp. 191-195.
+https://doi.org/10.1109/ISBI48211.2021.9434062
+
+Datos originales: Daniel Kermany, Kang Zhang y Michael Goldbaum.
+Labeled Optical Coherence Tomography (OCT) and Chest X-Ray Images for
+Classification. Mendeley Data, versión 2 (2018).
+https://data.mendeley.com/datasets/rscbjbr9sj/2
+https://doi.org/10.17632/rscbjbr9sj.2
+Publicación asociada: Kermany et al. Identifying Medical Diagnoses and
+Treatable Diseases by Image-Based Deep Learning. Cell 172 (2018),
+1122-1131.e9. https://doi.org/10.1016/j.cell.2018.02.010
+
+PneumoniaMNIST y el depósito de origen indican CC BY 4.0:
+https://creativecommons.org/licenses/by/4.0/
+Se permite compartir y adaptar con atribución, enlace a la licencia e
+indicación de cambios. Este taller no implica respaldo de los autores.
+Las condiciones del conjunto de datos se conservan independientemente de
+las condiciones del código o de los documentos del taller.
+
+TRANSFORMACIONES Y ALCANCE
+Los autores de MedMNIST prepararon esta versión mediante recorte central
+y reducción a 28 x 28 píxeles de radiografías pediátricas de tórax.
+El archivo NPZ incluido aquí es una copia idéntica del archivo de Zenodo:
+no se cambiaron sus bytes ni sus etiquetas. Las visualizaciones del taller
+amplían las imágenes para mostrarlas; la ampliación no recupera detalle.
+La etiqueta 0 significa "normal" y la 1 "pneumonia" en este conjunto.
+Son las etiquetas publicadas del ejercicio, no diagnósticos emitidos por
+el instructor ni interpretaciones clínicas realizadas en este taller.
+Metadatos técnicos oficiales:
+https://github.com/MedMNIST/MedMNIST/blob/main/medmnist/info.py
+Sitio del proyecto:
+https://medmnist.com/
+MedMNIST declara que el conjunto no está destinado a uso clínico.
+
+CONTENIDO COMPROBADO LOCALMENTE
+Seis matrices numéricas; imágenes y etiquetas en train, val y test.
+Imágenes uint8, valores 0-255 (en test, máximo observado 254).
+Entrenamiento: 4708 imágenes, 1214 de clase 0 y 3494 de clase 1.
+Validación: 524 imágenes, 135 de clase 0 y 389 de clase 1.
+Prueba: 624 imágenes, 234 de clase 0 y 390 de clase 1.
+Cada imagen tiene 28 x 28 píxeles, un canal, y una etiqueta numérica.
+
+AUDITORÍA DE COPIAS EXACTAS
+Se calculó SHA256 de los 784 bytes de cada imagen uint8, sin transformar.
+Entrenamiento: 18 grupos de imágenes repetidas, con 18 copias adicionales.
+Validación: ninguna copia interna exacta.
+Prueba: 3 grupos de imágenes repetidas, con 3 copias adicionales.
+Entre entrenamiento y validación: 8 matrices de píxeles distintas se
+repiten; producen 10 pares de índices porque dos aparecen dos veces en
+entrenamiento. Los índices de validación afectados, comenzando en cero,
+son 61, 105, 172, 236, 244, 253, 302 y 473. Todos llevan etiqueta 1.
+No se hallaron copias exactas entre train-test ni entre val-test.
+No se hallaron etiquetas contradictorias para matrices idénticas.
+Este control detecta igualdad exacta en la versión reducida, no imágenes
+parecidas ni diferentes estudios de una misma persona. Las métricas
+deben describir con precisión qué subconjuntos se utilizaron.
+
+REGLA DOCENTE DEL MÓDULO ADICIONAL
+El NPZ original se conserva. En memoria, el módulo mantiene la primera
+ocurrencia de cada matriz de entrenamiento (4690: 1213 de clase 0 y 3477
+de clase 1) y excluye de validación las ocho matrices iguales a alguna de
+entrenamiento (516: 135 de clase 0 y 381 de clase 1). La regla usa píxeles,
+no el rendimiento de ningún modelo. La prueba oficial de 624 imágenes se
+mantiene completa; sus tres copias adicionales se declaran. El resultado
+corresponde a esta adaptación docente documentada, no a un protocolo de
+entrenamiento idéntico al del benchmark oficial. Eliminar copias exactas
+no elimina todas las posibles dependencias entre personas o estudios.
+
+PRIVACIDAD E INDEPENDENCIA
+El NPZ no proporciona campos DICOM, EXIF, nombres ni identificadores de
+pacientes: contiene las seis matrices numéricas indicadas. Esta inspección
+no certifica la anonimización de los estudios originales ni permite
+auditar que todas las particiones contengan personas diferentes. Ausencia
+de copias exactas no equivale a separación por pacientes. El ejercicio usa
+la distribución pública con su licencia; no incorpora datos privados del
+instructor ni solicita historias clínicas de los participantes.
