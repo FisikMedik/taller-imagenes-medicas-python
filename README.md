@@ -13,6 +13,8 @@ Taller introductorio de la [Escuela de Machine Learning y Data Science en Hondur
 
 [Diapositivas web](https://FisikMedik.github.io/taller-imagenes-medicas-python/presentacion.html) · [Presentación PDF](Presentacion_taller.pdf) · [PowerPoint editable](Presentacion_taller.pptx) · [Explorador visual](https://FisikMedik.github.io/taller-imagenes-medicas-python/explorador.html)
 
+**Ampliación opcional:** [De radiografías a predicciones: un primer modelo de ML](https://fisikmedik.github.io/taller-imagenes-medicas-python/modulo_ml.html) · [Abrir el módulo en Colab](https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Modulo_ML_radiografias.ipynb)
+
 ![Tres cortes de la misma plantilla cerebral: axial, coronal y sagital](imagenes/mri_intensity.png)
 
 *Una plantilla cerebral, tres planos. Las imágenes proceden de una referencia pública MNI152; no son estudios privados de pacientes.*
@@ -36,12 +38,36 @@ No necesitas leer todo el libro antes de asistir. Como lectura previa opcional, 
 | [Explorador](https://FisikMedik.github.io/taller-imagenes-medicas-python/explorador.html) | Antes, durante o sin Python | Tres cortes, ventana de contraste, histograma y máscara por percentil; sin dependencias web. |
 | [Cuaderno completo](https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Taller_imagenes_medicas.ipynb) | Estudio posterior, en varias sesiones | 24 lecciones detalladas, salidas guardadas, matrices, filtros y ampliaciones. |
 | [Manual ilustrado](Guia_visual_imagenes_medicas.pdf) | Consulta y lectura autónoma | 95 páginas, 8 capítulos, 3 anexos, 15 tutoriales y 31 figuras diferentes. |
+| [Módulo opcional de ML](modulo_ml.html) | 45–60 minutos adicionales o estudio posterior | 12 celdas explicadas: radiografías públicas, regresión logística, validación, predicciones y errores. |
 
 El manual explica qué es un píxel, cómo leer una matriz, de dónde procede ICBM152 y qué hace Nilearn. Distingue imagen individual, plantilla, atlas y espacio de referencia. Sus tutoriales combinan código, salida e interpretación. El **[proyecto LaTeX completo](Fuente_LaTeX_manual.zip)** contiene los recursos necesarios para editarlo y recompilarlo; también puedes leer la [fuente principal](Guia_visual_imagenes_medicas.tex).
 
 <a href="Guia_visual_imagenes_medicas.pdf"><img src="Portada_manual.png" alt="Portada del manual Imágenes médicas con Python" width="230"></a>
 
 Las figuras científicas se obtienen de datos y cálculos documentados. La portada del libro es una ilustración conceptual generada con IA.
+
+## Módulo opcional: de radiografías a predicciones
+
+Esta ampliación permite **entrenar y evaluar un primer modelo de aprendizaje automático** con imágenes médicas. Reserva **45–60 minutos adicionales**; la sesión principal del programa sigue durando una hora. Si sólo se solicita una demostración de 15 minutos, utiliza las **salidas guardadas de las celdas 1, 6, 9 y 11**. Para ejecutar el cuaderno, comienza en la primera celda y sigue las doce en orden.
+
+**[Leer el tutorial visual sin ejecutar código](modulo_ml.html)** · **[Practicar en Google Colab](https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Modulo_ML_radiografias.ipynb)** · [Descargar el cuaderno](Modulo_ML_radiografias.ipynb) · [Guía ilustrada en PDF](Guia_modulo_ML.pdf)
+
+El recorrido comienza con radiografías y explica qué son una muestra, una característica y una etiqueta. Después transforma cada imagen de 28 × 28 píxeles en 784 valores, compara con una regla que siempre predice la clase mayoritaria y entrena una **regresión logística**. Es un clasificador supervisado que funciona con CPU; no es una red neuronal convolucional. Las explicaciones acompañan al código, a las figuras y a los ejercicios resueltos.
+
+Entrenamiento ajusta los pesos; validación elige entre tres valores de `C`; prueba se utiliza al final, después de fijar el modelo y el umbral. Los experimentos de umbral utilizan sólo validación. Se interpretan la matriz de confusión, sensibilidad, especificidad y exactitud equilibrada, y se muestran aciertos y errores con un criterio de selección declarado.
+
+**Datos:** [PneumoniaMNIST](https://medmnist.com/), una colección pública de radiografías pediátricas reducidas y etiquetadas. El archivo original de [Zenodo](https://zenodo.org/records/10519652) se distribuye intacto bajo **CC BY 4.0**. Para esta adaptación docente se retiran 18 copias exactas adicionales del entrenamiento y 8 imágenes de validación idénticas a entrenamiento: se utilizan **4690 / 516 / 624 imágenes**. La prueba oficial permanece completa, incluidas tres copias adicionales documentadas. El NPZ no contiene identificadores para comprobar separación por pacientes; eliminar copias exactas no certifica esa independencia. Consulta la [procedencia, licencia y auditoría](datos/FUENTES_PneumoniaMNIST.txt).
+
+La preparación inicial descarga el archivo público si no está disponible y verifica su huella. No se necesitan GPU, acceso a Drive ni estudios propios. Para uso local, conserva la carpeta `datos` e instala [requisitos_ml.txt](requisitos_ml.txt) en tu entorno de Python. Si ya creaste el entorno de Windows descrito más abajo, ejecuta:
+
+```powershell
+.\.venv\Scripts\python.exe -m pip install -r requisitos_ml.txt
+.\.venv\Scripts\python.exe -m jupyterlab
+```
+
+Abre `Modulo_ML_radiografias.ipynb`. Las salidas están guardadas y la [lectura web](modulo_ml.html) incluye sus imágenes para consultar el tutorial sin ejecutar. El [proyecto LaTeX completo](Fuente_LaTeX_modulo_ML.zip), la [fuente principal](Guia_modulo_ML.tex) y los [resultados de referencia](resultados_modulo_ml.json) permiten revisar y reutilizar el material.
+
+**Alcance:** ejercicio educativo sobre etiquetas de un conjunto público. Las imágenes reducidas no sirven para aprender diagnóstico visual, y la puntuación del modelo no es un riesgo clínico calibrado. Estos resultados no demuestran rendimiento en otras personas, edades u hospitales.
 
 ## Qué aprenderás
 
@@ -55,7 +81,7 @@ Las figuras científicas se obtienen de datos y cálculos documentados. La porta
 - Observar perfiles de intensidad y medir cambios con Sobel.
 - Documentar una secuencia de procesamiento y comprender por qué una evaluación de ML debe separar pacientes.
 
-El taller introduce la **visualización y el procesamiento previo al aprendizaje automático**. No entrena un modelo ni presenta una evaluación diagnóstica.
+La **sesión principal de 60 minutos** introduce la visualización y el procesamiento previo al aprendizaje automático. El **módulo opcional adicional** sí entrena un clasificador con radiografías públicas. Ambos son recursos educativos; ninguno constituye una evaluación diagnóstica validada.
 
 ## Abrir el cuaderno en Google Colab
 
@@ -93,6 +119,7 @@ El cuaderno completo de 24 lecciones es material de profundización. No se prete
 3. Pide una predicción antes de cada variación. Mantén una sola modificación por vez y utiliza las pistas antes de mostrar la solución.
 4. Si la instalación se retrasa, continúa con las salidas guardadas y el explorador. Reserva los últimos cinco minutos para las tres preguntas, aunque debas dejar una variación como tarea.
 5. Al cerrar, enlaza con ML: los filtros de este taller se especifican manualmente; una red convolucional aprende filtros a partir de datos y un objetivo. Entrenar y evaluar exige datos independientes, etiquetas pertinentes y separación adecuada por pacientes. Esta plantilla no constituye un conjunto de entrenamiento clínico.
+6. Si se solicita profundizar en aprendizaje automático, abre el [módulo opcional de radiografías](modulo_ml.html). Usa sus salidas guardadas para la demostración breve y acuerda tiempo adicional para la práctica completa; no intentes añadir sus doce celdas a la hora ya programada.
 
 ## Trabajar en tu computadora con Windows
 
@@ -123,6 +150,12 @@ Las 24 celdas se ejecutaron localmente utilizando la plantilla incluida. El ento
 
 `requirements.txt` mantiene intervalos de versiones compatibles; no es una copia congelada de todas las dependencias del entorno de comprobación.
 
+Las **12 celdas del módulo opcional de radiografías** se ejecutaron localmente en CPU, con 12 salidas gráficas y sin advertencias. Se utilizó Python 3.12.14, NumPy 2.5.4, Matplotlib 3.11.2 y scikit-learn 1.9.1. El modelo eligió `C=0.1` mediante validación; el umbral de prueba se fijó previamente en `0.5`. Las figuras y las salidas guardadas corresponden a esa ejecución local documentada. Los conteos, métricas, exclusiones y versiones están en [resultados_modulo_ml.json](resultados_modulo_ml.json).
+
+También se ejecutaron correctamente las doce celdas en **Google Colab con CPU el 23 de noviembre de 2026**, con NumPy 2.4.6, Matplotlib 3.10.0 y scikit-learn 1.6.1. En ese entorno, validación eligió `C=1`: obtuvo una exactitud equilibrada de 95.28 %, frente a 95.05 % para `C=0.1`. La prueba produjo `[[162,72],[11,379]]` (filas = referencia, columnas = predicción), con 86.70 % de exactitud y 83.21 % de exactitud equilibrada. La ejecución local produjo `[[158,76],[14,376]]` con `C=0.1`.
+
+Los intervalos de [requisitos_ml.txt](requisitos_ml.txt) no congelan un entorno idéntico. Las diferencias entre versiones pueden modificar el ajuste numérico, los resultados y la opción seleccionada cuando sus valores de validación son cercanos. **No cambies el modelo después de mirar prueba para reproducir los números del PDF**: conserva la selección hecha con validación y registra tus versiones y resultados. Estas comprobaciones de ejecución no equivalen a validación clínica ni demuestran independencia entre pacientes.
+
 El manual se compiló con XeLaTeX y se revisaron visualmente sus 95 páginas. También se extrajo el ZIP de la fuente en una carpeta independiente y se recompiló: conserva las 95 páginas y el mismo contenido textual. El generador portátil reprodujo las 20 figuras nuevas con huellas SHA-256 idénticas. El paquete incluye las imágenes ya preparadas, los datos públicos, las fuentes de código con su licencia y las instrucciones de compilación; Python solo se necesita si deseas regenerar las figuras.
 
 ## Archivos del repositorio
@@ -131,6 +164,10 @@ El manual se compiló con XeLaTeX y se revisaron visualmente sus 95 páginas. Ta
 - [`Taller_en_vivo_60min.ipynb`](Taller_en_vivo_60min.ipynb): ruta breve de la sesión, con salidas guardadas.
 - [`presentacion.html`](presentacion.html), [`Presentacion_taller.pdf`](Presentacion_taller.pdf) y [`Presentacion_taller.pptx`](Presentacion_taller.pptx): diapositivas web, copia para lectura y versión editable.
 - [`explorador.html`](explorador.html): herramienta autónoma con datos incorporados; puede abrirse sin conexión.
+- [`Modulo_ML_radiografias.ipynb`](Modulo_ML_radiografias.ipynb) y [`modulo_ml.html`](modulo_ml.html): práctica opcional de aprendizaje automático y lectura completa con código, explicaciones y salidas.
+- [`Guia_modulo_ML.pdf`](Guia_modulo_ML.pdf), [`Guia_modulo_ML.tex`](Guia_modulo_ML.tex) y [`Fuente_LaTeX_modulo_ML.zip`](Fuente_LaTeX_modulo_ML.zip): guía adicional y fuentes para editarla.
+- [`requisitos_ml.txt`](requisitos_ml.txt) y [`resultados_modulo_ml.json`](resultados_modulo_ml.json): bibliotecas y ficha de la ejecución del módulo.
+- [`datos/pneumoniamnist.npz`](datos/pneumoniamnist.npz) y [`datos/FUENTES_PneumoniaMNIST.txt`](datos/FUENTES_PneumoniaMNIST.txt): archivo público original y atribución con auditoría documentada.
 
 - [`Guia_visual_imagenes_medicas.pdf`](Guia_visual_imagenes_medicas.pdf): manual ilustrado por capítulos, con explicaciones, ejemplos, código, salidas interpretadas y ejercicios resueltos.
 - [`Guia_visual_imagenes_medicas.tex`](Guia_visual_imagenes_medicas.tex): fuente principal del manual en LaTeX; para recompilarla se necesitan los recursos del paquete completo.
@@ -152,7 +189,9 @@ También puedes compilar localmente con XeLaTeX siguiendo las instrucciones del 
 
 ## Datos fuentes y licencias
 
-Utilizamos la **plantilla T1 MNI152 distribuida con Nilearn 0.12.1**, remuestreada a 2 mm para esta práctica. Es una referencia anatómica agregada, no una colección de pacientes independientes. La matriz pequeña, las superficies matemáticas y el ruido se generan con código. El repositorio no incorpora archivos clínicos privados del facilitador.
+La sesión principal utiliza la **plantilla T1 MNI152 distribuida con Nilearn 0.12.1**, remuestreada a 2 mm para esta práctica. Es una referencia anatómica agregada, no una colección de pacientes independientes. La matriz pequeña, las superficies matemáticas y el ruido se generan con código. El repositorio no incorpora archivos clínicos privados del facilitador.
+
+El módulo opcional utiliza **PneumoniaMNIST 28 × 28**, de Yang y colaboradores, derivado de radiografías de Kermany y colaboradores. Se conserva su licencia **CC BY 4.0**, su atribución y el archivo original. Las transformaciones del conjunto, las exclusiones de la adaptación docente y las limitaciones de privacidad e independencia se describen en [datos/FUENTES_PneumoniaMNIST.txt](datos/FUENTES_PneumoniaMNIST.txt). MedMNIST declara que estos datos no están destinados a uso clínico.
 
 **Nota de procedencia:** la documentación de `load_mni152_template` en Nilearn 0.12.1 describe la plantilla como ICBM152 2009a asimétrica, mientras que el código de esa versión carga el archivo interno `mni_icbm152_t1_tal_nlin_sym_09a_converted.nii.gz`. Conservamos ambas evidencias sin resolver la discrepancia por el nombre del archivo ni afirmar una variante de simetría no confirmada. La fuente, la versión, la derivación y la huella SHA-256 de la copia utilizada están documentadas en [FUENTES_Y_LICENCIAS.txt](FUENTES_Y_LICENCIAS.txt).
 

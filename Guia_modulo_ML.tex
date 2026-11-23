@@ -1,0 +1,336 @@
+\input{estilo.tex}
+\begin{document}
+\begin{titlepage}\thispagestyle{empty}
+\begin{tikzpicture}[remember picture,overlay]
+\fill[Ink] (current page.south west) rectangle (current page.north east);
+\fill[Teal] ([yshift=-14mm]current page.north west) rectangle ([yshift=-17mm]current page.north east);
+\node[anchor=north west,align=left,text width=168mm,text=white] at ([xshift=21mm,yshift=-30mm]current page.north west) {
+{\sffamily\fontsize{10}{13}\selectfont\bfseries APRENDER HACIENDO · MÓDULO OPCIONAL}\par\vspace{10mm}
+{\sffamily\fontsize{34}{39}\selectfont\bfseries De radiografías\\a predicciones}\par\vspace{6mm}
+{\sffamily\fontsize{17}{23}\selectfont Primer modelo de\\aprendizaje automático}\par\vspace{7mm}
+{\sffamily\fontsize{11}{16}\selectfont Una guía visual de datos, entrenamiento,\\evaluación y errores, paso a paso.}};
+\node[anchor=center,inner sep=4mm,fill=white,rounded corners=3pt] at ([yshift=-26mm]current page.center) {\includegraphics[width=160mm]{figuras/celda-01.png}};
+\node[anchor=south west,text width=168mm,align=left,text=white] at ([xshift=21mm,yshift=23mm]current page.south west) {
+{\sffamily\fontsize{13}{17}\selectfont\bfseries Juan Calderón}\par\vspace{3mm}
+{\sffamily\fontsize{10}{15}\selectfont Machine Learning Honduras · Noviembre de 2026\\PneumoniaMNIST · Python · scikit-learn · CPU}\par\vspace{5mm}
+{\sffamily\fontsize{9}{13}\selectfont Imágenes públicas para aprender. Este ejercicio no es una herramienta diagnóstica.}};
+\end{tikzpicture}\null
+\end{titlepage}
+\setcounter{page}{2}
+
+\Pagina{ANTES DE ABRIR EL CUADERNO}{Qué vamos a construir}{Primera lectura: páginas 2–5, unos 15 minutos. Práctica guiada: 45–60 minutos adicionales.}
+Este módulo amplía el taller de procesamiento de imágenes. Allí elegíamos reglas, como un umbral o un filtro. Aquí aprenderemos una regla a partir de \textbf{imágenes acompañadas de una etiqueta}. Después comprobaremos qué hace con imágenes reservadas. Esa diferencia es el punto de partida del \textbf{aprendizaje supervisado}.
+\begin{Idea}{La pregunta del ejercicio}
+¿Puede un modelo sencillo relacionar los 784 valores de una imagen de tórax con las etiquetas \texttt{normal} y \texttt{pneumonia} del conjunto público? Evaluamos esa tarea concreta. No pedimos al estudiante que diagnostique una radiografía.
+\end{Idea}
+\par\begin{tabularx}{\linewidth}{@{}p{28mm}Y@{}}\toprule
+\textbf{Palabra} & \textbf{Significado en este módulo}\\\midrule
+Muestra & Una imagen. Una persona podría haber aportado más de una; no conocemos ese agrupamiento.\\
+Característica & Un número que entra al modelo: aquí, la intensidad de un píxel.\\
+Etiqueta & La categoría de referencia publicada junto a una imagen.\\
+Entrenamiento & Ajustar pesos utilizando imágenes y etiquetas de entrenamiento.\\
+Predicción & Aplicar los pesos ya ajustados a una imagen.\\
+Evaluación & Comparar predicciones con etiquetas reservadas y contar aciertos y errores.\\\bottomrule
+\end{tabularx}\par
+\Sub{Cómo empezar}
+Abre \href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Modulo_ML_radiografias.ipynb}{el cuaderno del módulo en Google Colab}. Inicia sesión si se solicita. Usa CPU, pulsa el triángulo de la primera celda y espera a que termine. Continúa de arriba abajo. Si quieres conservar cambios, elige \textbf{Archivo → Guardar una copia en Drive}; el ejercicio no necesita montar tus archivos de Drive.
+La primera celda prepara las bibliotecas ausentes y carga la copia pública local o la descarga. El resto reutiliza sus variables. Un \texttt{NameError} suele indicar que falta ejecutar una celda anterior. Las salidas guardadas permiten seguir la explicación aunque todavía no hayas ejecutado.
+\par Las cifras impresas corresponden a la ejecución local documentada en la página 13. Otra versión de las bibliotecas puede producir resultados y una selección de C diferentes; registra los de tu propia ejecución.
+\begin{Practica}{Dos recorridos}
+En una demostración breve, observa imágenes, entrenamiento, matriz de confusión y errores. Para aprender haciendo, reserva la ampliación completa. Este material es opcional y no modifica por sí solo el horario oficial de la escuela.
+\end{Practica}
+
+\Pagina{CELDAS 1–2 · CONOCER LOS DATOS}{Qué entra al modelo}{Una colección pública no equivale a datos sin limitaciones.}
+\textbf{PneumoniaMNIST} es una versión pequeña de una colección de radiografías pediátricas de tórax de Kermany y colaboradores. MedMNIST recorta centralmente y reduce cada imagen a \textbf{28 × 28 píxeles}, con una escala de gris. La clase 0 es \texttt{normal}; la clase 1 es \texttt{pneumonia}. Son etiquetas del conjunto: \texttt{normal} no demuestra ausencia de cualquier enfermedad. [1–3]
+El archivo \texttt{.npz} es un paquete comprimido de arreglos de NumPy. Contiene seis arreglos: imágenes y etiquetas para entrenamiento, validación y prueba. No es un DICOM ni aporta su cabecera clínica. Los valores de imagen son enteros de 8 bits; el rango posible es 0–255.
+\par\begin{tabularx}{\linewidth}{@{}Yrrr@{}}\toprule
+\textbf{Conjunto} & \textbf{Original} & \textbf{Usado} & \textbf{Función}\\\midrule
+Entrenamiento & 4 708 & 4 690 & Aprender\\
+Validación & 524 & 516 & Comparar opciones\\
+Prueba & 624 & 624 & Evaluar al final\\\bottomrule
+\end{tabularx}\par
+\Sub{La adaptación docente, explicada}
+La revisión de los arreglos encontró 18 copias exactas adicionales dentro de entrenamiento. Conservamos la primera aparición de cada imagen. Ocho imágenes de validación eran idénticas a imágenes de entrenamiento; las excluimos de validación. No hay etiquetas contradictorias entre los arreglos idénticos encontrados. El archivo original se conserva intacto.
+Prueba mantiene sus 624 imágenes oficiales, incluidas tres copias exactas adicionales internas, para no redefinir su composición después de observar resultados. No encontramos arreglos idénticos entre entrenamiento y prueba ni entre validación y prueba. Esto \textbf{no descarta imágenes parecidas ni varias imágenes de una persona}. Nuestro resultado corresponde a una adaptación documentada del protocolo, no a un benchmark original sin cambios.
+\begin{Codigo}{Integridad antes de cargar · idea de la celda 1}
+digest = hashlib.sha256(ruta.read_bytes()).hexdigest()
+assert digest == sha_esperada
+paquete = np.load(ruta, allow_pickle=False)
+\end{Codigo}
+La primera instrucción calcula una huella SHA-256 del archivo; \texttt{assert} detiene el ejercicio si no coincide con la copia auditada, cuyo valor fija la primera celda. La copia también se contrastó con el MD5 oficial. Estas huellas comprueban integridad, no independencia de pacientes. \texttt{allow\_pickle=False} evita cargar objetos de Python guardados en el paquete.
+\begin{Limite}{Privacidad e independencia son preguntas diferentes}
+El archivo inspeccionado contiene arreglos numéricos, sin campos de identificación de pacientes. Eso no certifica la anonimización de los estudios originales ni permite auditar separación por persona. Para el taller usamos esta publicación autorizada y atribuida; no añadimos estudios privados.
+\end{Limite}
+
+\Pagina{CELDAS 2–3 · ORGANIZAR Y REPRESENTAR}{Una imagen se convierte en una fila}{La etiqueta se guarda aparte: no debe filtrarse a las entradas.}
+\Figura{celda-03.png}{La representación cambia de forma, pero conserva el orden de los valores. Cada imagen aporta 784 características.}{66mm}
+Una imagen es una matriz de 28 filas y 28 columnas: \(28\times28=784\) posiciones. \texttt{reshape} reorganiza esos valores como una fila. Al reunir imágenes, \(X\) tiene una fila por imagen y una columna por posición de píxel. \(y\) es una lista aparte con una etiqueta por fila. Mantener su correspondencia es esencial.
+\begin{Codigo}{Representación numérica · fragmento conceptual de la celda 3}
+X_train = imagenes_train.reshape(len(imagenes_train), -1).astype(np.float64) / 255.0
+X_val = imagenes_val.reshape(len(imagenes_val), -1).astype(np.float64) / 255.0
+\end{Codigo}
+\texttt{len} cuenta imágenes. El \texttt{-1} pide calcular cuántas columnas hacen falta: 784. \texttt{astype(np.float64)} prepara números decimales. Dividir por 255 convierte el rango 0–255 en 0–1; por ejemplo, 128 pasa a aproximadamente 0,502. Las etiquetas \texttt{y\_train} e \texttt{y\_val} ya quedaron emparejadas con las imágenes en la celda 2.
+Esta división es una transformación \textbf{fija}: no calcula medias ni aprende de validación o prueba. Si utilizáramos una transformación que aprende estadísticas, habría que ajustarla únicamente con entrenamiento y aplicar después la misma transformación a los demás conjuntos.
+\begin{Idea}{Qué pierde y qué conserva esta elección}
+La fila conserva las posiciones en un orden conocido. Sin embargo, la regresión logística no incorpora vecindarios, desplazamientos ni filtros espaciales como lo hace una red convolucional. Es una referencia sencilla para entender el proceso completo, no una arquitectura avanzada para radiología.
+\end{Idea}
+\begin{Practica}{Calcula antes de seguir}
+\textbf{Pregunta:} ¿Una imagen de 56 × 56 produciría el doble de características?\\
+\textbf{Respuesta:} No: produciría 3 136, cuatro veces 784, porque se duplica tanto el número de filas como el de columnas. Ampliar visualmente la imagen de 28 × 28 no recupera detalles descartados.
+\end{Practica}
+
+\Pagina{CELDA 4 · ENTENDER EL MODELO}{Una suma y una transformación}{La regresión logística es un clasificador pese a su nombre.}
+\Figura{sigmoide_manual.png}{La misma sigmoide de la celda 4, con diseño horizontal para la lectura impresa. La línea discontinua marca 0,5.}{45mm}
+Cada entrada \(x_j\) es la intensidad normalizada de un píxel. El modelo aprende un peso \(w_j\) para cada entrada y un término independiente \(b\). Primero calcula un puntaje:
+\[ z=b+\sum_{j=1}^{784}w_jx_j. \qquad s=\frac{1}{1+e^{-z}}. \]
+El símbolo \(\sum\) significa «sumar las contribuciones». Un peso positivo aumenta \(z\) cuando aumenta su entrada; uno negativo lo reduce. La segunda fórmula es la \textbf{sigmoide}. Con \(z=0\), produce \(s=0,5\); con \(z=2\), aproximadamente \(0,881\); con \(z=-2\), aproximadamente \(0,119\).
+\begin{Codigo}{Un cálculo para comprobar la fórmula}
+z = 2.0
+s = 1 / (1 + np.exp(-z))
+print(round(s, 3))  # 0.881
+\end{Codigo}
+\texttt{np.exp} calcula la exponencial. La biblioteca ajusta los pesos para reducir una función de error respecto a las etiquetas de entrenamiento, con una penalización que limita su magnitud. \textbf{Aprender} significa ajustar esos números; \textbf{predecir} significa reutilizarlos.
+\begin{Idea}{Cómo aparece una decisión}
+Usamos la regla \(s\geq0,5\Rightarrow\) clase 1; si no se cumple, clase 0. Una puntuación de 0,501 y otra de 0,999 terminan en la misma clase, aunque sus valores sean distintos. Por eso conviene distinguir puntuación, umbral y etiqueta predicha.
+\end{Idea}
+\begin{Limite}{Qué no significa el 0,881}
+Es una estimación del modelo para las etiquetas de estos datos. No es una probabilidad clínica validada de que una persona tenga neumonía. El contexto, la calibración y la población de uso importan; la salida de esta práctica no debe utilizarse para decisiones médicas.
+\end{Limite}
+
+\Pagina{CELDA 5 · CREAR UNA REFERENCIA}{¿Qué logra una regla trivial?}{Antes de celebrar una cifra, compárala con algo sencillo.}
+\Figura{celda-05.png}{La regla de referencia siempre elige la clase más frecuente de entrenamiento. Se evalúa en validación, igual que las opciones del modelo.}{54mm}
+En el entrenamiento docente hay 1 213 imágenes de clase 0 y 3 477 de clase 1. Una regla que siempre responde clase 1 acertará muchas veces sin mirar los píxeles. \texttt{DummyClassifier}, con la opción \texttt{strategy="most\_frequent"}, construye esa referencia a partir de las etiquetas de entrenamiento.
+\begin{Codigo}{La referencia tiene entrenamiento y predicción}
+referencia = DummyClassifier(strategy="most_frequent")
+referencia.fit(X_train, y_train)
+pred_val_referencia = referencia.predict(X_val)
+\end{Codigo}
+\texttt{fit} identifica la clase mayoritaria. \texttt{predict} produce una respuesta para cada fila de validación. Esta regla usa las frecuencias de las clases, pero ignora los valores de la imagen. Un modelo que no la supera en una medida pertinente merece revisión.
+\begin{Idea}{Un ejemplo que engaña a la exactitud}
+Validación docente contiene 381 imágenes de clase 1 entre 516. Responder siempre 1 consigue \(381/516\approx73,8\,\%\) de exactitud. Sin embargo, reconoce \(0/135\) imágenes de clase 0 y \(381/381\) de clase 1. El promedio de esas dos tasas es \(50\,\%\): esa es su exactitud equilibrada.
+\end{Idea}
+La \textbf{exactitud} cuenta aciertos sobre todas las imágenes. La \textbf{exactitud equilibrada} calcula una tasa de acierto para cada clase y después las promedia. En un problema binario equivale al promedio de sensibilidad y especificidad. No elimina todos los problemas de evaluación, pero impide que la clase abundante domine por sí sola esa cifra.
+\begin{Practica}{Pregunta resuelta}
+\textbf{¿La regla trivial aprende algo?} Sí: aprende cuál es la etiqueta más frecuente. Lo que no aprende es una relación útil entre los píxeles y las etiquetas. Por eso es una referencia y no el modelo que buscamos.
+\end{Practica}
+
+\Pagina{CELDA 6 · ENTRENAR Y COMPARAR}{Tres opciones, una validación}{La prueba final permanece reservada.}
+\Figura{celda-06.png}{Comparación de entrenamiento y validación para los valores de C previstos antes de abrir la prueba.}{65mm}
+\textbf{Regularizar} significa limitar la complejidad de los pesos mediante una penalización durante el ajuste. En esta regresión, \(C\) controla inversamente su fuerza: un \(C\) menor implica más penalización. Probaremos \(0,01\), \(0,1\) y \(1\). Que \(C\) sea mayor no garantiza una mejor predicción en imágenes reservadas.
+\begin{Codigo}{Un modelo por cada opción · fragmento conceptual}
+modelo = LogisticRegression(
+    C=C, class_weight="balanced", solver="lbfgs", max_iter=2000
+)
+modelo.fit(X_train, y_train)
+pred_val = modelo.predict(X_val)
+\end{Codigo}
+\texttt{class\_weight="balanced"} da más peso a ejemplos de la clase menos frecuente durante el ajuste; los pesos se calculan con entrenamiento. Esto es distinto de la \textbf{métrica} exactitud equilibrada, que promedia tasas al evaluar. \texttt{lbfgs} es el método numérico de optimización. \texttt{max\_iter} fija un máximo de iteraciones: no obliga a utilizarlas todas ni equivale a entrenar 2 000 imágenes.
+Seleccionamos el valor con mayor exactitud equilibrada de \textbf{validación}. Si hay un empate, conservamos el menor \(C\). El conjunto de prueba no interviene. En la ejecución documentada se seleccionó \textbf{C = 0,1}, con \textbf{95,0\,\%} de exactitud equilibrada de validación.
+\begin{Practica}{Lee ambas curvas}
+Si el resultado en entrenamiento mejora mientras validación empeora, el ajuste podría estar adaptándose demasiado a sus ejemplos. Esa es una señal de \textbf{sobreajuste}, no una prueba automática de su causa. La diferencia entre conjuntos también puede depender de composición y variabilidad.
+\end{Practica}
+
+\Pagina{CELDA 7 · HACER UNA PREDICCIÓN}{De una imagen a una respuesta}{Separar lo que entra, lo que sale y con qué se compara.}
+\Figura{celda-07.png}{Ejemplo de validación. El índice identifica una posición del arreglo, no un identificador clínico de paciente.}{70mm}
+El modelo recibe la fila de 784 intensidades. \texttt{predict\_proba} devuelve dos valores, uno por clase. Sus columnas siguen el orden de \texttt{modelo.classes\_}. El cuaderno comprueba la columna correspondiente a la clase 1 y toma su puntuación. La etiqueta de referencia se usa después para comparar; no se entrega como entrada al predecir.
+\begin{Codigo}{La operación central · fragmento conceptual}
+puntuaciones = modelo.predict_proba(X_val)
+columna_1 = np.flatnonzero(modelo.classes_ == 1)[0]
+score = puntuaciones[indice, columna_1]
+prediccion = int(score >= 0.5)
+\end{Codigo}
+Los corchetes seleccionan una fila y una columna. \texttt{flatnonzero} encuentra la posición que cumple la comparación. \texttt{score >= 0.5} produce verdadero o falso; \texttt{int} lo convierte en 1 o 0. Con la etiqueta publicada podemos observar si hay coincidencia, pero una coincidencia individual no demuestra que el método generalice.
+\begin{Idea}{Tres elementos que no debemos mezclar}
+\textbf{Entrada:} los píxeles. \textbf{Predicción:} la respuesta calculada. \textbf{Referencia:} la etiqueta proporcionada por el conjunto. No modifiques la etiqueta para hacerla coincidir con el resultado, ni añadas esa etiqueta a las características.
+\end{Idea}
+\begin{Practica}{Prueba y explica}
+Cambia el índice por otro de validación, ejecuta la celda y describe entrada, puntuación, umbral, predicción y referencia. Si cambia la predicción, \textbf{no significa que el modelo se haya reentrenado}: sus pesos siguen siendo los ajustados antes.
+\end{Practica}
+
+\Pagina{CELDA 8 · VARIAR LA DECISIÓN}{El umbral mueve los errores}{Experimentamos con validación, sin utilizar prueba para elegir.}
+\Figura{celda-08.png}{La misma colección de puntuaciones se convierte en clases con umbrales diferentes. Los pesos del modelo permanecen iguales.}{71mm}
+Al bajar el umbral, más imágenes se clasifican como 1. Esto no puede disminuir el número de positivos predichos si conservamos las mismas puntuaciones. Puede reducir falsos negativos y aumentar falsos positivos. Al subirlo ocurre el intercambio contrario. Los cambios exactos dependen de dónde estén las puntuaciones respecto a cada umbral.
+\begin{Codigo}{Mismo modelo, tres reglas de decisión}
+for umbral in [0.3, 0.5, 0.7]:
+    pred_val = (p_val >= umbral).astype(int)
+    matriz = confusion_matrix(y_val, pred_val, labels=[0, 1])
+\end{Codigo}
+El bucle \texttt{for} repite las instrucciones para cada valor. \texttt{astype(int)} convierte una colección de comparaciones a ceros y unos. \texttt{labels=[0,1]} conserva el mismo orden de clases, de modo que las celdas de las matrices sean comparables.
+\begin{Idea}{La regla del informe}
+Este ejercicio conserva \textbf{0,5} como umbral final predefinido. La comparación 0,3/0,5/0,7 sirve para entender el efecto de la decisión; no utiliza el test para buscar una cifra más atractiva. La selección de C sí se hace con validación, siguiendo el criterio definido antes.
+\end{Idea}
+En un estudio aplicado, elegir un umbral requiere definir el uso, los costos de los errores y un procedimiento de validación pertinente. No existe un umbral clínico universal que podamos deducir de este pequeño ejemplo.
+\begin{Practica}{Pregunta resuelta}
+\textbf{Si bajo el umbral, ¿aprende el modelo otros pesos?} No. Sólo cambia cómo convertimos sus puntuaciones en categorías. Volver a ejecutar \texttt{fit} es una operación diferente.
+\end{Practica}
+
+\Pagina{CELDA 9 · ABRIR LA PRUEBA}{Cuatro casillas para contar}{Modelo elegido y umbral fijado antes de calcular el resultado final.}
+\Figura{celda-09.png}{Matriz de confusión de prueba. Lee primero los ejes: filas de referencia y columnas de predicción.}{77mm}
+Una \textbf{matriz de confusión} organiza los resultados en dos direcciones. La fila indica la etiqueta publicada; la columna, la respuesta del modelo. En este cuaderno el orden es 0, 1. Positivo significa \textbf{clase 1 del conjunto}.
+\par\begin{tabularx}{\linewidth}{@{}Ycc@{}}\toprule
+ & \textbf{Predice 0} & \textbf{Predice 1}\\\midrule
+\textbf{Referencia 0} & VN = 158 & FP = 76\\
+\textbf{Referencia 1} & FN = 14 & VP = 376\\\bottomrule
+\end{tabularx}\par
+\textbf{Verdadero negativo (VN):} coincide en 0. \textbf{Verdadero positivo (VP):} coincide en 1. \textbf{Falso positivo (FP):} predice 1 donde la referencia es 0. \textbf{Falso negativo (FN):} predice 0 donde la referencia es 1. Los cuatro conteos suman las 624 imágenes de prueba.
+\begin{Codigo}{Contar manteniendo un orden explícito}
+matriz = confusion_matrix(y_test, pred_test, labels=[0, 1])
+vn, fp, fn, vp = matriz.ravel()
+\end{Codigo}
+\texttt{ravel} recorre la matriz por filas: arriba izquierda, arriba derecha, abajo izquierda, abajo derecha. Por eso el orden de los nombres es importante. Cambiar los ejes o el orden de etiquetas sin cambiar la interpretación produciría métricas equivocadas.
+\begin{Limite}{Una vez visto el test}
+Mirar sus errores puede generar nuevas preguntas, pero no debemos ajustar C o el umbral a esos resultados y presentar la misma prueba como independiente. Una nueva decisión necesita un diseño de evaluación que conserve datos realmente reservados.
+\end{Limite}
+
+\Pagina{CELDA 10 · INTERPRETAR LAS MÉTRICAS}{El denominador cambia la pregunta}{Cada porcentaje debe decir qué está contando.}
+\Figura{celda-10.png}{Comparación final con la referencia. La exactitud equilibrada exige atender a ambas clases.}{66mm}
+\par\begin{tabularx}{\linewidth}{@{}p{34mm}Y@{}}\toprule
+\textbf{Medida} & \textbf{Cálculo e interpretación en esta ejecución}\\\midrule
+Exactitud & \((VN+VP)/624 = (158+376)/624 = 85,6\,\%\). De todas las imágenes, ¿cuántas coincidieron?\\
+Sensibilidad & \(VP/(VP+FN)=376/390=96,4\,\%\). Entre las imágenes de referencia 1, ¿cuántas detectó como 1?\\
+Especificidad & \(VN/(VN+FP)=158/234=67,5\,\%\). Entre las imágenes de referencia 0, ¿cuántas reconoció como 0?\\
+Exactitud equilibrada & \((\text{sensibilidad}+\text{especificidad})/2 = 82,0\,\%\). Promedia la tasa de ambas clases con el mismo peso.\\\bottomrule
+\end{tabularx}\par
+\begin{Idea}{Por qué no intercambiar sensibilidad y precisión positiva}
+La sensibilidad parte de los \textbf{positivos de referencia}: \(VP/(VP+FN)\). La precisión positiva parte de los \textbf{positivos predichos}: \(VP/(VP+FP)\). Pueden tener valores muy distintos. Antes de memorizar una fórmula, escribe qué conjunto está en su denominador.
+\end{Idea}
+El modelo obtiene aquí \textbf{82,0\,\%} de exactitud equilibrada; la regla mayoritaria obtiene \textbf{50,0\,\%}. Esta comparación informa sobre la tarea y la muestra concretas. No establece rendimiento clínico ni garantiza resultados similares en otro hospital, edad, equipo o tipo de imagen.
+\Fuente{Las tasas proceden de la ejecución guardada del cuaderno. El test conserva 624 imágenes oficiales, incluidas tres copias exactas adicionales internas. Sin identificadores de pacientes no calculamos intervalos suponiendo independencia por persona.}
+
+\Pagina{CELDA 11 · MIRAR LOS ERRORES}{Un resultado global no cuenta todo}{Los ejemplos se eligen con una regla, no por su atractivo visual.}
+\Figura{celda-11.png}{El cuaderno muestra el primer ejemplo disponible de cada casilla de la matriz de confusión; si una casilla está vacía, lo indica.}{85mm}
+Una galería ayuda a conectar los conteos con las imágenes. Cada panel incluye referencia, predicción, puntuación e índice. El criterio de selección es determinista: \textbf{la primera imagen de cada grupo en el orden de prueba}. No representa una muestra aleatoria ni los casos más frecuentes o más difíciles.
+\begin{Codigo}{Localizar un tipo de error · ejemplo de falso positivo}
+indices_fp = np.flatnonzero((y_test == 0) & (pred_test == 1))
+if len(indices_fp):
+    primer_fp = indices_fp[0]
+\end{Codigo}
+Cada comparación produce una máscara de verdaderos y falsos. \texttt{\&} exige que se cumplan ambas condiciones. \texttt{flatnonzero} devuelve posiciones que las cumplen. La comprobación \texttt{if} evita intentar acceder a un ejemplo inexistente.
+\begin{Practica}{Cómo comentar una imagen sin inventar una explicación}
+Puedes decir: «La referencia es 0, el modelo produjo 1 y la puntuación fue esta». No puedes concluir sólo con esa figura por qué se equivocó, si una etiqueta es errónea o dónde hay una lesión. Para ello harían falta otros datos y revisión experta.
+\end{Practica}
+Un modelo puede aprovechar señales de posición, recorte, contraste o adquisición en lugar de lo que nos interesa. Los errores invitan a investigar esos factores. La galería es una revisión descriptiva posterior; no se usa para cambiar el modelo de este informe.
+
+\Pagina{CELDA 12 · DEJAR UN REGISTRO}{Un resultado que se pueda explicar}{Reproducir significa conservar decisiones, datos, código y entorno.}
+\Figura{celda-12.png}{Resumen de la ejecución. Cada etapa tiene una función distinta y un conjunto de datos asignado.}{70mm}
+Una cifra sin contexto no permite repetir ni juzgar un experimento. La última celda reúne el origen de los datos, sus huellas, la regla de limpieza, las opciones probadas, el valor de C seleccionado, el umbral y los resultados. También guarda las versiones de las bibliotecas utilizadas.
+\begin{Idea}{Ficha breve de esta ejecución}
+\textbf{Datos:} PneumoniaMNIST 28 × 28. \textbf{Entrenamiento:} 4 690 imágenes tras deduplicación exacta. \textbf{Validación:} 516 tras retirar coincidencias con entrenamiento. \textbf{Prueba:} 624 imágenes oficiales. \textbf{Modelo:} regresión logística, ponderación equilibrada de clases. \textbf{C:} 0,1. \textbf{Umbral:} 0,5. \textbf{Exactitud equilibrada de prueba:} 82,0\,\%.
+\end{Idea}
+\Sub{Explica el recorrido en cinco frases}
+\begin{enumerate}
+\item Las imágenes se convierten en filas de 784 valores normalizados; las etiquetas quedan aparte.
+\item El modelo ajusta pesos únicamente con entrenamiento.
+\item Comparamos tres valores de C usando validación y un criterio previamente definido.
+\item Con el modelo elegido y el umbral fijado, calculamos predicciones de prueba y contamos las cuatro casillas.
+\item Interpretamos tasas y errores dentro de las limitaciones de este conjunto; no hacemos diagnósticos.
+\end{enumerate}
+\Sub{Qué puede variar al repetir}
+Las figuras y cifras de esta guía pertenecen a la ejecución local indicada abajo. Otra ejecución en Colab con scikit-learn 1.6.1 seleccionó C = 1; aquí, con 1.9.1, se seleccionó C = 0,1. Las versiones y los detalles numéricos pueden cambiar incluso la opción elegida por validación. Registra tu resultado real y su entorno: no cambies el modelo mirando prueba para imitar el PDF. \texttt{lbfgs} no utiliza \texttt{random\_state} en este ajuste; cambiar una «semilla» no resuelve esa diferencia.
+\Fuente{Entorno documentado: Python 3.12.14, numpy 2.5.4, matplotlib 3.11.2, scikit-learn 1.9.1. Edición de la guía: 23 de noviembre de 2026.}
+
+\Pagina{DEL EJERCICIO A UN ESTUDIO REAL}{Qué faltaría para ir más lejos}{Un buen resultado de taller es el comienzo de una pregunta.}
+\begin{center}
+\begin{tikzpicture}[node distance=7mm,box/.style={draw=Teal!40,fill=Pale,rounded corners=3pt,text width=145mm,inner sep=9pt,align=left,font=\sffamily},arr/.style={-{Stealth[length=2mm]},thick,Teal}]
+\node[box] (a) {\textbf{Definir la pregunta}\quad ¿Qué entrada, población, decisión y uso se quiere estudiar?};
+\node[box,below=of a] (b) {\textbf{Controlar la procedencia}\quad Permisos, etiquetas, calidad, identidad de pacientes y contexto de adquisición.};
+\node[box,below=of b] (c) {\textbf{Separar correctamente}\quad Evitar que imágenes de la misma persona o copias entren en evaluación independiente.};
+\node[box,below=of c] (d) {\textbf{Evaluar fuera del desarrollo}\quad Otros pacientes y, cuando corresponda, otros centros, equipos y períodos.};
+\draw[arr] (a)--(b);\draw[arr] (b)--(c);\draw[arr] (c)--(d);
+\end{tikzpicture}
+\end{center}
+\Sub{El cambio de contexto}
+Un modelo puede funcionar en su conjunto de origen y fallar cuando cambia la población o la forma de adquirir las imágenes. Ese \textbf{cambio de distribución} puede afectar apariencias, etiquetas y frecuencia de clases. Un buen porcentaje en radiografías pediátricas reducidas no se transporta automáticamente a adultos ni a estudios clínicos de alta resolución.
+\Sub{Las etiquetas también merecen revisión}
+El aprendizaje supervisado aprende a aproximar las etiquetas que recibe. Si hay errores, sesgos o una definición ambigua de la tarea, puede reproducirlos. La evaluación respecto a una etiqueta publicada no demuestra por sí misma que esa etiqueta sea un estándar clínico perfecto.
+\Sub{Antes de usar imágenes propias}
+Usa una copia destinada a docencia y verifica los permisos correspondientes. Revisa cabeceras, información incrustada en píxeles y archivos acompañantes. Una conversión de formato no equivale a anonimización. El manual principal del taller desarrolla la revisión de privacidad; el módulo actual no necesita añadir imágenes privadas.
+\begin{Idea}{Un siguiente paso razonable}
+Comparar una red convolucional con esta referencia, manteniendo el mismo diseño de separación y evaluación. Una arquitectura más compleja introduce otras decisiones; no corrige automáticamente los problemas de procedencia, etiquetas o dependencia entre imágenes.
+\end{Idea}
+
+\Pagina{PARA QUIEN FACILITA}{Guion de la ampliación}{Una ruta de 60 minutos, con alternativas si hay menos tiempo.}
+\par\begin{tabularx}{\linewidth}{@{}p{19mm}p{20mm}Y@{}}\toprule
+\textbf{Minutos} & \textbf{Celdas} & \textbf{Explicación y comprobación}\\\midrule
+0–8 & 1–2 & «Estas son imágenes y etiquetas públicas. Una imagen no equivale necesariamente a una persona». Mostrar galería, funciones de los conjuntos y copias retiradas. Preguntar por qué una copia en validación puede engañarnos.\\
+8–17 & 3–4 & «Cada imagen se vuelve una fila; el modelo aprende pesos». Calcular 28 × 28 y la salida de la sigmoide para cero. Distinguir entrenamiento de predicción.\\
+17–28 & 5–6 & «Primero competimos contra una regla que ignora los píxeles». Leer exactitud y exactitud equilibrada. Comparar C sólo en validación.\\
+28–38 & 7–8 & «Una puntuación no es todavía una categoría». Probar un índice de validación y anticipar qué cambia al bajar el umbral.\\
+38–49 & 9–10 & «Ahora abrimos prueba con las decisiones fijadas». Leer ejes de la matriz y calcular sensibilidad con su denominador.\\
+49–60 & 11–12 & «Los errores también son resultados». Leer un ejemplo de cada casilla, recuperar límites y responder las preguntas de cierre.\\\bottomrule
+\end{tabularx}\par
+\Sub{Antes de que lleguen los participantes}
+Ejecuta todo el cuaderno una vez en un entorno preparado. Comprueba que aparecen las doce figuras y que la descarga está completa. Registra las métricas y versiones de esa ejecución; si difieren de la guía, revisa los datos, las decisiones y el entorno, sin ajustar con prueba para igualarlas. Abre la guía como respaldo. Prepara bibliotecas y descarga antes de la explicación.
+\begin{Practica}{Si sólo dispones de 20 minutos}
+Usa las salidas guardadas. Muestra galería, representación, comparación con la regla trivial, matriz final y errores. Di qué etapas ya se ejecutaron; no presentes esa lectura acelerada como una práctica completa de entrenamiento y validación. Ofrece el resto para estudio autónomo.
+\end{Practica}
+\Sub{Tres preguntas de cierre con su respuesta}
+\textbf{¿Dónde aprende los pesos?} En entrenamiento. \textbf{¿Dónde seleccionamos C?} En validación. \textbf{¿Dónde informamos el resultado final?} En prueba, después de fijar las decisiones. Si esas respuestas no están claras, vuelve al diagrama antes de introducir una red neuronal.
+
+\Pagina{PRÁCTICA CON RESPUESTAS}{Comprueba lo que entendiste}{Responde antes de leer cada solución.}
+\begin{Practica}{1 · La forma de los datos}
+\textbf{Pregunta:} ¿Qué forma tiene X con 100 imágenes de 28 × 28 y qué forma tiene y?\\
+\textbf{Respuesta:} X tiene 100 filas y 784 columnas; y contiene 100 etiquetas. Las 784 columnas no son 784 personas ni 784 diagnósticos.
+\end{Practica}
+\begin{Practica}{2 · Una buena cifra engañosa}
+\textbf{Pregunta:} En 100 imágenes hay 90 de clase 1. Siempre predecir 1 da 90\,\% de exactitud. ¿Qué exactitud equilibrada obtiene?\\
+\textbf{Respuesta:} Sensibilidad 90/90 = 100\,\%; especificidad 0/10 = 0\,\%; promedio 50\,\%. El modelo ignora por completo una de las clases.
+\end{Practica}
+\begin{Practica}{3 · El umbral}
+\textbf{Pregunta:} Una puntuación es 0,62. ¿Qué predice con umbral 0,5 y con 0,7?\\
+\textbf{Respuesta:} Predice 1 con 0,5 y 0 con 0,7. La puntuación no cambia porque no hemos cambiado la imagen ni los pesos. Sólo cambia la regla de decisión.
+\end{Practica}
+\begin{Practica}{4 · La selección del modelo}
+\textbf{Pregunta:} Probamos muchas C y elegimos la de mayor resultado en test. ¿El test sigue siendo una evaluación independiente de esa elección?\\
+\textbf{Respuesta:} No. La elección utilizó información de test. Para seleccionar se usa validación; una evaluación posterior necesita datos que no hayan dirigido esas decisiones.
+\end{Practica}
+\begin{Practica}{5 · Una matriz pequeña}
+\textbf{Pregunta:} VN=30, FP=10, FN=5 y VP=55. Calcula exactitud, sensibilidad y especificidad.\\
+\textbf{Respuesta:} Exactitud=(30+55)/100=85\,\%; sensibilidad=55/60≈91,7\,\%; especificidad=30/40=75\,\%. La exactitud equilibrada es aproximadamente 83,3\,\%.
+\end{Practica}
+\begin{Practica}{6 · Lo que aún no sabemos}
+\textbf{Pregunta:} No encontramos arreglos idénticos entre entrenamiento y prueba. ¿Demuestra eso que pertenecen a personas distintas?\\
+\textbf{Respuesta:} No. Una persona puede aportar imágenes diferentes. La igualdad exacta de píxeles es sólo una comprobación limitada; separar por paciente requiere esa información y un diseño adecuado.
+\end{Practica}
+
+\Pagina{CONSULTA RÁPIDA}{Lee el código sin adivinar}{No hace falta memorizar las funciones; sí entender su papel.}
+\par\begin{tabularx}{\linewidth}{@{}p{43mm}Y@{}}\toprule
+\textbf{Expresión} & \textbf{Qué hace y qué debes cuidar}\\\midrule
+\texttt{import numpy as np} & Da a NumPy el nombre corto np. Importar una biblioteca no entrena un modelo.\\
+\texttt{X.shape} & Informa sus dimensiones: número de imágenes y número de características.\\
+\texttt{array[i]} & Selecciona el elemento de índice i. Python comienza en 0.\\
+\texttt{array.reshape(...)} & Reorganiza los mismos valores; no crea detalle médico.\\
+\texttt{modelo.fit(X, y)} & Ajusta parámetros con entradas y etiquetas. Usa sólo el conjunto previsto para entrenamiento.\\
+\texttt{modelo.predict(X)} & Produce clases con el modelo ajustado. No vuelve a aprender los pesos.\\
+\texttt{predict\_proba(X)} & Produce estimaciones por clase; hay que interpretar el orden de las columnas y sus límites.\\
+\texttt{(p >= t).astype(int)} & Convierte puntuaciones en clases mediante un umbral explícito.\\
+\texttt{confusion\_matrix} & Cuenta combinaciones de referencia y predicción. Mantén explícito el orden de clases.\\
+\texttt{assert condición} & Detiene la ejecución si una comprobación no se cumple; no lo borres para esconder un problema.\\\bottomrule
+\end{tabularx}\par
+\Sub{Si algo falla}
+\textbf{No aparece una figura:} espera a que termine la celda y comprueba si hay un mensaje de error. \textbf{No existe una variable:} ejecuta desde la primera celda en orden. \textbf{La descarga se interrumpe:} revisa la conexión y repite la celda de carga; conserva la verificación de integridad.
+\textbf{Aparece una advertencia de convergencia:} no la interpretes como un resultado válido sin revisión. Comprueba versión, preparación y límite de iteraciones; una optimización inconclusa puede alterar la comparación. \textbf{Cambiaste una celda:} ejecutar sólo esa celda no actualiza automáticamente las salidas posteriores.
+\begin{Idea}{Cómo practicar con orden}
+Guarda una copia, cambia una sola opción permitida y anota tu predicción antes de ejecutar. Experimenta con entrenamiento y validación. Si utilizas repetidamente la prueba para decidir, la práctica sigue siendo educativa, pero esa prueba ya no mide una decisión independiente.
+\end{Idea}
+
+\Pagina{FUENTES Y REPRODUCCIÓN}{De dónde viene este material}{Referencias consultadas y archivos para repetir el recorrido.}
+\begin{enumerate}[label={[\arabic*]},leftmargin=2em]
+\item \textbf{MedMNIST.} Descripción, alcance educativo y datos: \url{https://medmnist.com/}. Metadatos y huella del archivo: \href{https://github.com/MedMNIST/MedMNIST/blob/main/medmnist/info.py}{MedMNIST/info.py}. Descarga: \href{https://zenodo.org/records/10519652}{Zenodo, registro 10519652}.
+\item \textbf{Yang, J. y colaboradores (2023).} \emph{MedMNIST v2: A large-scale lightweight benchmark for 2D and 3D biomedical image classification.} Scientific Data 10, 41.\\ \url{https://doi.org/10.1038/s41597-022-01721-8}.
+\item \textbf{Kermany, D.; Zhang, K.; Goldbaum, M. (2018).} \emph{Labeled Optical Coherence Tomography (OCT) and Chest X-Ray Images for Classification.} Mendeley Data, versión 2. \url{https://doi.org/10.17632/rscbjbr9sj.2}.
+\item \textbf{scikit-learn.} \href{https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html}{Regresión logística}; \href{https://scikit-learn.org/stable/modules/generated/sklearn.dummy.DummyClassifier.html}{referencia DummyClassifier}; \href{https://scikit-learn.org/stable/modules/model_evaluation.html}{métricas de evaluación}; \href{https://scikit-learn.org/stable/common_pitfalls.html}{separación de datos y errores frecuentes}.
+\end{enumerate}
+\Sub{Atribución y modificaciones}
+PneumoniaMNIST y su fuente indicada se distribuyen bajo \href{https://creativecommons.org/licenses/by/4.0/}{Creative Commons Attribution 4.0 (CC BY 4.0)}. Se atribuye la colección derivada a Yang y colaboradores y las imágenes de origen a Kermany, Zhang y Goldbaum. MedMNIST ya realizó el recorte y la reducción a 28 × 28. Este taller conserva el archivo publicado, adapta la selección docente eliminando copias exactas descritas en la página 3, normaliza intensidades y dibuja nuevas figuras. No hay respaldo implícito de los autores a este taller.
+La portada y las figuras de resultados se componen a partir de las imágenes y cálculos del ejercicio; no son imágenes médicas generadas con IA. Los diagramas conceptuales son ilustraciones educativas. Las salidas son una ejecución de referencia, no una certificación diagnóstica.
+\Sub{Conservar y recompilar}
+El cuaderno completo, sus salidas y la guía están en el \href{https://github.com/FisikMedik/taller-imagenes-medicas-python}{repositorio del taller}. El proyecto de edición se distribuye como:\par
+\texttt{Fuente\_LaTeX\_modulo\_ML.zip}.\par
+Incluye fuente principal, estilo, figuras, fuentes tipográficas y su licencia. Extrae el ZIP y compila \texttt{Guia\_modulo\_ML.tex} dos veces con \textbf{XeLaTeX}. Mantén las carpetas junto a la fuente.
+\begin{Idea}{Identidad del archivo de datos}
+\texttt{pneumoniamnist.npz}: 4 170 669 bytes.\\
+MD5 publicado: \texttt{28209eda62fecd6e6a2d98b1501bb15f}.\\
+Descarga y comprobación: 23 de noviembre de 2026. La huella SHA-256, el detalle de duplicados y las condiciones se documentan con los datos del módulo.
+\end{Idea}
+\end{document}

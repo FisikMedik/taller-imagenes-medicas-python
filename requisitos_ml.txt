@@ -1,5 +1,7 @@
 # Módulo opcional de radiografías: uso local con CPU.
 # No requiere Nilearn, GPU ni montar Google Drive.
+# Intervalos compatibles; no representan un entorno congelado.
+# Registra versiones y resultados: pueden variar respecto a las salidas del PDF.
 numpy>=1.24,<3
 matplotlib>=3.8,<4
 scikit-learn>=1.4,<2
