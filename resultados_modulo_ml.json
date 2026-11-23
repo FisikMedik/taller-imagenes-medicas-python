@@ -1,0 +1,70 @@
+{
+  "dataset": "PneumoniaMNIST 28x28 · Zenodo 10519652",
+  "sha256": "e1792d3f03751cb101e99f19a63b3c1941436c988665f47853417b05be250cd8",
+  "particiones_originales": {
+    "train": 4708,
+    "val": 524,
+    "test": 624
+  },
+  "particiones_utilizadas": {
+    "train": 4690,
+    "val": 516,
+    "test": 624
+  },
+  "exclusiones": "18 copias exactas adicionales en train; 8 val idénticas a train; test oficial intacto",
+  "modelo": "LogisticRegression · lbfgs · class_weight=balanced · píxeles/255",
+  "C_elegido_solo_con_validacion": 0.1,
+  "opciones_C_y_resultados_train_val": [
+    [
+      0.01,
+      0.9351569766793967,
+      0.9299212598425197
+    ],
+    [
+      0.1,
+      0.9536779320756041,
+      0.9504520268299796
+    ],
+    [
+      1.0,
+      0.9714705113167414,
+      0.9491396908719744
+    ]
+  ],
+  "umbral_predefinido": 0.5,
+  "matriz_prueba_filas_referencia_columnas_prediccion": [
+    [
+      158,
+      76
+    ],
+    [
+      14,
+      376
+    ]
+  ],
+  "metricas_prueba": {
+    "exactitud": 0.8557692307692307,
+    "equilibrada": 0.8196581196581196,
+    "sensibilidad": 0.9641025641025641,
+    "especificidad": 0.6752136752136753
+  },
+  "metricas_referencia_prueba": [
+    0.625,
+    0.5,
+    1.0,
+    0.0
+  ],
+  "ejemplos_prueba": {
+    "VN": 3,
+    "FP": 1,
+    "FN": 110,
+    "VP": 0
+  },
+  "versiones": {
+    "numpy": "2.5.4",
+    "matplotlib": "3.11.2",
+    "scikit-learn": "1.9.1"
+  },
+  "python": "3.12.14",
+  "limites": "Uso educativo; baja resolución; sin IDs para auditar independencia por paciente; sin validación clínica externa ni calibración clínica."
+}
