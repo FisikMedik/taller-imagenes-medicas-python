@@ -1,34 +1,47 @@
-# Imágenes médicas con Python desde cero
+# Análisis de datos médicos · ML Honduras 2026
 
-**Manual ilustrado por capítulos y cuaderno paso a paso para aprender a mirar, medir y transformar una imagen médica.**
+## Imágenes médicas con Python
 
-[![Abrir en Google Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Taller_imagenes_medicas.ipynb)
+**Juan Calderón · UNAH**  
+**Viernes 27 de noviembre de 2026 · 13:30–14:30 · Honduras (UTC−6)**
 
-[Leer el manual ilustrado en PDF](Guia_visual_imagenes_medicas.pdf) · [Aprender a usar GitHub y Colab](Guia_GitHub_paso_a_paso.pdf) · [Ver el cuaderno](Taller_imagenes_medicas.ipynb)
+Taller introductorio de la [Escuela de Machine Learning y Data Science en Honduras](https://machine-learning-honduras.org/). Fecha y título según el [programa público](https://machine-learning-honduras.org/programa/), consultado el 23 de noviembre de 2026. Revisa esa página por si la organización comunica cambios.
 
-[Descargar la fuente LaTeX](Guia_visual_imagenes_medicas.tex) · [Descargar el proyecto LaTeX completo](Fuente_LaTeX_manual.zip)
+**[Página del taller: todos los accesos](https://FisikMedik.github.io/taller-imagenes-medicas-python/)**
 
-<a href="Guia_visual_imagenes_medicas.pdf"><img src="Portada_manual.png" alt="Portada del manual Imágenes médicas con Python" width="300"></a>
+[![Abrir el cuaderno de la sesión en Google Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Taller_en_vivo_60min.ipynb)
 
-**95 páginas · 8 capítulos y 3 anexos · 15 tutoriales · 31 figuras diferentes**
+[Diapositivas web](https://FisikMedik.github.io/taller-imagenes-medicas-python/presentacion.html) · [Presentación PDF](Presentacion_taller.pdf) · [PowerPoint editable](Presentacion_taller.pptx) · [Explorador visual](https://FisikMedik.github.io/taller-imagenes-medicas-python/explorador.html)
 
 ![Tres cortes de la misma plantilla cerebral: axial, coronal y sagital](imagenes/mri_intensity.png)
 
 *Una plantilla cerebral, tres planos. Las imágenes proceden de una referencia pública MNI152; no son estudios privados de pacientes.*
 
-Material de **Juan Calderón** para el taller introductorio de imágenes médicas de la [escuela de Machine Learning y Data Science en Honduras](https://machine-learning-honduras.org/).
-
 ## Empieza aquí
 
-Si nunca has programado, abre primero el **manual ilustrado**. Está organizado como un libro por capítulos: presenta la procedencia de MNI152 e ICBM152, explica qué hace Nilearn y distingue una imagen individual, una plantilla, un atlas y un espacio de referencia. Después enseña qué es un píxel, cómo leer una matriz y qué significan las instrucciones de Python antes de pasar a histogramas, curvas de nivel, filtros y bordes.
+1. Abre el **[cuaderno en vivo de 60 minutos](https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Taller_en_vivo_60min.ipynb)**. Inicia sesión en Google y guarda una copia si deseas conservar tus cambios.
+2. Ejecuta la primera celda pulsando su triángulo o **Mayús + Enter**. Espera a ver tres cortes del cerebro. Usa CPU; no necesitas GPU ni conectar tus archivos de Drive al cuaderno.
+3. Sigue las celdas en orden. Predice qué cambiará, modifica un parámetro y compara. Cada ejercicio ofrece una pista y una solución explicada.
 
-El manual contiene **31 figuras diferentes**, incluidas **20 ilustraciones nuevas**: esquemas de registro y geometría, ejemplos numéricos, comparaciones de procesamiento y curvas de igual intensidad trazadas sobre la imagen de la plantilla cerebral. Las figuras conceptuales ficticias se distinguen de las derivadas de la resonancia. Los 15 tutoriales combinan explicaciones, preguntas resueltas y **código completo, salida e interpretación**, con explicación de cada línea de las celdas seleccionadas. La portada es una ilustración conceptual generada con IA; las figuras científicas del interior son cálculos y visualizaciones documentados.
+El **[explorador visual](https://FisikMedik.github.io/taller-imagenes-medicas-python/explorador.html)** permite empezar sin programar y sirve de alternativa si Colab no está disponible. Descarga `explorador.html` para abrirlo sin internet: sus datos están incluidos en el propio archivo.
 
-El **cuaderno** permite reproducir las figuras y cambiar parámetros. Contiene 24 lecciones: las primeras 22 construyen el recorrido principal; las lecciones 23 y 24 amplían el cálculo de media y mediana y la comparación de filtros ante ruido de impulsos.
+No necesitas leer todo el libro antes de asistir. Como lectura previa opcional, observa las figuras y la introducción a MNI152 y Nilearn del **[manual ilustrado en PDF](Guia_visual_imagenes_medicas.pdf)**. Si nunca has usado GitHub o Colab, consulta la **[guía de acceso](Guia_GitHub_paso_a_paso.pdf)**.
 
-Las figuras y respuestas están guardadas en el cuaderno para que puedas observarlas antes de ejecutar el código.
+## Dos ritmos de aprendizaje
 
-Puedes estudiar el material en varias sesiones y detenerte en cada imagen. La ruta de una hora que aparece más abajo utiliza salidas preparadas y una variación breve por bloque; no exige comprender cada línea de código durante la sesión. Para estudiar el libro y el cuaderno con calma, reserva de dos a tres horas o más, según tu experiencia y las prácticas que repitas.
+| Recurso | Cuándo usarlo | Qué incluye |
+|---|---|---|
+| [Cuaderno en vivo](Taller_en_vivo_60min.ipynb) | Durante la hora del taller | 8 celdas de código, imágenes desde la primera salida, explicación, variaciones y ejercicios resueltos. |
+| [Presentación](https://FisikMedik.github.io/taller-imagenes-medicas-python/presentacion.html) | Para seguir la explicación o facilitarla | Diapositivas visuales con tiempos, preguntas y notas para el instructor; PDF y PowerPoint disponibles. |
+| [Explorador](https://FisikMedik.github.io/taller-imagenes-medicas-python/explorador.html) | Antes, durante o sin Python | Tres cortes, ventana de contraste, histograma y máscara por percentil; sin dependencias web. |
+| [Cuaderno completo](https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Taller_imagenes_medicas.ipynb) | Estudio posterior, en varias sesiones | 24 lecciones detalladas, salidas guardadas, matrices, filtros y ampliaciones. |
+| [Manual ilustrado](Guia_visual_imagenes_medicas.pdf) | Consulta y lectura autónoma | 95 páginas, 8 capítulos, 3 anexos, 15 tutoriales y 31 figuras diferentes. |
+
+El manual explica qué es un píxel, cómo leer una matriz, de dónde procede ICBM152 y qué hace Nilearn. Distingue imagen individual, plantilla, atlas y espacio de referencia. Sus tutoriales combinan código, salida e interpretación. El **[proyecto LaTeX completo](Fuente_LaTeX_manual.zip)** contiene los recursos necesarios para editarlo y recompilarlo; también puedes leer la [fuente principal](Guia_visual_imagenes_medicas.tex).
+
+<a href="Guia_visual_imagenes_medicas.pdf"><img src="Portada_manual.png" alt="Portada del manual Imágenes médicas con Python" width="230"></a>
+
+Las figuras científicas se obtienen de datos y cálculos documentados. La portada del libro es una ilustración conceptual generada con IA.
 
 ## Qué aprenderás
 
@@ -60,17 +73,26 @@ Si aparece un mensaje como `NameError`, probablemente falta ejecutar una celda a
 
 ## Ruta preparada para una sesión de una hora
 
-Antes del taller, abre el cuaderno, prepara las bibliotecas y ejecuta las celdas para comprobar que las figuras están disponibles. Durante la sesión, utiliza esas salidas y realiza una variación breve por bloque. Los tiempos siguientes suponen que la preparación ya terminó; el objetivo es comprender las comparaciones, sin explicar todas las líneas de código en una hora.
+Utiliza **Taller_en_vivo_60min.ipynb** en la sesión. Prepara su primera celda antes de comenzar; las salidas guardadas también permiten seguir el razonamiento si la conexión tarda. La presentación incluye notas para explicar cada imagen y repartir el tiempo.
 
-- **0–8 minutos — Qué contiene una imagen.** Lecciones 1–3: mirar la plantilla, leer la matriz de 6 × 6 y cambiar un píxel.
-- **8–18 minutos — Explorar y representar.** Lecciones 4–7: forma, milímetros, tres planos, movimiento de un corte y contraste.
-- **18–30 minutos — Contar y seleccionar.** Lecciones 8–11: histogramas, intervalos, percentiles y máscara por umbral.
-- **30–38 minutos — Leer curvas de nivel.** Lecciones 12–14: igualdad de intensidad y diferencia entre una línea y una región seleccionada.
-- **38–48 minutos — Comparar filtros.** Lecciones 15–18: una misma realización del ruido y los efectos de media, filtro gaussiano y mediana.
-- **48–56 minutos — Observar cambios y bordes.** Lecciones 19–21: perfiles, Sobel y comparación antes y después del suavizado.
-- **56–60 minutos — Explicar el recorrido.** Lección 22 y tres preguntas: ¿cambió la imagen o sólo su visualización?, ¿qué representa cada eje del histograma?, ¿qué detalle se pierde al suavizar más?
+| Minutos | Actividad | Qué debe poder explicar el participante |
+|---|---|---|
+| 0–10 | Primera imagen y tres planos | Una imagen contiene valores en una rejilla; la plantilla no es un paciente nuevo. |
+| 10–20 | Geometría y contraste | Un índice no es una distancia; cambiar la ventana no cambia la matriz. |
+| 20–35 | Histograma, percentil y máscara | Qué cuenta cada barra, por qué se excluye el fondo y qué selecciona el umbral. |
+| 35–43 | Curvas de nivel sobre el cerebro | Una curva une posiciones de igual intensidad; una máscara selecciona una región. |
+| 43–55 | Filtros y Sobel | Suavizar reduce variaciones y también puede borrar detalles; Sobel mide cambios. |
+| 55–60 | Tres preguntas resueltas | Explicar visualización, empates en percentiles y el compromiso del suavizado. |
 
-Las ampliaciones 23 y 24 quedan para después del taller. Retoma las explicaciones línea por línea y repite los ejercicios durante el estudio autónomo de dos a tres horas o más.
+El cuaderno completo de 24 lecciones es material de profundización. No se pretende ejecutar y explicar todo ese recorrido durante la hora asignada.
+
+## Para quien facilita el taller
+
+1. Abre la [presentación web](https://FisikMedik.github.io/taller-imagenes-medicas-python/presentacion.html), su sección de notas y el cuaderno en vivo en dos pestañas. Descarga también el PDF y `explorador.html` como respaldo.
+2. Ejecuta el cuaderno en orden antes de la sesión. Comprueba la imagen inicial, el histograma, las curvas del cerebro y la comparación de bordes.
+3. Pide una predicción antes de cada variación. Mantén una sola modificación por vez y utiliza las pistas antes de mostrar la solución.
+4. Si la instalación se retrasa, continúa con las salidas guardadas y el explorador. Reserva los últimos cinco minutos para las tres preguntas, aunque debas dejar una variación como tarea.
+5. Al cerrar, enlaza con ML: los filtros de este taller se especifican manualmente; una red convolucional aprende filtros a partir de datos y un objetivo. Entrenar y evaluar exige datos independientes, etiquetas pertinentes y separación adecuada por pacientes. Esta plantilla no constituye un conjunto de entrenamiento clínico.
 
 ## Trabajar en tu computadora con Windows
 
@@ -89,9 +111,11 @@ py -3.12 -m venv .venv
 
 La primera línea crea un entorno separado para las bibliotecas del taller; la segunda las instala; la tercera abre JupyterLab. No hace falta activar el entorno ni cambiar la política de ejecución de PowerShell.
 
-En JupyterLab, abre `Taller_imagenes_medicas.ipynb` y ejecuta las celdas en orden. Mantén abierta la terminal mientras trabajas. Para volver otro día, abre una terminal en la misma carpeta y ejecuta sólo la última línea. Si usas otra instalación compatible de Python, adapta la primera línea a su versión.
+En JupyterLab, abre `Taller_en_vivo_60min.ipynb` para la ruta breve o `Taller_imagenes_medicas.ipynb` para el recorrido completo y ejecuta las celdas en orden. Mantén abierta la terminal mientras trabajas. Para volver otro día, abre una terminal en la misma carpeta y ejecuta sólo la última línea. Si usas otra instalación compatible de Python, adapta la primera línea a su versión.
 
 ### Comprobación de esta edición
+
+La revisión del 23 de noviembre de 2026 incorpora una ruta breve, una presentación y una página pública de acceso. El manual y el cuaderno completo conservan la validación de la edición anterior descrita a continuación.
 
 Las 24 celdas se ejecutaron localmente utilizando la plantilla incluida. El entorno de comprobación utilizó Python 3.12.14, Nilearn 0.12.1, NumPy 2.5.4, Matplotlib 3.11.2, NiBabel 5.4.2 y SciPy 1.18.1. El cuaderno conserva las salidas de esa ejecución. También se ejecutaron las 24 celdas desde el enlace público en Google Colab el 16 de noviembre de 2026, con un entorno de CPU y la carga alternativa de la plantilla mediante Nilearn. Se comprobó que la última celda terminó y mostró 232 posiciones sustituidas de un corte de 11 583 píxeles.
 
@@ -100,6 +124,11 @@ Las 24 celdas se ejecutaron localmente utilizando la plantilla incluida. El ento
 El manual se compiló con XeLaTeX y se revisaron visualmente sus 95 páginas. También se extrajo el ZIP de la fuente en una carpeta independiente y se recompiló: conserva las 95 páginas y el mismo contenido textual. El generador portátil reprodujo las 20 figuras nuevas con huellas SHA-256 idénticas. El paquete incluye las imágenes ya preparadas, los datos públicos, las fuentes de código con su licencia y las instrucciones de compilación; Python solo se necesita si deseas regenerar las figuras.
 
 ## Archivos del repositorio
+
+- [`index.html`](index.html) y [`estilo_web.css`](estilo_web.css): página pública del taller, publicada mediante GitHub Pages.
+- [`Taller_en_vivo_60min.ipynb`](Taller_en_vivo_60min.ipynb): ruta breve de la sesión, con salidas guardadas.
+- [`presentacion.html`](presentacion.html), [`Presentacion_taller.pdf`](Presentacion_taller.pdf) y [`Presentacion_taller.pptx`](Presentacion_taller.pptx): diapositivas web, copia para lectura y versión editable.
+- [`explorador.html`](explorador.html): herramienta autónoma con datos incorporados; puede abrirse sin conexión.
 
 - [`Guia_visual_imagenes_medicas.pdf`](Guia_visual_imagenes_medicas.pdf): manual ilustrado por capítulos, con explicaciones, ejemplos, código, salidas interpretadas y ejercicios resueltos.
 - [`Guia_visual_imagenes_medicas.tex`](Guia_visual_imagenes_medicas.tex): fuente principal del manual en LaTeX; para recompilarla se necesitan los recursos del paquete completo.
@@ -140,4 +169,10 @@ Referencias principales:
 - [Perfiles de confidencialidad DICOM](https://dicom.nema.org/medical/dicom/current/output/chtml/part15/chapter_E.html).
 - [Prevención de fuga de información en aprendizaje automático](https://scikit-learn.org/stable/common_pitfalls.html#data-leakage).
 
-**Autor del material docente:** Juan Calderón · **Revisión:** 16 de noviembre de 2026.
+## Relación con los materiales de la escuela
+
+La organización de esta edición —acceso web, diapositivas, Colab, ejercicios con pistas y soluciones, repositorio y fuentes— toma como referencia los [materiales publicados por la escuela](https://machine-learning-honduras.org/materiales/), los de [Edith Natalia Villegas](https://edithvillegas.github.io/introduccion-ml-redes-neuronales/) y los de [Daniela Pérez](https://dapivei.github.io/escuela-machine-learning-honduras-2026/). Son prácticas docentes observadas, no una rúbrica oficial ni una aprobación formal de este material por la organización.
+
+El sitio es el recurso del expositor y se mantiene en su repositorio personal. La información institucional y posibles cambios de horario corresponden a la [web oficial](https://machine-learning-honduras.org/).
+
+**Autor del material docente:** Juan Calderón · **Revisión de acceso y sesión:** 23 de noviembre de 2026 · **Edición del manual:** 16 de noviembre de 2026.
