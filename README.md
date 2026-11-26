@@ -12,12 +12,14 @@ Estos enlaces abren los controles listos para usar, sin instalar Python ni inici
 
 Aprende a leer imágenes como matrices, cambiar su visualización y aplicar histogramas, máscaras, curvas de nivel, filtros y bordes. El módulo opcional usa radiografías públicas para entrenar y evaluar un clasificador sencillo.
 
+Taller realizado el jueves 26 de noviembre de 2026, a las 13:30, hora de Honduras (UTC−6).
+
 ## Elige tu cuaderno
 
 | Ruta | Contenido | Abrir |
 |---|---|---|
-| Principal · 60 minutos | 8 bloques y 28 pasos; seis gráficos con controles. | [Colab](https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Taller_en_vivo_60min.ipynb) · [Notebook](Taller_en_vivo_60min.ipynb) |
-| ML opcional · 45–60 minutos adicionales | 12 bloques y 58 pasos; regresión logística, validación, métricas y errores. | [Colab](https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Modulo_ML_radiografias.ipynb) · [Notebook](Modulo_ML_radiografias.ipynb) |
+| Principal | 8 bloques y 28 pasos; seis gráficos con controles. | [Colab](https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Taller_en_vivo_60min.ipynb) · [Notebook](Taller_en_vivo_60min.ipynb) |
+| ML opcional | 12 bloques y 58 pasos; regresión logística, validación, métricas y errores. | [Colab](https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Modulo_ML_radiografias.ipynb) · [Notebook](Modulo_ML_radiografias.ipynb) |
 | Ampliación | 24 lecciones detalladas con numeración independiente. | [Colab](https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Taller_imagenes_medicas.ipynb) |
 
 ## Cómo trabajar
@@ -54,9 +56,9 @@ En ML puedes explorar una imagen y sus características, la sigmoide, candidatos
 | Manual ilustrado | [Leer](Guia_visual_imagenes_medicas.pdf) | [Leer](Guia_modulo_ML.pdf) |
 | Fuente LaTeX completa | [Descargar](Fuente_LaTeX_manual.zip) | [Descargar](Fuente_LaTeX_modulo_ML.zip) |
 
-Las presentaciones web incluyen ejemplos manipulables y un panel con el código y la salida guardada de cada paso. **Abrir esta celda en Colab** localiza la celda correspondiente. Los PDF y PowerPoint son estáticos; las notas de PowerPoint incluyen código y explicaciones.
+Las presentaciones web incluyen ejemplos manipulables y un panel con el código y la salida guardada de cada paso. El botón de Colab abre la celda elegida. Los PDF y PowerPoint son estáticos; las notas de PowerPoint incluyen código y explicaciones.
 
-También tienes un [explorador cerebral sin Python](https://fisikmedik.github.io/taller-imagenes-medicas-python/explorador.html), el [tutorial de ML con resultados](https://fisikmedik.github.io/taller-imagenes-medicas-python/modulo_ml.html) y la [guía de GitHub y Colab](Guia_GitHub_paso_a_paso.pdf). El manual principal separa lectura introductoria, ruta de 60 minutos y ampliación.
+También tienes un [explorador cerebral sin Python](https://fisikmedik.github.io/taller-imagenes-medicas-python/explorador.html), el [tutorial de ML con resultados](https://fisikmedik.github.io/taller-imagenes-medicas-python/modulo_ml.html) y la [guía de GitHub y Colab](Guia_GitHub_paso_a_paso.pdf).
 
 ## Usarlo en tu computadora
 
