@@ -16,34 +16,40 @@ Primero observamos; después preguntamos qué números producen esa imagen. Cada
 
 \needspace{6\baselineskip}
 
-\begin{Idea}{Dos recursos que se complementan}
+\begin{Idea}{Dos cuadernos, dos ritmos}
 
-El PDF permite estudiar con calma. El cuaderno Taller\_imagenes\_medicas.ipynb permite ejecutar, modificar y comparar. Sus 24 lecciones conservan explicaciones de cada línea y salidas ya calculadas. Los tutoriales de este libro indican las lecciones correspondientes; algunos fragmentos necesitan las variables creadas antes en el cuaderno.
+Durante la hora de clase utiliza Taller\_en\_vivo\_60min.ipynb: ocho celdas de código con imágenes ya guardadas, una variación cada vez y tres preguntas finales. Sus celdas se identifican aquí como C1 a C8.
+
+
+Para estudiar después utiliza Taller\_imagenes\_medicas.ipynb: 24 lecciones con explicaciones de cada línea. Los tutoriales de este libro corresponden a ese cuaderno completo. Su numeración es distinta de C1–C8; no hay que completar las 24 lecciones durante la sesión.
 
 
 \end{Idea}
 
-Una sesión de una hora utiliza una selección de demostraciones y variaciones. No pretende agotar el libro. Para el estudio autónomo, avanza por capítulos, vuelve a ejecutar los ejemplos y registra tus predicciones. La duración dependerá de las repeticiones y de tu experiencia; puedes distribuir el recorrido en varias sesiones.
-
+\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Taller_en_vivo_60min.ipynb}{\textbf{Abrir el cuaderno en vivo de 60 minutos en Google Colab}}\par
 
 \needspace{6\baselineskip}
 
-\begin{Practica}{Tu primera ejecución, paso a paso}
+\begin{Practica}{Empieza con estas tres acciones}
 
-Abre el repositorio enlazado al final de esta introducción y pulsa Abrir en Google Colab. Inicia sesión en Google si se solicita. Pulsa el triángulo de la primera celda o Mayús + Enter y espera a que aparezcan las imágenes. La primera celda prepara las bibliotecas y carga la plantilla; no necesita GPU ni montar Drive. Continúa de arriba abajo. Para conservar cambios, usa Archivo $\rightarrow$ Guardar una copia en Drive. La guía separada de GitHub y Colab explica esos pasos con más detalle.
+1. Abre el enlace anterior e inicia sesión en Google si se solicita. Usa el entorno normal de CPU; no necesitas GPU ni montar Drive.
+
+
+2. Antes de la sesión, ejecuta C1 con el triángulo o Mayús + Enter y espera a ver los tres planos. La preparación de bibliotecas puede tardar. Para conservar cambios, usa Archivo $\rightarrow$ Guardar una copia en Drive.
+
+
+3. En clase, avanza de arriba abajo. Observa la salida guardada, predice una variación y ejecuta el parámetro indicado. Las explicaciones de cada línea quedan disponibles para releer después.
 
 
 \end{Practica}
 
-\begin{itemize}
+\Etiqueta{Qué leer antes, durante y después}
 
-\item Antes del taller: observa el capítulo 1 y lee las bases del capítulo 2. Abre el cuaderno y ejecuta su primera celda para preparar el entorno.
+\textbf{Antes:} observa el capítulo 1 (p.\,\pageref{cap:referencia}) y consulta el vocabulario de Python y los archivos del capítulo 2 (p.\,\pageref{cap:herramientas}). Basta reconocer qué es un vóxel, un índice y una función; no hace falta memorizar las instrucciones.\par
 
-\item Durante el taller: sigue las imágenes y cambia un parámetro por vez. Ejecuta las celdas en orden: una variable creada antes puede ser necesaria después.
+\textbf{Durante:} sigue la ruta de ocho celdas del anexo B (p.\,\pageref{anexo:cuadernos}). Cambia una sola cosa, relaciona la línea modificada con la figura y restaura el valor inicial antes de seguir. Si una operación usa un resultado anterior, vuelve a ejecutar esa preparación.\par
 
-\item Después: completa las preguntas resueltas y repite los filtros con otra intensidad de ruido. Explica cada resultado con tus propias palabras.
-
-\end{itemize}
+\textbf{Después:} recorre los capítulos 3 a 8, desde píxeles y cortes (p.\,\pageref{cap:cortes}) hasta la conexión con ML (p.\,\pageref{cap:ml}), con el cuaderno completo. Distribuye las 24 lecciones en varias sesiones y explica cada resultado con tus propias palabras.\par
 
 La referencia utilizada es una plantilla cerebral pública. Los dibujos didácticos, regiones ficticias, matrices pequeñas y ruido simulado están identificados como tales. La portada es una ilustración conceptual generada con IA; las figuras científicas del interior se calculan a partir de datos o modelos matemáticos documentados.
 
@@ -51,7 +57,7 @@ La referencia utilizada es una plantilla cerebral pública. Los dibujos didácti
 El libro reproduce las celdas completas de cálculo y dibujo seleccionadas, con sus salidas textuales. Las ilustraciones se han maquetado para la lectura impresa: algunas amplían el ejemplo mediante diagramas, otros cortes o comparaciones adicionales. El pie identifica qué se está representando; la presentación puede diferir de la salida gráfica del cuaderno.
 
 
-\Fuente{Edición revisada: 16 de noviembre de 2026. Material de iniciación; las operaciones mostradas no constituyen una evaluación diagnóstica. Fuentes, licencias y procedencia al final del manual y en el repositorio.}
+\Fuente{Edición revisada: 25 de noviembre de 2026. Material de iniciación; las operaciones mostradas no constituyen una evaluación diagnóstica. Fuentes, licencias y procedencia al final del manual y en el repositorio.}
 
 \href{https://github.com/FisikMedik/taller-imagenes-medicas-python}{Repositorio y materiales actualizados · FisikMedik en GitHub}
 
@@ -60,6 +66,8 @@ El libro reproduce las celdas completas de cálculo y dibujo seleccionadas, con 
 \mainmatter
 
 \chapter[La referencia cerebral]{Una imagen, muchas preguntas}
+
+\label{cap:referencia}
 
 \needspace{6\baselineskip}
 
@@ -220,6 +228,8 @@ Respuesta. No. El nombre no realiza un registro ni modifica la geometría. La pr
 \end{Practica}
 
 \chapter[Herramientas y archivos]{Herramientas, archivos y primeras instrucciones}
+
+\label{cap:herramientas}
 
 \needspace{6\baselineskip}
 
@@ -458,6 +468,8 @@ Respuesta. Hemos identificado el archivo, convertido sus intensidades en un arre
 \end{Practica}
 
 \chapter[Píxeles y cortes]{De los números a los cortes}
+
+\label{cap:cortes}
 
 \needspace{6\baselineskip}
 
@@ -792,6 +804,8 @@ Respuesta. Porque los índices localizan muestras dentro de la matriz y la afín
 \end{Idea}
 
 \chapter[Contar y seleccionar]{Contraste, histogramas y selección}
+
+\label{cap:histogramas}
 
 \needspace{6\baselineskip}
 
@@ -1228,6 +1242,8 @@ Respuesta. Porque la condición solo describe una intensidad relativa. No contie
 
 \chapter[Curvas de nivel]{Curvas de nivel sobre el cerebro}
 
+\label{cap:curvas}
+
 \needspace{6\baselineskip}
 
 \begin{Idea}{Al terminar este capítulo}
@@ -1464,6 +1480,8 @@ Respuesta. contour interpola una trayectoria donde se cumple la igualdad entre m
 \end{Idea}
 
 \chapter[Ruido y filtros]{Ruido y filtros: qué se gana y qué se pierde}
+
+\label{cap:filtros}
 
 \needspace{6\baselineskip}
 
@@ -1961,6 +1979,8 @@ Respuesta. La media incluye directamente el extremo en la suma. La mediana elige
 
 \chapter[Bordes]{Perfiles, cambios y bordes}
 
+\label{cap:bordes}
+
 \needspace{6\baselineskip}
 
 \begin{Idea}{Al terminar este capítulo}
@@ -2222,6 +2242,8 @@ Respuesta. Cada normalización convertiría su máximo propio en uno y podría o
 
 \chapter[Procesamiento y ML]{Un recorrido completo y su conexión con ML}
 
+\label{cap:ml}
+
 \needspace{6\baselineskip}
 
 \begin{Idea}{Al terminar este capítulo}
@@ -2399,19 +2421,113 @@ No. Pueden quedar identificadores en otros atributos, referencias, píxeles, ros
 
 \end{Practica}
 
-\chapter[Mapa del cuaderno]{Del libro al cuaderno}
+\chapter[Mapa del cuaderno]{Del libro a los dos cuadernos}
+
+\label{anexo:cuadernos}
 
 \needspace{6\baselineskip}
 
 \begin{Idea}{Al terminar este capítulo}
 
-Encontrarás las 24 lecciones y sabrás qué resultado comprobar en cada etapa. Las celdas se ejecutan en orden.
+Seguirás la sesión de 60 minutos con ocho celdas y localizarás las 24 lecciones del recorrido posterior. Comprobarás el efecto de un cambio y restaurarás la preparación antes de continuar.
 
 
 \end{Idea}
 
-El cuaderno empieza mostrando imágenes y conserva los resultados. Bajo cada bloque aparecen explicaciones línea por línea. Si una celda falla por un nombre no definido, vuelve a ejecutar su preparación. Si cambias un parámetro, vuelve a ejecutar también las celdas que dependen de ese resultado. Una salida antigua puede permanecer visible aunque el código haya cambiado: ejecútalo para actualizarla.
+C1–C8 designan las ocho celdas de código de Taller\_en\_vivo\_60min.ipynb. Las lecciones 1–24 pertenecen a Taller\_imagenes\_medicas.ipynb, el cuaderno completo que desarrolla este libro. Ambos conservan salidas visibles y se ejecutan de arriba abajo; sus números no son intercambiables.
 
+
+\section{Una hora: observar, predecir y probar}
+
+\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Taller_en_vivo_60min.ipynb}{Abrir el cuaderno en vivo · ocho celdas}\par
+
+Prepara C1 antes de comenzar la hora para que la instalación no ocupe la práctica. Durante la sesión, observa la figura, explica una predicción y modifica solo la línea indicada. Las explicaciones detalladas se leen después; no es necesario comprender todas las líneas antes de experimentar.
+
+
+\begin{longtable}{@{}p{.15\linewidth}p{.12\linewidth}p{.66\linewidth}@{}}\toprule\textbf{Minutos}&\textbf{Celdas}&\textbf{Actividad y evidencia}\\\midrule\endhead
+
+0–10&C1&Reconoce tres planos del mismo volumen y sus coordenadas en milímetros.\\\addlinespace[6pt]
+
+10–20&C2&Mueve el corte y cambia la ventana; distingue posición, apariencia y valores almacenados.\\\addlinespace[6pt]
+
+20–35&C3–C4&Lee el histograma del soporte y prueba un percentil: observa el umbral y la máscara.\\\addlinespace[6pt]
+
+35–43&C5&Compara una curva de igual intensidad con una región seleccionada por umbral.\\\addlinespace[6pt]
+
+43–55&C6–C7&Prueba sigma y compara filtros y respuestas de Sobel sobre la misma entrada, con escala común.\\\addlinespace[6pt]
+
+55–60&C8&Explica tres límites: ventana, máscara y separación de pacientes al evaluar ML.\\\addlinespace[6pt]
+
+\bottomrule\end{longtable}
+
+\section{Qué cambiar y qué restaurar}
+
+Un parámetro es una opción que recibe una operación. Al cambiarlo, vuelve a ejecutar la celda: editar el texto no actualiza la imagen. Usa la figura y la salida numérica como evidencia de lo que ocurrió; no compares una salida antigua con un código nuevo.
+
+
+\begin{itemize}
+
+\item C2 · Corte: cambia k = 46 por k = 56. Busca qué anatomía aparece y lee la nueva posición. Después restaura k = 46 y ejecuta C2.
+
+\item C2 · Contraste: cambia ventana = (0.35, 0.90) por ventana = (0.60, 0.80). Predice qué intensidades se verán negras o blancas. Restaura (0.35, 0.90) y ejecuta C2 antes de C3.
+
+\item C4 · Selección: cambia percentil = 90 por percentil = 75. Anticipa si se seleccionarán más posiciones; comprueba el umbral, la máscara y el porcentaje. Restaura 90 y ejecuta C4.
+
+\item C5 · Curva: cambia nivel = 0.7 por nivel = 0.6 y compara la trayectoria con la región rellena. Restaura 0.7 y ejecuta C5.
+
+\item C6 · Suavizado: cambia sigma\_pixeles = 1.2 por 0.6 o 2.4. Observa textura y detalles pequeños. Restaura 1.2 y ejecuta C6 antes de C7; Sobel utiliza la imagen filtrada que produjo C6.
+
+\end{itemize}
+
+\needspace{6\baselineskip}
+
+\begin{Idea}{Conecta la línea con su efecto}
+
+Antes de ejecutar, escribe qué control cambias y qué esperas ver. Después señala una evidencia concreta: una coordenada, una barra del histograma, un porcentaje o una diferencia visible bajo la misma escala. Si cambiaste el corte o reiniciaste el entorno, ejecuta de nuevo las celdas siguientes en orden. Conserva los demás parámetros para poder atribuir el efecto al cambio elegido.
+
+
+\end{Idea}
+
+\section{C8: tres preguntas finales, con respuesta}
+
+\needspace{6\baselineskip}
+
+\begin{Practica}{1 · ¿vmin y vmax cambian la matriz?}
+
+No. Cambian la traducción de valores a tonos al mostrar la imagen. La misma matriz puede verse más blanca sin que aumente ninguno de sus valores. Consulta el capítulo de contraste para distinguir apariencia y datos.
+
+
+\end{Practica}
+
+\needspace{6\baselineskip}
+
+\begin{Practica}{2 · ¿Una máscara por intensidad diagnostica una enfermedad?}
+
+No. Marca las posiciones que cumplen una comparación numérica. El umbral elegido no aporta por sí mismo una etiqueta clínica ni demuestra capacidad diagnóstica.
+
+
+\end{Practica}
+
+\needspace{6\baselineskip}
+
+\begin{Practica}{3 · ¿Separamos cortes de un paciente entre entrenamiento y prueba?}
+
+No. Para evaluar generalización a pacientes nuevos, separa por paciente: sus cortes deben permanecer en el mismo grupo. De otro modo, la información compartida puede hacer demasiado optimista la evaluación. La demostración de esta sesión no entrena un modelo.
+
+
+\end{Practica}
+
+\section{Después de la sesión: las 24 lecciones}
+
+\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Taller_imagenes_medicas.ipynb}{Abrir el cuaderno completo · estudio autónomo}\par
+
+Esta tabla corresponde al cuaderno completo y a los tutoriales del libro. Recorre las lecciones con calma, en varias sesiones: ejecuta, lee las explicaciones de cada línea y responde antes de consultar las soluciones. Las lecciones 23–24 amplían los cálculos manuales y el ruido de impulsos. Todo este recorrido queda fuera de la ruta de una hora.
+
+
+Si una celda falla por un nombre no definido, vuelve a ejecutar su preparación. Si cambias un parámetro, ejecuta también las celdas que dependen de ese resultado. Una salida antigua puede permanecer visible aunque el código haya cambiado: ejecútalo para actualizarla.
+
+
+\clearpage
 
 \begin{longtable}{@{}p{.08\linewidth}p{.40\linewidth}p{.45\linewidth}@{}}\toprule\textbf{Celda}&\textbf{Lección}&\textbf{Qué comprobar}\\\midrule\endhead
 
@@ -2464,55 +2580,6 @@ El cuaderno empieza mostrando imágenes y conserva los resultados. Bajo cada blo
 24&Ampliación para observar ruido de impulsos&La respuesta depende del tipo de ruido.\\\addlinespace[5pt]
 
 \bottomrule\end{longtable}
-
-\section{Ruta de una hora, con preparación previa}
-
-\begin{itemize}
-
-\item 0–8 min: observar la plantilla, leer la matriz pequeña y cambiar un píxel (lecciones 1–3).
-
-\item 8–18 min: geometría, planos y contraste (4–7).
-
-\item 18–30 min: histogramas, percentiles y máscaras (8–11).
-
-\item 30–38 min: curvas sintéticas y cerebrales; comparar con una región (12–14).
-
-\item 38–48 min: ruido y filtros; mantener la misma entrada (15–18).
-
-\item 48–56 min: perfiles, Sobel y suavizado (19–21).
-
-\item 56–60 min: explicar la secuencia y sus límites (22). Las ampliaciones 23–24 quedan para estudio posterior.
-
-\end{itemize}
-
-\section{Tres comprobaciones finales, con respuesta}
-
-\needspace{6\baselineskip}
-
-\begin{Practica}{1 · La imagen se ve más blanca. ¿Aumentaron los valores?}
-
-No necesariamente. Si cambiaste vmin o vmax, la traducción visual pudo saturarse. Comprueba la matriz antes de afirmar que se modificó la intensidad.
-
-
-\end{Practica}
-
-\needspace{6\baselineskip}
-
-\begin{Practica}{2 · Dos imágenes tienen el mismo histograma. ¿Son idénticas?}
-
-No. El histograma cuenta valores sin conservar su ubicación. Una permutación de posiciones puede mantener las cuentas y destruir la estructura espacial.
-
-
-\end{Practica}
-
-\needspace{6\baselineskip}
-
-\begin{Practica}{3 · Hay menos bordes después de suavizar. ¿El resultado es mejor?}
-
-Depende del objetivo. Puede haberse reducido el ruido, pero también un detalle útil. Compara con la referencia, conserva una escala común y justifica el parámetro. Una imagen agradable no demuestra mayor rendimiento de un modelo.
-
-
-\end{Practica}
 
 \chapter[Glosario y fuentes]{Glosario y fuentes para seguir aprendiendo}
 
@@ -2657,6 +2724,15 @@ a5f0ddb2d173ffb7b34a511fa6bcfe71e272
 
 La huella anterior aparece dividida en dos líneas para su lectura: concaténalas sin espacios para comparar los 64 caracteres. Los términos del recurso ICBM/MNI se conservan en FUENTES\_Y\_LICENCIAS.txt. Las figuras derivadas mantienen su atribución. La licencia de una biblioteca no sustituye la licencia del conjunto de datos.
 
+
+\section{Referentes pedagógicos de esta revisión}
+
+La organización de la sesión y la conexión entre pregunta, código y evidencia se enriquecieron al consultar materiales públicos de colegas de la escuela. Se reconocen como referentes pedagógicos; esta mención no implica revisión ni aval de sus autores o instituciones sobre este manual.
+
+
+\begin{itemize}\item \href{https://dapivei.github.io/escuela-machine-learning-honduras-2026/}{Daniela Pinto Veizaga · materiales de la escuela}. Organización de recursos y actividades para seguir una sesión.\item \href{https://edithvillegas.github.io/introduccion-ml-redes-neuronales/}{Edith Natalia Villegas Garcia · introducción a ML y redes neuronales}. Acceso web y recorrido didáctico.\item \href{https://carlossoto362.github.io/pwf_honduras_slides/main.html}{Carlos Enmanuel Soto Lopez · presentaciones de la escuela}. Preguntas iniciales, ejemplos numéricos y controles ligados a resultados visibles.\end{itemize}
+
+\Fuente{Enlaces y adaptación pedagógica revisados el 25 de noviembre de 2026. Los temas de esos materiales no amplían el programa de la hora de imágenes médicas.}
 
 \section{Fuentes enlazadas}
 

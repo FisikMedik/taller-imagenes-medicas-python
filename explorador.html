@@ -48,7 +48,17 @@ table{width:100%;border-collapse:collapse;margin:14px 0;font-size:.86rem}th,td{t
 footer{border-top:1px solid var(--line);padding:24px 0;font-size:.82rem;color:var(--muted)}
 footer p{margin:4px 0}.screen-reader{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 .error{background:#fff2e9;color:#6c3000;border:1px solid #b25408;padding:16px;border-radius:10px}
+.python-bridge{margin:0 0 20px;padding:22px 24px;background:white;border:1px solid var(--line);border-radius:16px}
+.python-bridge h2{margin:0 0 5px;font-size:1.18rem}.bridge-intro{font-size:.88rem;color:var(--muted);margin:0 0 13px}
+.bridge-steps{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 14px}.bridge-steps button[aria-pressed=true]{background:var(--teal);color:white}
+.bridge-grid{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(250px,.7fr);gap:20px;align-items:start}
+.python-code{margin:0;background:#102c40;color:#f5fbfc;padding:12px 0;border-radius:10px;font:13px/1.55 ui-monospace,SFMono-Regular,Consolas,monospace;white-space:pre-wrap;overflow-wrap:anywhere}
+.code-row{display:block;padding:1px 12px 1px 40px;position:relative;border-left:3px solid transparent}.code-row.active{background:#204e5c;border-left-color:#79d4dc}
+.line-number{position:absolute;left:10px;color:#b1c7cd;user-select:none;font-size:11px}.bridge-read h3{font-size:1rem;margin:0 0 9px}.bridge-read p{font-size:.9rem;margin:0 0 12px}
+.bridge-result{padding:13px;background:var(--soft);border-radius:9px;line-height:1.5;overflow-wrap:anywhere}.bridge-result strong{display:block;font-size:.82rem;text-transform:uppercase;letter-spacing:.04em;margin-bottom:5px}
+.bridge-foot{font-size:.8rem;color:var(--muted);margin:12px 0 0}.bridge-result output{display:block;color:#075d68;font-weight:650;font-variant-numeric:tabular-nums}
 @media(max-width:800px){.controls{grid-template-columns:1fr 1fr}.control:first-child{grid-column:1/-1}.workspace{grid-template-columns:1fr}.instructions{grid-template-columns:1fr}.scan-frame{max-width:365px}.stats{gap:6px}}
+@media(max-width:800px){.bridge-grid{grid-template-columns:1fr}.python-bridge{padding:18px}.python-code{font-size:12px}.bridge-steps button{font-size:.8rem;padding:.5rem .65rem}}
 @media(max-width:480px){.wrap{padding:0 14px}header{padding-top:17px}.controls,.card{padding:17px}.controls{gap:15px}.stats .stat{padding:10px 7px}.stat strong{font-size:1rem}.stat span{font-size:.72rem}.toggle{font-size:.9rem}.control-actions{gap:10px}#histogram{height:260px}.eyebrow{margin-top:24px}}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
 </style>
@@ -92,6 +102,25 @@ footer p{margin:4px 0}.screen-reader{position:absolute;width:1px;height:1px;padd
 <label class="toggle" for="mask"><input id="mask" type="checkbox"><span>3. Mostrar máscara ≥ p90</span></label>
 <button id="percentile" type="button">Ventana p2–p98</button>
 <button id="reset" type="button" class="primary">Restablecer</button>
+</div>
+</section>
+<section class="python-bridge" aria-labelledby="python-title">
+<h2 id="python-title">Del control al código y al resultado</h2>
+<p class="bridge-intro">Sigue un paso o mueve un control de arriba. La línea resaltada cambia con tu acción. <strong>Python equivalente:</strong> este fragmento explica las operaciones. El navegador usa JavaScript para la interacción y la visualización, con datos y percentiles precalculados incluidos; <strong>no ejecuta Python</strong>.</p>
+<div class="bridge-steps" role="group" aria-label="Pasos del código equivalente">
+<button type="button" id="code-step-corte" aria-pressed="true">1 · Elegir corte</button>
+<button type="button" id="code-step-ventana" aria-pressed="false">2 · Dibujar grises</button>
+<button type="button" id="code-step-conteo" aria-pressed="false">3 · Contar valores</button>
+<button type="button" id="code-step-mascara" aria-pressed="false">4 · Seleccionar</button>
+</div>
+<div class="bridge-grid">
+<pre class="python-code" aria-label="Fragmento de Python equivalente a los controles"><code id="python-code"></code></pre>
+<div class="bridge-read">
+<h3 id="bridge-step-title">Paso 1 · Elegir un corte</h3>
+<p id="bridge-explanation"></p>
+<div class="bridge-result"><strong>Resultado de la exploración</strong><output id="bridge-output"></output></div>
+<p class="bridge-foot">El cuaderno desarrolla estas operaciones en Python real. <code>datos</code>, <code>np</code> y <code>plt</code> se preparan allí. La casilla de máscara controla la superposición de color; no cambia los números seleccionados.</p>
+</div>
 </div>
 </section>
 <div class="workspace">
@@ -170,6 +199,61 @@ footer p{margin:4px 0}.screen-reader{position:absolute;width:1px;height:1px;padd
   const decoded = new Map();
   let current;
   let announceTimer;
+  let bridgeStep = "corte";
+
+  function drawPythonBridge() {
+    const low = Number(controls.low.value);
+    const high = Number(controls.high.value);
+    const lines = [
+      "k = " + current.k,
+      "corte = datos[:, :, k].T",
+      "vmin, vmax = " + low.toFixed(2) + ", " + high.toFixed(2),
+      'plt.imshow(corte, cmap="gray", origin="lower",',
+      "           vmin=vmin, vmax=vmax)",
+      "soporte = corte > 1e-6",
+      "valores = corte[soporte]",
+      "conteos, bordes = np.histogram(valores,",
+      "    bins=32, range=(0, 1))",
+      "umbral = np.percentile(valores, 90)",
+      "mascara = soporte & (corte >= umbral)",
+      "mostrar_mascara = " + (controls.mask.checked ? "True" : "False"),
+      'print(mascara.sum(), "de", valores.size)'
+    ];
+    const steps = {
+      corte: {
+        active: [0, 1], title: "Paso 1 · Elegir un corte",
+        explanation: "k fija la posición axial. Los dos puntos conservan todas las posiciones de x e y; .T organiza filas y columnas para dibujarlas. Cambiar k elige otros datos del mismo volumen.",
+        result: "k = " + current.k + " → z = " + current.z_mm + " mm. Matriz mostrada: 117 filas × 99 columnas."
+      },
+      ventana: {
+        active: [2, 3, 4], title: "Paso 2 · Traducir valores a grises",
+        explanation: "vmin se dibuja negro y vmax blanco. Los valores intermedios se reparten entre esos grises; fuera de la ventana se saturan. La matriz, su histograma y la selección por p90 no cambian.",
+        result: "Ventana " + decimal(low, 2) + "–" + decimal(high, 2) + ". Se conservan " + current.foreground + " valores del soporte y " + current.selected + " valores ≥ p90."
+      },
+      conteo: {
+        active: [5, 6, 7, 8], title: "Paso 3 · Elegir qué se cuenta",
+        explanation: "soporte es una selección lógica: intensidad original mayor que una millonésima. valores reúne sólo esas intensidades. histogram las reparte en 32 intervalos fijos, sin saber dónde estaba cada píxel.",
+        result: "32 intervalos. Suma de las barras = " + current.hist.reduce((sum, count) => sum + count, 0) + " = tamaño del soporte. Es una exclusión numérica, no una máscara cerebral validada."
+      },
+      mascara: {
+        active: [9, 10, 11, 12], title: "Paso 4 · Seleccionar mediante una regla",
+        explanation: "percentile calcula el p90 de los valores del soporte. >= incluye también los empates. mostrar_mascara representa la casilla de la interfaz: decide si superponemos la selección, no si cambian los datos.",
+        result: "p90 = " + decimal(current.p90, 6) + ". " + current.selected + " de " + current.foreground + " (" + decimal(current.percentage, 2) + " %). Superposición " + (controls.mask.checked ? "activada." : "desactivada.")
+      }
+    };
+    const step = steps[bridgeStep];
+    function escapeCode(text) {
+      return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+    document.getElementById("python-code").innerHTML = lines.map((line, index) =>
+      '<span class="code-row' + (step.active.includes(index) ? ' active' : '') +
+      '"><span class="line-number" aria-hidden="true">' + (index + 1) + '</span>' + escapeCode(line) + '</span>'
+    ).join("");
+    document.getElementById("bridge-step-title").textContent = step.title;
+    document.getElementById("bridge-explanation").textContent = step.explanation;
+    document.getElementById("bridge-output").textContent = step.result;
+    Object.keys(steps).forEach(key => document.getElementById("code-step-" + key).setAttribute("aria-pressed", String(key === bridgeStep)));
+  }
 
   function loadSlice(record) {
     if (decoded.has(record.k)) return decoded.get(record.k);
@@ -290,7 +374,8 @@ footer p{margin:4px 0}.screen-reader{position:absolute;width:1px;height:1px;padd
       " vóxeles con intensidad mayor que 0,000001. Los intervalos conservan su conteo al mover la ventana. " + binsText + ".";
   }
 
-  function update(announce) {
+  function update(announce, focusStep) {
+    if (focusStep) bridgeStep = focusStep;
     current = payload.slices.find(record => record.k === Number(controls.slice.value));
     document.getElementById("vmin-value").textContent = decimal(Number(controls.low.value), 2);
     document.getElementById("vmax-value").textContent = decimal(Number(controls.high.value), 2);
@@ -303,6 +388,7 @@ footer p{margin:4px 0}.screen-reader{position:absolute;width:1px;height:1px;padd
     document.getElementById("mask-caption").hidden = !controls.mask.checked;
     drawImage();
     drawHistogram();
+    drawPythonBridge();
     if (announce) {
       clearTimeout(announceTimer);
       announceTimer = setTimeout(() => {
@@ -322,13 +408,19 @@ footer p{margin:4px 0}.screen-reader{position:absolute;width:1px;height:1px;padd
       if (changed === "low") controls.high.value = (low + 0.01).toFixed(2);
       else controls.low.value = (high - 0.01).toFixed(2);
     }
-    update(true);
+    update(true, "ventana");
   }
 
   try {
     payload.slices.forEach(verifyData);
-    controls.slice.addEventListener("change", () => update(true));
-    controls.mask.addEventListener("change", () => update(true));
+    controls.slice.addEventListener("change", () => update(true, "corte"));
+    controls.mask.addEventListener("change", () => update(true, "mascara"));
+    ["corte", "ventana", "conteo", "mascara"].forEach(key => {
+      document.getElementById("code-step-" + key).addEventListener("click", () => {
+        bridgeStep = key;
+        drawPythonBridge();
+      });
+    });
     controls.low.addEventListener("input", () => adjustWindow("low"));
     controls.high.addEventListener("input", () => adjustWindow("high"));
     document.getElementById("reset").addEventListener("click", () => {
@@ -336,12 +428,12 @@ footer p{margin:4px 0}.screen-reader{position:absolute;width:1px;height:1px;padd
       controls.low.value = "0";
       controls.high.value = "1";
       controls.mask.checked = false;
-      update(true);
+      update(true, "corte");
     });
     document.getElementById("percentile").addEventListener("click", () => {
       controls.low.value = current.p2.toFixed(2);
       controls.high.value = current.p98.toFixed(2);
-      update(true);
+      update(true, "ventana");
     });
     window.addEventListener("resize", () => drawHistogram());
     update(false);

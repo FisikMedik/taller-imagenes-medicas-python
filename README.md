@@ -34,10 +34,10 @@ No necesitas leer todo el libro antes de asistir. Como lectura previa opcional, 
 | Recurso | Cuándo usarlo | Qué incluye |
 |---|---|---|
 | [Cuaderno en vivo](Taller_en_vivo_60min.ipynb) | Durante la hora del taller | 8 celdas de código, imágenes desde la primera salida, explicación, variaciones y ejercicios resueltos. |
-| [Presentación](https://FisikMedik.github.io/taller-imagenes-medicas-python/presentacion.html) | Para seguir la explicación o facilitarla | Diapositivas visuales con tiempos, preguntas y notas para el instructor; PDF y PowerPoint disponibles. |
+| [Presentación](https://FisikMedik.github.io/taller-imagenes-medicas-python/presentacion.html) | Para seguir la explicación o facilitarla | 16 diapositivas, con seis demostraciones web que enlazan controles, código y resultados. PDF y PowerPoint con vistas estáticas y notas. |
 | [Explorador](https://FisikMedik.github.io/taller-imagenes-medicas-python/explorador.html) | Antes, durante o sin Python | Tres cortes, ventana de contraste, histograma y máscara por percentil; sin dependencias web. |
 | [Cuaderno completo](https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Taller_imagenes_medicas.ipynb) | Estudio posterior, en varias sesiones | 24 lecciones detalladas, salidas guardadas, matrices, filtros y ampliaciones. |
-| [Manual ilustrado](Guia_visual_imagenes_medicas.pdf) | Consulta y lectura autónoma | 95 páginas, 8 capítulos, 3 anexos, 15 tutoriales y 31 figuras diferentes. |
+| [Manual ilustrado](Guia_visual_imagenes_medicas.pdf) | Consulta y lectura autónoma | 97 páginas, 8 capítulos, 3 anexos, 15 tutoriales y 31 figuras diferentes. |
 | [Módulo opcional de ML](modulo_ml.html) | 45–60 minutos adicionales o estudio posterior | 12 celdas explicadas: radiografías públicas, regresión logística, validación, predicciones y errores. |
 
 El manual explica qué es un píxel, cómo leer una matriz, de dónde procede ICBM152 y qué hace Nilearn. Distingue imagen individual, plantilla, atlas y espacio de referencia. Sus tutoriales combinan código, salida e interpretación. El **[proyecto LaTeX completo](Fuente_LaTeX_manual.zip)** contiene los recursos necesarios para editarlo y recompilarlo; también puedes leer la [fuente principal](Guia_visual_imagenes_medicas.tex).
@@ -45,6 +45,25 @@ El manual explica qué es un píxel, cómo leer una matriz, de dónde procede IC
 <a href="Guia_visual_imagenes_medicas.pdf"><img src="Portada_manual.png" alt="Portada del manual Imágenes médicas con Python" width="230"></a>
 
 Las figuras científicas se obtienen de datos y cálculos documentados. La portada del libro es una ilustración conceptual generada con IA.
+
+## Presentación interactiva: sigue el código y su resultado
+
+Abre la **[presentación web](https://fisikmedik.github.io/taller-imagenes-medicas-python/presentacion.html#7)**. En las diapositivas 7–12, pulsa **Siguiente paso**: se resalta una instrucción, se explica su efecto y aparece la salida. Los controles permiten cambiar un valor y comparar. **Restaurar ejemplo** devuelve los parámetros de referencia.
+
+| Demostración | Qué puedes probar |
+|---|---|
+| [Contraste](https://fisikmedik.github.io/taller-imagenes-medicas-python/presentacion.html#7) | Cambiar corte y ventana; comprobar que los valores originales se conservan. |
+| [Histograma](https://fisikmedik.github.io/taller-imagenes-medicas-python/presentacion.html#8) | Reordenar 36 valores, cambiar intervalos y comprobar la suma de los conteos; después pasar al cerebro. |
+| [Percentil y máscara](https://fisikmedik.github.io/taller-imagenes-medicas-python/presentacion.html#9) | Relacionar un percentil con su umbral, selección y denominador. |
+| [Curva y región](https://fisikmedik.github.io/taller-imagenes-medicas-python/presentacion.html#10) | Comparar igualdad y desigualdad sobre el mismo corte cerebral. |
+| [Ventana de filtro 3×3](https://fisikmedik.github.io/taller-imagenes-medicas-python/presentacion.html#11) | Ver los nueve vecinos, calcular media/mediana/pesos y guardar cada valor en una matriz nueva. |
+| [Cambios y bordes](https://fisikmedik.github.io/taller-imagenes-medicas-python/presentacion.html#12) | Comparar una fila uniforme, una rampa y un salto; seguir cada resta antes de ver Sobel. |
+
+La web muestra **Python equivalente** y calcula estas demostraciones en JavaScript; no instala ni ejecuta un intérprete de Python. En el cuaderno de Colab se ejecuta Python. Las curvas de los seis niveles se calcularon previamente con Matplotlib. La presentación lleva sus datos y funciona sin conexión al descargarla; Colab y los enlaces externos necesitan internet.
+
+Las copias **PDF y PowerPoint son estáticas**. Para mover los controles utiliza la presentación web. Las notas del instructor mantienen tiempos, preguntas y soluciones.
+
+El [explorador](explorador.html) también enlaza controles, instrucciones y cifras. Los cuadernos comienzan con imágenes visibles y dejan las respuestas en apartados desplegables para intentar resolver las preguntas primero.
 
 ## Módulo opcional: de radiografías a predicciones
 
@@ -65,7 +84,7 @@ La preparación inicial descarga el archivo público si no está disponible y ve
 .\.venv\Scripts\python.exe -m jupyterlab
 ```
 
-Abre `Modulo_ML_radiografias.ipynb`. Las salidas están guardadas y la [lectura web](modulo_ml.html) incluye sus imágenes para consultar el tutorial sin ejecutar. El [proyecto LaTeX completo](Fuente_LaTeX_modulo_ML.zip), la [fuente principal](Guia_modulo_ML.tex) y los [resultados de referencia](resultados_modulo_ml.json) permiten revisar y reutilizar el material.
+Abre `Modulo_ML_radiografias.ipynb`. Las salidas están guardadas y la [lectura web](modulo_ml.html) incluye sus imágenes para consultar el tutorial sin ejecutar. La guía complementaria tiene **20 páginas**. El [proyecto LaTeX completo](Fuente_LaTeX_modulo_ML.zip), la [fuente principal](Guia_modulo_ML.tex) y los [resultados de referencia](resultados_modulo_ml.json) permiten revisar y reutilizar el material.
 
 **Alcance:** ejercicio educativo sobre etiquetas de un conjunto público. Las imágenes reducidas no sirven para aprender diagnóstico visual, y la puntuación del modelo no es un riesgo clínico calibrado. Estos resultados no demuestran rendimiento en otras personas, edades u hospitales.
 
@@ -156,7 +175,7 @@ También se ejecutaron correctamente las doce celdas en **Google Colab con CPU e
 
 Los intervalos de [requisitos_ml.txt](requisitos_ml.txt) no congelan un entorno idéntico. Las diferencias entre versiones pueden modificar el ajuste numérico, los resultados y la opción seleccionada cuando sus valores de validación son cercanos. **No cambies el modelo después de mirar prueba para reproducir los números del PDF**: conserva la selección hecha con validación y registra tus versiones y resultados. Estas comprobaciones de ejecución no equivalen a validación clínica ni demuestran independencia entre pacientes.
 
-El manual se compiló con XeLaTeX y se revisaron visualmente sus 95 páginas. También se extrajo el ZIP de la fuente en una carpeta independiente y se recompiló: conserva las 95 páginas y el mismo contenido textual. El generador portátil reprodujo las 20 figuras nuevas con huellas SHA-256 idénticas. El paquete incluye las imágenes ya preparadas, los datos públicos, las fuentes de código con su licencia y las instrucciones de compilación; Python solo se necesita si deseas regenerar las figuras.
+El manual se compiló con XeLaTeX y se revisaron visualmente sus 97 páginas. También se extrajo el ZIP de la fuente en una carpeta independiente y se recompiló: conserva las 97 páginas y el mismo contenido textual. El generador portátil reprodujo las 20 figuras nuevas con huellas SHA-256 idénticas. El paquete incluye las imágenes ya preparadas, los datos públicos, las fuentes de código con su licencia y las instrucciones de compilación; Python solo se necesita si deseas regenerar las figuras.
 
 ## Archivos del repositorio
 
@@ -212,8 +231,12 @@ Referencias principales:
 
 ## Relación con los materiales de la escuela
 
-La organización de esta edición —acceso web, diapositivas, Colab, ejercicios con pistas y soluciones, repositorio y fuentes— toma como referencia los [materiales publicados por la escuela](https://machine-learning-honduras.org/materiales/), los de [Edith Natalia Villegas](https://edithvillegas.github.io/introduccion-ml-redes-neuronales/) y los de [Daniela Pinto Veizaga](https://dapivei.github.io/escuela-machine-learning-honduras-2026/). Son prácticas docentes observadas, no una rúbrica oficial ni una aprobación formal de este material por la organización.
+La organización de esta edición —acceso web, diapositivas, Colab, ejercicios con pistas y soluciones, repositorio y fuentes— toma como referencia los [materiales publicados por la escuela](https://machine-learning-honduras.org/materiales/), los de [Edith Natalia Villegas](https://edithvillegas.github.io/introduccion-ml-redes-neuronales/) y los de [Daniela Pinto Veizaga](https://dapivei.github.io/escuela-machine-learning-honduras-2026/) y las [presentaciones de Carlos Enmanuel Soto Lopez](https://carlossoto362.github.io/pwf_honduras_slides/main.html). Son prácticas docentes observadas, no una rúbrica oficial ni una aprobación formal de este material por la organización.
 
 El sitio es el recurso del expositor y se mantiene en su repositorio personal. La información institucional y posibles cambios de horario corresponden a la [web oficial](https://machine-learning-honduras.org/).
 
 **Autor del material docente:** Juan Calderón · **Revisión de acceso y sesión:** 23 de noviembre de 2026 · **Edición del manual:** 16 de noviembre de 2026.
+
+### Revisión didáctica del 25 de noviembre de 2026
+
+Se adaptó la relación entre controles, código y resultados observada en los materiales de Daniela y Carlos, y la explicación por ventanas de las convoluciones de Natalia. Las demostraciones, figuras y ejemplos de esta revisión son propios del taller. Los dos manuales conservan sus fuentes LaTeX. La ruta de una hora utiliza las ocho celdas del cuaderno breve; las 24 lecciones completas y el módulo de ML quedan como ampliaciones. Los ejemplos de ML introducen la suma ponderada y una matriz de confusión con cuatro casos ficticios antes de evaluar radiografías.

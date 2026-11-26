@@ -18,7 +18,7 @@
 \end{titlepage}
 \setcounter{page}{2}
 
-\Pagina{ANTES DE ABRIR EL CUADERNO}{Qué vamos a construir}{Primera lectura: páginas 2–5, unos 15 minutos. Práctica guiada: 45–60 minutos adicionales.}
+\Pagina{ANTES DE ABRIR EL CUADERNO}{Qué vamos a construir}{Primera lectura: páginas 2–6, unos 15–20 minutos. Práctica guiada: 45–60 minutos adicionales.}
 Este módulo amplía el taller de procesamiento de imágenes. Allí elegíamos reglas, como un umbral o un filtro. Aquí aprenderemos una regla a partir de \textbf{imágenes acompañadas de una etiqueta}. Después comprobaremos qué hace con imágenes reservadas. Esa diferencia es el punto de partida del \textbf{aprendizaje supervisado}.
 \begin{Idea}{La pregunta del ejercicio}
 ¿Puede un modelo sencillo relacionar los 784 valores de una imagen de tórax con las etiquetas \texttt{normal} y \texttt{pneumonia} del conjunto público? Evaluamos esa tarea concreta. No pedimos al estudiante que diagnostique una radiografía.
@@ -35,7 +35,7 @@ Evaluación & Comparar predicciones con etiquetas reservadas y contar aciertos y
 \Sub{Cómo empezar}
 Abre \href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Modulo_ML_radiografias.ipynb}{el cuaderno del módulo en Google Colab}. Inicia sesión si se solicita. Usa CPU, pulsa el triángulo de la primera celda y espera a que termine. Continúa de arriba abajo. Si quieres conservar cambios, elige \textbf{Archivo → Guardar una copia en Drive}; el ejercicio no necesita montar tus archivos de Drive.
 La primera celda prepara las bibliotecas ausentes y carga la copia pública local o la descarga. El resto reutiliza sus variables. Un \texttt{NameError} suele indicar que falta ejecutar una celda anterior. Las salidas guardadas permiten seguir la explicación aunque todavía no hayas ejecutado.
-\par Las cifras impresas corresponden a la ejecución local documentada en la página 13. Otra versión de las bibliotecas puede producir resultados y una selección de C diferentes; registra los de tu propia ejecución.
+\par Las cifras impresas corresponden a la ejecución local documentada en la página \pageref{registro-ejecucion}. Otra versión de las bibliotecas puede producir resultados y una selección de C diferentes; registra los de tu propia ejecución.
 \begin{Practica}{Dos recorridos}
 En una demostración breve, observa imágenes, entrenamiento, matriz de confusión y errores. Para aprender haciendo, reserva la ampliación completa. Este material es opcional y no modifica por sí solo el horario oficial de la escuela.
 \end{Practica}
@@ -77,6 +77,26 @@ La fila conserva las posiciones en un orden conocido. Sin embargo, la regresión
 \begin{Practica}{Calcula antes de seguir}
 \textbf{Pregunta:} ¿Una imagen de 56 × 56 produciría el doble de características?\\
 \textbf{Respuesta:} No: produciría 3 136, cuatro veces 784, porque se duplica tanto el número de filas como el de columnas. Ampliar visualmente la imagen de 28 × 28 no recupera detalles descartados.
+\end{Practica}
+
+\Pagina{CELDA 4 · PRIMERO UNA CUENTA}{Cuatro entradas, paso a paso}{Números ficticios para comprobar qué hace una predicción.}
+\Figura{suma_cuatro_entradas.png}{Entradas y pesos inventados: cada posición aporta un producto. No son valores de radiografías ni pesos aprendidos con pacientes.}{82mm}
+\begin{enumerate}
+\item \textbf{Multiplica cada entrada por su peso.} La segunda contribución es negativa: \(0,80\times(-1)=-0,80\). Un peso puede ser negativo o mayor que uno; no es una intensidad de píxel.
+\item \textbf{Suma productos y añade el término independiente.} Los productos suman 0,80. Añadir \(b=-0,30\) deja \(z=0,50\). El término independiente desplaza la suma; no multiplica una entrada.
+\item \textbf{Aplica la sigmoide y el umbral.} La fórmula transforma \(z=0,50\) en una puntuación de aproximadamente 0,622. Como \(0,622\geq0,5\), la predicción es clase 1.
+\end{enumerate}
+\begin{Codigo}{Cuenta ilustrativa · no modifica el modelo del taller}
+x_ejemplo = np.array([0.20, 0.80, 0.60, 0.40])
+w_ejemplo = np.array([1.00, -1.00, 2.00, 0.50])
+productos_ejemplo = x_ejemplo * w_ejemplo
+z_ejemplo = productos_ejemplo.sum() - 0.30
+s_ejemplo = 1 / (1 + np.exp(-z_ejemplo))
+# productos: [0.20, -0.80, 1.20, 0.20]; z: 0.50; s: 0.622
+\end{Codigo}
+\texttt{*} multiplica las posiciones correspondientes; \texttt{.sum()} reúne sus aportaciones. \textbf{Predecir} reutiliza pesos; \textbf{aprender} ajusta pesos a partir de ejemplos. Aquí los elegimos a mano; la celda 6 aprenderá 784 pesos y un término independiente con entrenamiento.
+\begin{Practica}{Cambia una entrada, conserva los pesos}
+Si la tercera entrada baja de 0,60 a 0,10, su contribución baja de 1,20 a 0,20. Queda \(z=-0,50\), la puntuación es aproximadamente 0,378 y la predicción pasa a clase 0. No se ha reentrenado. Es un ejemplo matemático, no una interpretación anatómica.
 \end{Practica}
 
 \Pagina{CELDA 4 · ENTENDER EL MODELO}{Una suma y una transformación}{La regresión logística es un clasificador pese a su nombre.}
@@ -147,6 +167,25 @@ Los corchetes seleccionan una fila y una columna. \texttt{flatnonzero} encuentra
 Cambia el índice por otro de validación, ejecuta la celda y describe entrada, puntuación, umbral, predicción y referencia. Si cambia la predicción, \textbf{no significa que el modelo se haya reentrenado}: sus pesos siguen siendo los ajustados antes.
 \end{Practica}
 
+\Pagina{CELDA 8 · PRIMERO CONTAR}{Cuatro casos, cuatro casillas}{Aprende a leer la matriz antes de comparar varios umbrales.}
+\Figura{cuatro_casos_confusion.png}{Cuatro casos ficticios con puntuaciones inventadas. La matriz cuenta una vez cada caso: no describe pacientes ni resultados del conjunto médico.}{76mm}
+\begin{enumerate}
+\item \textbf{Decide con el umbral.} Las puntuaciones \([0,20;0,80;0,30;0,70]\) producen predicciones \([0;1;0;1]\) al aplicar \(s\geq0,5\).
+\item \textbf{Busca el cruce.} La referencia elige la fila; la predicción elige la columna. C tiene referencia 1 y predicción 0: cae en falso negativo, abajo a la izquierda.
+\item \textbf{Cuenta y comprueba.} Cada casilla contiene un caso. La suma es cuatro: dos coincidencias en la diagonal y dos discrepancias fuera de ella.
+\end{enumerate}
+\textbf{Positivo/negativo} nombra la predicción 1/0. \textbf{Verdadero/falso} indica si coincide con la referencia. La referencia se consulta para evaluar, no se entrega como entrada al predecir. Estos términos no indican gravedad.
+\begin{Codigo}{La misma cuenta con Python · ejemplo ficticio}
+y_ejemplo = np.array([0, 0, 1, 1])
+s_ejemplo = np.array([0.20, 0.80, 0.30, 0.70])
+pred_ejemplo = (s_ejemplo >= 0.5).astype(int)
+confusion_matrix(y_ejemplo, pred_ejemplo, labels=[0, 1])
+# Salida por filas: [[1, 1], [1, 1]]
+\end{Codigo}
+\begin{Practica}{Ahora baja el umbral a 0,3}
+C pasa de FN a VP: 0,30 cumple \texttt{>= 0.3}, que incluye la igualdad. La matriz queda \texttt{[[1, 1], [0, 2]]}. Los otros casos no cambian y la suma sigue siendo cuatro. No han cambiado las puntuaciones ni los pesos.
+\end{Practica}
+
 \Pagina{CELDA 8 · VARIAR LA DECISIÓN}{El umbral mueve los errores}{Experimentamos con validación, sin utilizar prueba para elegir.}
 \Figura{celda-08.png}{La misma colección de puntuaciones se convierte en clases con umbrales diferentes. Los pesos del modelo permanecen iguales.}{71mm}
 Al bajar el umbral, más imágenes se clasifican como 1. Esto no puede disminuir el número de positivos predichos si conservamos las mismas puntuaciones. Puede reducir falsos negativos y aumentar falsos positivos. Al subirlo ocurre el intercambio contrario. Los cambios exactos dependen de dónde estén las puntuaciones respecto a cada umbral.
@@ -211,7 +250,7 @@ Puedes decir: «La referencia es 0, el modelo produjo 1 y la puntuación fue est
 \end{Practica}
 Un modelo puede aprovechar señales de posición, recorte, contraste o adquisición en lugar de lo que nos interesa. Los errores invitan a investigar esos factores. La galería es una revisión descriptiva posterior; no se usa para cambiar el modelo de este informe.
 
-\Pagina{CELDA 12 · DEJAR UN REGISTRO}{Un resultado que se pueda explicar}{Reproducir significa conservar decisiones, datos, código y entorno.}
+\Pagina{CELDA 12 · DEJAR UN REGISTRO}{Un resultado que se pueda explicar}{Reproducir significa conservar decisiones, datos, código y entorno.}\label{registro-ejecucion}
 \Figura{celda-12.png}{Resumen de la ejecución. Cada etapa tiene una función distinta y un conjunto de datos asignado.}{70mm}
 Una cifra sin contexto no permite repetir ni juzgar un experimento. La última celda reúne el origen de los datos, sus huellas, la regla de limpieza, las opciones probadas, el valor de C seleccionado, el umbral y los resultados. También guarda las versiones de las bibliotecas utilizadas.
 \begin{Idea}{Ficha breve de esta ejecución}
