@@ -235,7 +235,7 @@ La organización de esta edición —acceso web, diapositivas, Colab, ejercicios
 
 El sitio es el recurso del expositor y se mantiene en su repositorio personal. La información institucional y posibles cambios de horario corresponden a la [web oficial](https://machine-learning-honduras.org/).
 
-**Autor del material docente:** Juan Calderón · **Revisión de acceso y sesión:** 23 de noviembre de 2026 · **Edición del manual:** 16 de noviembre de 2026.
+**Autor del material docente:** Juan Calderón · **Revisión de materiales, acceso y sesión:** 25 de noviembre de 2026 · **Edición del manual:** 25 de noviembre de 2026.
 
 ### Revisión didáctica del 25 de noviembre de 2026
 
