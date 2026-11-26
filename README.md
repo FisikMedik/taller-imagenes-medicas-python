@@ -13,7 +13,7 @@ Taller introductorio de la [Escuela de Machine Learning y Data Science en Hondur
 
 [Diapositivas web](https://FisikMedik.github.io/taller-imagenes-medicas-python/presentacion.html) · [Presentación PDF](Presentacion_taller.pdf) · [PowerPoint editable](Presentacion_taller.pptx) · [Explorador visual](https://FisikMedik.github.io/taller-imagenes-medicas-python/explorador.html)
 
-**Ampliación opcional:** [De radiografías a predicciones: un primer modelo de ML](https://fisikmedik.github.io/taller-imagenes-medicas-python/modulo_ml.html) · [Abrir el módulo en Colab](https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Modulo_ML_radiografias.ipynb)
+**Ampliación opcional:** [Presentación interactiva de ML](https://fisikmedik.github.io/taller-imagenes-medicas-python/presentacion_ml.html) · [De radiografías a predicciones: tutorial completo](https://fisikmedik.github.io/taller-imagenes-medicas-python/modulo_ml.html) · [Abrir el módulo en Colab](https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Modulo_ML_radiografias.ipynb)
 
 ![Tres cortes de la misma plantilla cerebral: axial, coronal y sagital](imagenes/mri_intensity.png)
 
@@ -38,7 +38,7 @@ No necesitas leer todo el libro antes de asistir. Como lectura previa opcional, 
 | [Explorador](https://FisikMedik.github.io/taller-imagenes-medicas-python/explorador.html) | Antes, durante o sin Python | Tres cortes, ventana de contraste, histograma y máscara por percentil; sin dependencias web. |
 | [Cuaderno completo](https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Taller_imagenes_medicas.ipynb) | Estudio posterior, en varias sesiones | 24 lecciones detalladas, salidas guardadas, matrices, filtros y ampliaciones. |
 | [Manual ilustrado](Guia_visual_imagenes_medicas.pdf) | Consulta y lectura autónoma | 97 páginas, 8 capítulos, 3 anexos, 15 tutoriales y 31 figuras diferentes. |
-| [Módulo opcional de ML](modulo_ml.html) | 45–60 minutos adicionales o estudio posterior | 12 celdas explicadas: radiografías públicas, regresión logística, validación, predicciones y errores. |
+| [Módulo opcional de ML](modulo_ml.html) | 45–60 minutos adicionales o estudio posterior | [Presentación interactiva](https://fisikmedik.github.io/taller-imagenes-medicas-python/presentacion_ml.html) de 8 diapositivas y 6 laboratorios; cuaderno de 12 celdas sobre radiografías, regresión logística, validación y errores. |
 
 El manual explica qué es un píxel, cómo leer una matriz, de dónde procede ICBM152 y qué hace Nilearn. Distingue imagen individual, plantilla, atlas y espacio de referencia. Sus tutoriales combinan código, salida e interpretación. El **[proyecto LaTeX completo](Fuente_LaTeX_manual.zip)** contiene los recursos necesarios para editarlo y recompilarlo; también puedes leer la [fuente principal](Guia_visual_imagenes_medicas.tex).
 
@@ -69,11 +69,24 @@ El [explorador](explorador.html) también enlaza controles, instrucciones y cifr
 
 Esta ampliación permite **entrenar y evaluar un primer modelo de aprendizaje automático** con imágenes médicas. Reserva **45–60 minutos adicionales**; la sesión principal del programa sigue durando una hora. Si sólo se solicita una demostración de 15 minutos, utiliza las **salidas guardadas de las celdas 1, 6, 9 y 11**. Para ejecutar el cuaderno, comienza en la primera celda y sigue las doce en orden.
 
-**[Leer el tutorial visual sin ejecutar código](modulo_ml.html)** · **[Practicar en Google Colab](https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Modulo_ML_radiografias.ipynb)** · [Descargar el cuaderno](Modulo_ML_radiografias.ipynb) · [Guía ilustrada en PDF](Guia_modulo_ML.pdf)
+**[Abrir la presentación interactiva de ML](https://fisikmedik.github.io/taller-imagenes-medicas-python/presentacion_ml.html)** · **[Leer el tutorial visual sin ejecutar código](modulo_ml.html)** · **[Practicar en Google Colab](https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Modulo_ML_radiografias.ipynb)** · [Descargar el cuaderno](Modulo_ML_radiografias.ipynb) · [Guía ilustrada en PDF](Guia_modulo_ML.pdf)
 
 El recorrido comienza con radiografías y explica qué son una muestra, una característica y una etiqueta. Después transforma cada imagen de 28 × 28 píxeles en 784 valores, compara con una regla que siempre predice la clase mayoritaria y entrena una **regresión logística**. Es un clasificador supervisado que funciona con CPU; no es una red neuronal convolucional. Las explicaciones acompañan al código, a las figuras y a los ejercicios resueltos.
 
 Entrenamiento ajusta los pesos; validación elige entre tres valores de `C`; prueba se utiliza al final, después de fijar el modelo y el umbral. Los experimentos de umbral utilizan sólo validación. Se interpretan la matriz de confusión, sensibilidad, especificidad y exactitud equilibrada, y se muestran aciertos y errores con un criterio de selección declarado.
+
+### Presentación interactiva del módulo de ML
+
+La [presentación web de ML](https://fisikmedik.github.io/taller-imagenes-medicas-python/presentacion_ml.html) reúne **8 diapositivas y 6 laboratorios**. Cambia un control y recorre el código paso a paso para relacionar cada instrucción con su resultado:
+
+- **Píxel → vector:** localiza un píxel y encuentra su posición entre las 784 características.
+- **Particiones:** compara los conteos originales y los usados tras retirar copias exactas; distingue entrenamiento, validación y prueba.
+- **Regresión logística:** sigue los valores de una imagen, sus pesos, la suma y la sigmoide.
+- **Elección de `C`:** compara resultados guardados de entrenamiento y validación; la prueba queda fuera de la elección.
+- **Umbral y matriz:** mueve la regla de decisión sobre cuatro casos ficticios y sigue dónde se cuenta cada caso.
+- **Errores de prueba:** explora aciertos, falsos positivos y falsos negativos de la evaluación fija; interpreta sus métricas.
+
+Las interacciones se calculan en **JavaScript con datos y modelos precalculados**. El código mostrado es Python equivalente; para ejecutarlo y entrenar, abre el cuaderno en Colab. La presentación funciona sin conexión al guardar `presentacion_ml.html`; sus enlaces a Colab y otros recursos sí necesitan internet. El umbral de la prueba permanece fijo en 0.5.
 
 **Datos:** [PneumoniaMNIST](https://medmnist.com/), una colección pública de radiografías pediátricas reducidas y etiquetadas. El archivo original de [Zenodo](https://zenodo.org/records/10519652) se distribuye intacto bajo **CC BY 4.0**. Para esta adaptación docente se retiran 18 copias exactas adicionales del entrenamiento y 8 imágenes de validación idénticas a entrenamiento: se utilizan **4690 / 516 / 624 imágenes**. La prueba oficial permanece completa, incluidas tres copias adicionales documentadas. El NPZ no contiene identificadores para comprobar separación por pacientes; eliminar copias exactas no certifica esa independencia. Consulta la [procedencia, licencia y auditoría](datos/FUENTES_PneumoniaMNIST.txt).
 
