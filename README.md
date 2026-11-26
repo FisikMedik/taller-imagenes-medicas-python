@@ -22,7 +22,7 @@ Taller introductorio de la [Escuela de Machine Learning y Data Science en Hondur
 ## Empieza aquí
 
 1. Abre el **[cuaderno en vivo de 60 minutos](https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Taller_en_vivo_60min.ipynb)**. Inicia sesión en Google y guarda una copia si deseas conservar tus cambios.
-2. Ejecuta la primera celda pulsando su triángulo o **Mayús + Enter**. Espera a ver tres cortes del cerebro. Usa CPU; no necesitas GPU ni conectar tus archivos de Drive al cuaderno.
+2. La galería inicial ya muestra tres cortes del cerebro. Ejecuta los pasos **1A–1E** para preparar la sesión y **1F–1G** para volver a dibujarlos, pulsando el triángulo de cada celda o **Mayús + Enter**. Usa CPU; no necesitas GPU ni conectar tus archivos de Drive al cuaderno.
 3. Sigue las celdas en orden. Predice qué cambiará, modifica un parámetro y compara. Cada ejercicio ofrece una pista y una solución explicada.
 
 El **[explorador visual](https://FisikMedik.github.io/taller-imagenes-medicas-python/explorador.html)** permite empezar sin programar y sirve de alternativa si Colab no está disponible. Descarga `explorador.html` para abrirlo sin internet: sus datos están incluidos en el propio archivo.
@@ -33,7 +33,7 @@ No necesitas leer todo el libro antes de asistir. Como lectura previa opcional, 
 
 | Recurso | Cuándo usarlo | Qué incluye |
 |---|---|---|
-| [Cuaderno en vivo](Taller_en_vivo_60min.ipynb) | Durante la hora del taller | 8 celdas de código, imágenes desde la primera salida, explicación, variaciones y ejercicios resueltos. |
+| [Cuaderno en vivo](Taller_en_vivo_60min.ipynb) | Durante la hora del taller | 8 bloques temáticos repartidos en 28 celdas de código breves, galería inicial, resultados intermedios y ejercicios resueltos. |
 | [Presentación](https://FisikMedik.github.io/taller-imagenes-medicas-python/presentacion.html) | Para seguir la explicación o facilitarla | 16 diapositivas, con seis demostraciones web que enlazan controles, código y resultados. PDF y PowerPoint con vistas estáticas y notas. |
 | [Explorador](https://FisikMedik.github.io/taller-imagenes-medicas-python/explorador.html) | Antes, durante o sin Python | Tres cortes, ventana de contraste, histograma y máscara por percentil; sin dependencias web. |
 | [Cuaderno completo](https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Taller_imagenes_medicas.ipynb) | Estudio posterior, en varias sesiones | 24 lecciones detalladas, salidas guardadas, matrices, filtros y ampliaciones. |
@@ -109,7 +109,7 @@ Necesitas una computadora con navegador e internet. No necesitas instalar Python
 1. Pulsa **Abrir en Google Colab** en la parte superior de esta página.
 2. Inicia sesión en Google si Colab lo solicita. Para conservar tus cambios, elige **Archivo → Guardar una copia en Drive**. Esto guarda tu cuaderno; no monta tus archivos de Drive en la sesión.
 3. Pulsa el botón triangular de la primera celda o usa **Mayús + Enter**. Una celda es un bloque de código; su resultado aparece debajo. Espera a que termine antes de continuar.
-4. Ejecuta las siguientes celdas en orden. La primera prepara las bibliotecas y carga la plantilla; las demás utilizan los datos creados antes.
+4. Ejecuta las siguientes celdas en orden. 1A prepara las bibliotecas, 1B las importa y 1C carga la plantilla; 1D–1E comprueban su geometría y 1F–1G preparan y dibujan los planos. Cada paso indica qué observar y qué volver a ejecutar.
 5. Cuando llegues a una indicación **Cambia**, modifica sólo el parámetro propuesto, ejecuta de nuevo y compara la imagen. Luego consulta la respuesta explicada.
 
 La primera ejecución puede tardar mientras se instalan las bibliotecas que falten. Usa el entorno normal de **CPU**. La plantilla se carga desde `datos/mni152_2mm.nii.gz` si ese archivo está disponible; al abrir sólo el cuaderno en Colab, se obtiene mediante Nilearn.
@@ -118,7 +118,7 @@ Si aparece un mensaje como `NameError`, probablemente falta ejecutar una celda a
 
 ## Ruta preparada para una sesión de una hora
 
-Utiliza **Taller_en_vivo_60min.ipynb** en la sesión. Prepara su primera celda antes de comenzar; las salidas guardadas también permiten seguir el razonamiento si la conexión tarda. La presentación incluye notas para explicar cada imagen y repartir el tiempo.
+Utiliza **Taller_en_vivo_60min.ipynb** en la sesión. Prepara los pasos 1A–1E antes de comenzar; las salidas guardadas también permiten seguir el razonamiento si la conexión tarda. La presentación incluye notas para explicar cada imagen y repartir el tiempo.
 
 | Minutos | Actividad | Qué debe poder explicar el participante |
 |---|---|---|
@@ -161,7 +161,7 @@ En JupyterLab, abre `Taller_en_vivo_60min.ipynb` para la ruta breve o `Taller_im
 
 ### Comprobación de esta edición
 
-La revisión del 23 de noviembre de 2026 incorpora una ruta breve, una presentación y una página pública de acceso. Las ocho celdas del cuaderno en vivo se ejecutaron completas con el archivo local y con la carga de Nilearn; ambas rutas produjeron matrices idénticas. También se ejecutaron las ocho celdas del enlace público en Google Colab con CPU el 23 de noviembre: percentil 90 de 0.878431, 523 de 4 859 posiciones seleccionadas y conteos Sobel de 2 471/1 495 antes/después del suavizado. El entorno Colab utilizó NumPy 2.4.6, Matplotlib 3.10.0, NiBabel 5.4.2, SciPy 1.16.3 y Nilearn 0.12.1.
+La revisión del 23 de noviembre de 2026 incorpora una ruta breve, una presentación y una página pública de acceso. En la versión anterior de ocho celdas, el cuaderno en vivo se ejecutó completo con el archivo local y con la carga de Nilearn; ambas rutas produjeron matrices idénticas. Esa versión de ocho celdas también se ejecutó desde el enlace público en Google Colab con CPU el 23 de noviembre: percentil 90 de 0.878431, 523 de 4 859 posiciones seleccionadas y conteos Sobel de 2 471/1 495 antes/después del suavizado. El entorno Colab utilizó NumPy 2.4.6, Matplotlib 3.10.0, NiBabel 5.4.2, SciPy 1.16.3 y Nilearn 0.12.1.
 
 El explorador se comprobó en pantalla de escritorio y teléfono, incluidos sus controles de teclado, cambios de corte, ventana y máscara. Sus números e histogramas coinciden con los cálculos NumPy sobre el archivo distribuido. El manual y el cuaderno completo conservan la validación de la edición anterior descrita a continuación.
 
@@ -239,4 +239,11 @@ El sitio es el recurso del expositor y se mantiene en su repositorio personal. L
 
 ### Revisión didáctica del 25 de noviembre de 2026
 
-Se adaptó la relación entre controles, código y resultados observada en los materiales de Daniela y Carlos, y la explicación por ventanas de las convoluciones de Natalia. Las demostraciones, figuras y ejemplos de esta revisión son propios del taller. Los dos manuales conservan sus fuentes LaTeX. La ruta de una hora utiliza las ocho celdas del cuaderno breve; las 24 lecciones completas y el módulo de ML quedan como ampliaciones. Los ejemplos de ML introducen la suma ponderada y una matriz de confusión con cuatro casos ficticios antes de evaluar radiografías.
+Se adaptó la relación entre controles, código y resultados observada en los materiales de Daniela y Carlos, y la explicación por ventanas de las convoluciones de Natalia. Las demostraciones, figuras y ejemplos de esta revisión son propios del taller. Los dos manuales conservan sus fuentes LaTeX. La ruta de una hora conserva ocho bloques temáticos, ahora repartidos en 28 celdas breves; las 24 lecciones completas y el módulo de ML quedan como ampliaciones. Los ejemplos de ML introducen la suma ponderada y una matriz de confusión con cuatro casos ficticios antes de evaluar radiografías.
+
+
+### Cuaderno breve reorganizado en pasos pequeños
+
+La revisión del 25 de noviembre conserva los ocho temas y la duración prevista, repartidos en **28 celdas de código**. Los pasos llevan identificadores estables, de **1A** a **8B**, para distinguirlos de los contadores de ejecución de Colab. El código más largo tiene 13 líneas; los textos se reparten en unidades cortas, con explicaciones por línea desplegables, resultados intermedios y una pregunta final por celda. Cada variación indica qué pasos recalcular y cómo restaurar la referencia.
+
+Se ejecutaron las 28 celdas localmente, tanto con el NIfTI incluido como con la carga de Nilearn. Las ocho figuras finales son idénticas a las de la versión anterior y se conservan las matrices y resultados numéricos. También se probaron las variaciones de corte, intervalos, percentil, nivel, sigma y umbral de Sobel, junto con sus recorridos de restauración. Las comprobaciones históricas de Colab descritas arriba corresponden a la versión de ocho celdas.

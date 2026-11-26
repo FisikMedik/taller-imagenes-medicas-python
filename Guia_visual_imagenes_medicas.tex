@@ -18,7 +18,7 @@ Primero observamos; después preguntamos qué números producen esa imagen. Cada
 
 \begin{Idea}{Dos cuadernos, dos ritmos}
 
-Durante la hora de clase utiliza Taller\_en\_vivo\_60min.ipynb: ocho celdas de código con imágenes ya guardadas, una variación cada vez y tres preguntas finales. Sus celdas se identifican aquí como C1 a C8.
+Durante la hora de clase utiliza Taller\_en\_vivo\_60min.ipynb: ocho bloques repartidos en 28 celdas cortas, con imágenes ya guardadas, una variación cada vez y tres preguntas finales. C1 a C8 identifican aquí los bloques, no las celdas individuales.
 
 
 Para estudiar después utiliza Taller\_imagenes\_medicas.ipynb: 24 lecciones con explicaciones de cada línea. Los tutoriales de este libro corresponden a ese cuaderno completo. Su numeración es distinta de C1–C8; no hay que completar las 24 lecciones durante la sesión.
@@ -35,10 +35,10 @@ Para estudiar después utiliza Taller\_imagenes\_medicas.ipynb: 24 lecciones con
 1. Abre el enlace anterior e inicia sesión en Google si se solicita. Usa el entorno normal de CPU; no necesitas GPU ni montar Drive.
 
 
-2. Antes de la sesión, ejecuta C1 con el triángulo o Mayús + Enter y espera a ver los tres planos. La preparación de bibliotecas puede tardar. Para conservar cambios, usa Archivo $\rightarrow$ Guardar una copia en Drive.
+2. Antes de la sesión, ejecuta los pasos 1A–1E con el triángulo o Mayús + Enter. La preparación puede tardar. Continúa con 1F–1G para ver los tres planos. Para conservar cambios, usa Archivo $\rightarrow$ Guardar una copia en Drive.
 
 
-3. En clase, avanza de arriba abajo. Observa la salida guardada, predice una variación y ejecuta el parámetro indicado. Las explicaciones de cada línea quedan disponibles para releer después.
+3. En clase, avanza de arriba abajo por las celdas de cada bloque. Observa la salida guardada, predice una variación y ejecuta el parámetro indicado. Las explicaciones de cada línea quedan disponibles para releer después.
 
 
 \end{Practica}
@@ -47,7 +47,7 @@ Para estudiar después utiliza Taller\_imagenes\_medicas.ipynb: 24 lecciones con
 
 \textbf{Antes:} observa el capítulo 1 (p.\,\pageref{cap:referencia}) y consulta el vocabulario de Python y los archivos del capítulo 2 (p.\,\pageref{cap:herramientas}). Basta reconocer qué es un vóxel, un índice y una función; no hace falta memorizar las instrucciones.\par
 
-\textbf{Durante:} sigue la ruta de ocho celdas del anexo B (p.\,\pageref{anexo:cuadernos}). Cambia una sola cosa, relaciona la línea modificada con la figura y restaura el valor inicial antes de seguir. Si una operación usa un resultado anterior, vuelve a ejecutar esa preparación.\par
+\textbf{Durante:} sigue la ruta de ocho bloques del anexo B (p.\,\pageref{anexo:cuadernos}). Cambia una sola cosa, relaciona la línea modificada con la figura y restaura el valor inicial antes de seguir. Si una operación usa un resultado anterior, vuelve a ejecutar esa preparación.\par
 
 \textbf{Después:} recorre los capítulos 3 a 8, desde píxeles y cortes (p.\,\pageref{cap:cortes}) hasta la conexión con ML (p.\,\pageref{cap:ml}), con el cuaderno completo. Distribuye las 24 lecciones en varias sesiones y explica cada resultado con tus propias palabras.\par
 
@@ -2429,22 +2429,22 @@ No. Pueden quedar identificadores en otros atributos, referencias, píxeles, ros
 
 \begin{Idea}{Al terminar este capítulo}
 
-Seguirás la sesión de 60 minutos con ocho celdas y localizarás las 24 lecciones del recorrido posterior. Comprobarás el efecto de un cambio y restaurarás la preparación antes de continuar.
+Seguirás la sesión de 60 minutos con ocho bloques y localizarás las 24 lecciones del recorrido posterior. Comprobarás el efecto de un cambio y restaurarás la preparación antes de continuar.
 
 
 \end{Idea}
 
-C1–C8 designan las ocho celdas de código de Taller\_en\_vivo\_60min.ipynb. Las lecciones 1–24 pertenecen a Taller\_imagenes\_medicas.ipynb, el cuaderno completo que desarrolla este libro. Ambos conservan salidas visibles y se ejecutan de arriba abajo; sus números no son intercambiables.
+C1–C8 designan los ocho bloques de Taller\_en\_vivo\_60min.ipynb, repartidos en 28 celdas cortas. Sus pasos se rotulan 1A, 1B y así sucesivamente; C1 reúne 1A–1G. Las lecciones 1–24 pertenecen a Taller\_imagenes\_medicas.ipynb, el cuaderno completo del libro. Ambos se ejecutan de arriba abajo; sus números no son intercambiables.
 
 
 \section{Una hora: observar, predecir y probar}
 
-\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Taller_en_vivo_60min.ipynb}{Abrir el cuaderno en vivo · ocho celdas}\par
+\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Taller_en_vivo_60min.ipynb}{Abrir el cuaderno en vivo · ocho bloques}\par
 
-Prepara C1 antes de comenzar la hora para que la instalación no ocupe la práctica. Durante la sesión, observa la figura, explica una predicción y modifica solo la línea indicada. Las explicaciones detalladas se leen después; no es necesario comprender todas las líneas antes de experimentar.
+Ejecuta 1A–1E antes de comenzar la hora para que la preparación no ocupe la práctica. Durante la sesión, observa la figura, explica una predicción y modifica solo la línea indicada. Las explicaciones detalladas se leen después; no es necesario comprender todas las líneas antes de experimentar.
 
 
-\begin{longtable}{@{}p{.15\linewidth}p{.12\linewidth}p{.66\linewidth}@{}}\toprule\textbf{Minutos}&\textbf{Celdas}&\textbf{Actividad y evidencia}\\\midrule\endhead
+\begin{longtable}{@{}p{.15\linewidth}p{.12\linewidth}p{.66\linewidth}@{}}\toprule\textbf{Minutos}&\textbf{Bloques}&\textbf{Actividad y evidencia}\\\midrule\endhead
 
 0–10&C1&Reconoce tres planos del mismo volumen y sus coordenadas en milímetros.\\\addlinespace[6pt]
 
@@ -2462,7 +2462,7 @@ Prepara C1 antes de comenzar la hora para que la instalación no ocupe la práct
 
 \section{Qué cambiar y qué restaurar}
 
-Un parámetro es una opción que recibe una operación. Al cambiarlo, vuelve a ejecutar la celda: editar el texto no actualiza la imagen. Usa la figura y la salida numérica como evidencia de lo que ocurrió; no compares una salida antigua con un código nuevo.
+Un parámetro es una opción que recibe una operación. Al cambiarlo, ejecuta las celdas del bloque en orden: editar el texto no actualiza la imagen. Usa la figura y la salida numérica como evidencia de lo que ocurrió; no compares una salida antigua con un código nuevo.
 
 
 \begin{itemize}
