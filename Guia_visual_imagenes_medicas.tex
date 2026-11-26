@@ -18,10 +18,10 @@ Primero observamos; después preguntamos qué números producen esa imagen. Cada
 
 \begin{Idea}{Dos cuadernos, dos ritmos}
 
-Durante la hora de clase utiliza Taller\_en\_vivo\_60min.ipynb: ocho bloques repartidos en 28 celdas cortas, con imágenes ya guardadas, una variación cada vez y tres preguntas finales. C1 a C8 identifican aquí los bloques, no las celdas individuales.
+Durante la hora de clase utiliza Taller\_en\_vivo\_60min.ipynb: ocho bloques repartidos en 28 celdas cortas, con imágenes ya guardadas, una variación cada vez y tres preguntas finales. Los bloques se rotulan 1–8 y las celdas llevan identificadores como 1A o 6C. El capítulo de la ruta de 60 minutos reproduce esos mismos pasos, en el mismo orden.
 
 
-Para estudiar después utiliza Taller\_imagenes\_medicas.ipynb: 24 lecciones con explicaciones de cada línea. Los tutoriales de este libro corresponden a ese cuaderno completo. Su numeración es distinta de C1–C8; no hay que completar las 24 lecciones durante la sesión.
+Para estudiar después utiliza Taller\_imagenes\_medicas.ipynb: 24 lecciones con explicaciones de cada línea. Los tutoriales de ampliación corresponden a ese cuaderno completo. Sus lecciones 1–24 son distintas de los pasos 1A–8B; no hay que completarlas durante la sesión.
 
 
 \end{Idea}
@@ -47,9 +47,9 @@ Para estudiar después utiliza Taller\_imagenes\_medicas.ipynb: 24 lecciones con
 
 \textbf{Antes:} observa el capítulo 1 (p.\,\pageref{cap:referencia}) y consulta el vocabulario de Python y los archivos del capítulo 2 (p.\,\pageref{cap:herramientas}). Basta reconocer qué es un vóxel, un índice y una función; no hace falta memorizar las instrucciones.\par
 
-\textbf{Durante:} sigue la ruta de ocho bloques del anexo B (p.\,\pageref{anexo:cuadernos}). Cambia una sola cosa, relaciona la línea modificada con la figura y restaura el valor inicial antes de seguir. Si una operación usa un resultado anterior, vuelve a ejecutar esa preparación.\par
+\textbf{Durante:} sigue los 28 pasos de la ruta de 60 minutos (p.\,\pageref{cap:envivo}); el anexo B ofrece el mapa de consulta (p.\,\pageref{anexo:cuadernos}). Cambia una sola cosa, relaciona la línea modificada con la figura y restaura el valor inicial antes de seguir. Si una operación usa un resultado anterior, vuelve a ejecutar esa preparación.\par
 
-\textbf{Después:} recorre los capítulos 3 a 8, desde píxeles y cortes (p.\,\pageref{cap:cortes}) hasta la conexión con ML (p.\,\pageref{cap:ml}), con el cuaderno completo. Distribuye las 24 lecciones en varias sesiones y explica cada resultado con tus propias palabras.\par
+\textbf{Después:} recorre los capítulos \ref{cap:cortes} a \ref{cap:ml}, desde píxeles y cortes (p.\,\pageref{cap:cortes}) hasta la conexión con ML (p.\,\pageref{cap:ml}), con el cuaderno completo. Distribuye las 24 lecciones en varias sesiones y explica cada resultado con tus propias palabras.\par
 
 La referencia utilizada es una plantilla cerebral pública. Los dibujos didácticos, regiones ficticias, matrices pequeñas y ruido simulado están identificados como tales. La portada es una ilustración conceptual generada con IA; las figuras científicas del interior se calculan a partir de datos o modelos matemáticos documentados.
 
@@ -57,7 +57,7 @@ La referencia utilizada es una plantilla cerebral pública. Los dibujos didácti
 El libro reproduce las celdas completas de cálculo y dibujo seleccionadas, con sus salidas textuales. Las ilustraciones se han maquetado para la lectura impresa: algunas amplían el ejemplo mediante diagramas, otros cortes o comparaciones adicionales. El pie identifica qué se está representando; la presentación puede diferir de la salida gráfica del cuaderno.
 
 
-\Fuente{Edición revisada: 25 de noviembre de 2026. Material de iniciación; las operaciones mostradas no constituyen una evaluación diagnóstica. Fuentes, licencias y procedencia al final del manual y en el repositorio.}
+\Fuente{Edición revisada: 26 de noviembre de 2026. Material de iniciación; las operaciones mostradas no constituyen una evaluación diagnóstica. Fuentes, licencias y procedencia al final del manual y en el repositorio.}
 
 \href{https://github.com/FisikMedik/taller-imagenes-medicas-python}{Repositorio y materiales actualizados · FisikMedik en GitHub}
 
@@ -467,7 +467,923 @@ Respuesta. Hemos identificado el archivo, convertido sus intensidades en un arre
 
 \end{Practica}
 
-\chapter[Píxeles y cortes]{De los números a los cortes}
+\chapter[Ruta de 60 minutos]{La ruta del taller, paso a paso}
+
+\label{cap:envivo}
+
+\begin{Idea}{La misma numeración en los tres lugares}
+
+Esta ruta sigue los ocho bloques y los 28 pasos de código del cuaderno en vivo. Busca, por ejemplo, \textbf{6C}: ese identificador designa el mismo filtro gaussiano en el manual, la presentación interactiva y Colab. Los números de capítulo, página, diapositiva o ejecución cumplen funciones distintas. Para alternar, utiliza siempre el identificador del paso.
+
+\end{Idea}
+
+Lee primero la explicación breve, observa el código y comprueba su salida guardada. Los enlaces abren la celda o diapositiva correspondiente; no ejecutan las preparaciones por ti. En una sesión nueva ejecuta desde 1A. Los pasos 1A–1E se preparan antes de comenzar la hora; 1F–1G reproducen la galería de tres planos.
+
+Las salidas proceden de la ejecución local guardada en el cuaderno. La carga en Colab puede informar otra procedencia o versiones instaladas. Comprueba la geometría en 1D y conserva los resultados de tu propia ejecución. Las figuras de esta ruta son las salidas exactas del cuaderno; las ilustraciones de ampliación se encuentran después.
+
+\begin{longtable}{@{}p{.13\linewidth}p{.42\linewidth}p{.17\linewidth}p{.19\linewidth}@{}}\toprule\textbf{Minutos}&\textbf{Bloque}&\textbf{Pasos}&\textbf{Presentación}\\\midrule\endhead
+
+0–10&1 · Plantilla y planos&1A–1G&Diap. 3–6\\\addlinespace[4pt]
+
+10–20&2 · Corte y contraste&2A–2C&Diap. 7\\\addlinespace[4pt]
+
+20–27&3 · Histograma y fondo&3A–3B&Diap. 8\\\addlinespace[4pt]
+
+27–35&4 · Percentil y máscara&4A–4C&Diap. 9\\\addlinespace[4pt]
+
+35–43&5 · Curva y región&5A–5B&Diap. 10\\\addlinespace[4pt]
+
+43–50&6 · Filtros&6A–6E&Diap. 11\\\addlinespace[4pt]
+
+50–55&7 · Sobel&7A–7D&Diap. 12\\\addlinespace[4pt]
+
+55–60&8 · Recorrido y preguntas&8A–8B&Diap. 13–16\\\addlinespace[4pt]
+
+\bottomrule\end{longtable}
+
+\Fuente{En ediciones anteriores, C1–C8 designaban los ocho bloques. Aquí los verás como Bloque 1–8; los identificadores de las celdas siguen siendo 1A, 1B, etc.}
+
+\clearpage
+
+\section*{Bloque 1 · Primero miremos: una plantilla, tres planos}
+
+\addcontentsline{toc}{section}{Bloque 1 · Plantilla y planos}
+
+\label{vivo:bloque1}
+
+\Fuente{0–10 minutos · Presentación, diapositivas 3–6 · Desarrollo conceptual: p.\,\pageref{cap:referencia}.}
+
+\textbf{0–10 minutos · Demostración guiada.} Los pasos 1A–1E preparan la sesión; 1F–1G dibujan las tres imágenes. Son distintas secciones del mismo volumen de referencia.
+
+Una imagen 2D es una tabla de valores; un volumen añade una tercera dirección. Su elemento se llama \textbf{vóxel}. Los índices indican posiciones en la tabla; la información geométrica permite expresarlas en milímetros. Aquí los centros vecinos están separados por \textbf{2 mm}. La orientación y el espaciado se comprueban antes de dibujar: estas simplificaciones pertenecen a la plantilla de esta práctica.
+
+\needspace{8\baselineskip}
+
+\subsection*{1A · Preparar las bibliotecas}
+
+\phantomsection\label{vivo:1a}
+
+Este paso solicita la instalación de las bibliotecas ausentes. El instalador puede ajustar dependencias para satisfacer sus requisitos; en 1G registraremos las versiones utilizadas.
+
+\Fuente{\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Taller_en_vivo_60min.ipynb\#scrollTo=codigo-1a}{Abrir 1A en Colab} · \href{https://fisikmedik.github.io/taller-imagenes-medicas-python/presentacion.html\#3}{Ir a la diapositiva 3}}
+
+\begin{Codigo}{1A · Código exacto del cuaderno}
+import sys, subprocess, importlib.util
+from pathlib import Path
+from importlib.metadata import version
+ruta = Path("datos/mni152_2mm.nii.gz")
+requisitos = {"numpy": "numpy>=1.22.4,<3", "matplotlib": "matplotlib>=3.8,<4", "nibabel": "nibabel>=5.2,<6", "scipy": "scipy>=1.8,<2"}
+if not ruta.exists():
+    requisitos["nilearn"] = "nilearn==0.12.1"
+faltantes = [paquete for modulo, paquete in requisitos.items() if importlib.util.find_spec(modulo) is None]
+if faltantes:
+    instalacion = subprocess.run([sys.executable, "-m", "pip", "install", "-q", *faltantes], capture_output=True, text=True)
+    if instalacion.returncode != 0:
+        raise RuntimeError("No terminó la preparación. Revisa la conexión y consulta al facilitador. " + instalacion.stderr[-1200:])
+print("Preparación terminada. Continúa con 1B.")
+\end{Codigo}
+
+
+\begin{Salida}{1A · Salida guardada}
+Preparación terminada. Continúa con 1B.
+\end{Salida}
+
+
+\needspace{8\baselineskip}
+
+\subsection*{1B · Importar las herramientas}
+
+\phantomsection\label{vivo:1b}
+
+Cargamos las bibliotecas y les damos nombres breves. np calculará con matrices; plt dibujará; nib leerá el archivo y ndimage aplicará filtros.
+
+\Fuente{\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Taller_en_vivo_60min.ipynb\#scrollTo=codigo-1b}{Abrir 1B en Colab} · \href{https://fisikmedik.github.io/taller-imagenes-medicas-python/presentacion.html\#3}{Ir a la diapositiva 3}}
+
+\begin{Codigo}{1B · Código exacto del cuaderno}
+import numpy as np
+import matplotlib.pyplot as plt
+import nibabel as nib
+from scipy import ndimage
+print("Herramientas disponibles: np, plt, nib y ndimage.")
+\end{Codigo}
+
+
+\begin{Salida}{1B · Salida guardada}
+Herramientas disponibles: np, plt, nib y ndimage.
+\end{Salida}
+
+
+\needspace{8\baselineskip}
+
+\subsection*{1C · Abrir la plantilla}
+
+\phantomsection\label{vivo:1c}
+
+Primero buscamos la copia pública incluida en el proyecto. Si no está —como suele ocurrir al abrir solo el notebook en Colab— usamos la plantilla distribuida por Nilearn.
+
+\Fuente{\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Taller_en_vivo_60min.ipynb\#scrollTo=codigo-1c}{Abrir 1C en Colab} · \href{https://fisikmedik.github.io/taller-imagenes-medicas-python/presentacion.html\#4}{Ir a la diapositiva 4}}
+
+\begin{Codigo}{1C · Código exacto del cuaderno}
+if ruta.exists():
+    imagen = nib.load(ruta)
+    fuente = "Copia pública local: datos/mni152_2mm.nii.gz"
+else:
+    from nilearn.datasets import load_mni152_template
+    imagen = load_mni152_template(resolution=2)
+    fuente = "Plantilla distribuida por Nilearn " + version("nilearn")
+print(fuente)
+\end{Codigo}
+
+
+\begin{Salida}{1C · Salida guardada}
+Copia pública local: datos/mni152_2mm.nii.gz
+\end{Salida}
+
+
+\needspace{8\baselineskip}
+
+\subsection*{1D · Comprobar los datos y la geometría}
+
+\phantomsection\label{vivo:1d}
+
+Antes de dibujar, verificamos tamaño, orientación, espaciado y rango. assert detiene el trabajo si una condición no se cumple; no convierte automáticamente cualquier archivo en una entrada apropiada.
+
+\Fuente{\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Taller_en_vivo_60min.ipynb\#scrollTo=codigo-1d}{Abrir 1D en Colab} · \href{https://fisikmedik.github.io/taller-imagenes-medicas-python/presentacion.html\#5}{Ir a la diapositiva 5}}
+
+\begin{Codigo}{1D · Código exacto del cuaderno}
+imagen = nib.as_closest_canonical(imagen)
+datos = imagen.get_fdata(dtype=np.float32)
+pasos = np.array(imagen.header.get_zooms()[:3])
+afin = imagen.affine
+assert datos.shape == (99, 117, 95) and np.allclose(pasos, [2, 2, 2]), "La entrada no coincide con la plantilla docente de 2 mm."
+assert nib.aff2axcodes(afin) == ("R", "A", "S") and np.allclose(afin[:3, :3], np.diag(pasos)), "Revisa la orientación de la entrada."
+assert np.isfinite(datos).all() and datos.min() >= 0 and datos.max() <= 1, "Revisa el rango de la plantilla."
+print("Volumen:", datos.shape, "· separación entre centros:", pasos, "mm · orientación RAS+")
+\end{Codigo}
+
+
+\begin{Salida}{1D · Salida guardada}
+Volumen: (99, 117, 95) · separación entre centros: [2. 2. 2.] mm · orientación RAS+
+\end{Salida}
+
+
+\needspace{8\baselineskip}
+
+\subsection*{1E · Relacionar índices y milímetros}
+
+\phantomsection\label{vivo:1e}
+
+Construimos las coordenadas físicas de los centros. extension marca los bordes exteriores del dibujo; no añade datos nuevos.
+
+\Fuente{\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Taller_en_vivo_60min.ipynb\#scrollTo=codigo-1e}{Abrir 1E en Colab} · \href{https://fisikmedik.github.io/taller-imagenes-medicas-python/presentacion.html\#5}{Ir a la diapositiva 5}}
+
+\begin{Codigo}{1E · Código exacto del cuaderno}
+x, y, z = [afin[eje, 3] + pasos[eje] * np.arange(datos.shape[eje]) for eje in range(3)]
+extension = [x[0]-1, x[-1]+1, y[0]-1, y[-1]+1]
+print(f"El plano de índice 46 está en z={z[46]:.0f} mm; el de índice 56, en z={z[56]:.0f} mm.")
+\end{Codigo}
+
+
+\begin{Salida}{1E · Salida guardada}
+El plano de índice 46 está en z=20 mm; el de índice 56, en z=40 mm.
+\end{Salida}
+
+
+\needspace{8\baselineskip}
+
+\subsection*{1F · Preparar los tres planos}
+
+\phantomsection\label{vivo:1f}
+
+Seleccionamos una sección axial, una coronal y una sagital. .T intercambia filas y columnas para que el dibujo coincida con los ejes indicados.
+
+\Fuente{\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Taller_en_vivo_60min.ipynb\#scrollTo=codigo-1f}{Abrir 1F en Colab} · \href{https://fisikmedik.github.io/taller-imagenes-medicas-python/presentacion.html\#6}{Ir a la diapositiva 6}}
+
+\begin{Codigo}{1F · Código exacto del cuaderno}
+cortes = [datos[:, :, 46].T, datos[:, 57, :].T, datos[49, :, :].T]
+extensiones = [extension, [x[0]-1, x[-1]+1, z[0]-1, z[-1]+1], [y[0]-1, y[-1]+1, z[0]-1, z[-1]+1]]
+titulos = [f"Axial · z={z[46]:.0f} mm", f"Coronal · y={y[57]:.0f} mm", f"Sagital · x={x[49]:.0f} mm"]
+ejes = [("x mm · L → R", "y mm · P → A"), ("x mm · L → R", "z mm · I → S"), ("y mm · P → A", "z mm · I → S")]
+print("Planos preparados:", " | ".join(titulos))
+\end{Codigo}
+
+
+\begin{Salida}{1F · Salida guardada}
+Planos preparados: Axial · z=20 mm | Coronal · y=-20 mm | Sagital · x=0 mm
+\end{Salida}
+
+
+\needspace{7\baselineskip}\begin{Practica}{Variación opcional y pasos que debes repetir}
+
+Si una comprobación de 1D falla, detente y revisa la entrada. Si reinicias la sesión, ejecuta 1A–1G y continúa en orden. No hace falta reinstalar nada cuando 1A ya terminó bien.
+
+\end{Practica}
+
+\needspace{8\baselineskip}
+
+\subsection*{1G · Mostrar las imágenes}
+
+\phantomsection\label{vivo:1g}
+
+Esta celda dibuja los tres planos completos con la misma escala. Después informa de la procedencia y las versiones; esos mensajes permiten documentar la ejecución.
+
+\Fuente{\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Taller_en_vivo_60min.ipynb\#scrollTo=codigo-1g}{Abrir 1G en Colab} · \href{https://fisikmedik.github.io/taller-imagenes-medicas-python/presentacion.html\#6}{Ir a la diapositiva 6}}
+
+\begin{Codigo}{1G · Código exacto del cuaderno}
+fig, ax = plt.subplots(1, 3, figsize=(12, 4.4), layout="constrained")
+for panel, matriz, limites, titulo, etiquetas in zip(ax, cortes, extensiones, titulos, ejes):
+    panel.imshow(matriz, cmap="gray", origin="lower", extent=limites, vmin=0, vmax=1)
+    panel.set(title=titulo, xlabel=etiquetas[0], ylabel=etiquetas[1])
+plt.show()
+print(f"{fuente}\nVolumen: {datos.shape} · espaciado: {pasos} mm · Python {sys.version.split()[0]}")
+print("Versiones: " + ", ".join(f"{nombre} {version(nombre)}" for nombre in requisitos))
+\end{Codigo}
+
+
+\Figura{vivo_1g.png}{1G · Mostrar las imágenes. Salida guardada exacta del cuaderno en vivo.}{.38}
+
+\begin{Salida}{1G · Salida guardada}
+Copia pública local: datos/mni152_2mm.nii.gz
+Volumen: (99, 117, 95) · espaciado: [2. 2. 2.] mm · Python 3.12.14
+Versiones: numpy 2.5.4, matplotlib 3.11.2, nibabel 5.4.2, scipy 1.18.1
+\end{Salida}
+
+
+\clearpage
+
+\section*{Bloque 2 · Mover un corte y cambiar su contraste}
+
+\addcontentsline{toc}{section}{Bloque 2 · Corte y contraste}
+
+\label{vivo:bloque2}
+
+\Fuente{10–20 minutos · Presentación, diapositivas 7 · Desarrollo conceptual: p.\,\pageref{cap:cortes}.}
+
+\textbf{10–20 minutos · Primera práctica.} Requiere el bloque 1. Elige un plano axial mediante \texttt{k} y una ventana de visualización con dos extremos. Cambiar \texttt{k} elige otra sección; cambiar la ventana modifica cómo vemos los números del corte.
+
+Un valor bajo se ve oscuro y uno alto, claro. En esta RM los números son intensidades relativas de una plantilla procesada, no probabilidades de enfermedad. Los extremos de la ventana no son instrucciones para borrar o modificar datos.
+
+\needspace{8\baselineskip}
+
+\subsection*{2A · Elegir y extraer un corte}
+
+\phantomsection\label{vivo:2a}
+
+k es un índice: una posición dentro del volumen. Cambiarlo selecciona otro plano de la misma plantilla.
+
+\Fuente{\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Taller_en_vivo_60min.ipynb\#scrollTo=codigo-2a}{Abrir 2A en Colab} · \href{https://fisikmedik.github.io/taller-imagenes-medicas-python/presentacion.html\#7}{Ir a la diapositiva 7}}
+
+\begin{Codigo}{2A · Código exacto del cuaderno}
+k = 46
+assert 0 <= k < datos.shape[2], "El índice está fuera del volumen."
+corte = datos[:, :, k].T.copy()
+print(f"Corte k={k} · z={z[k]:.0f} mm · forma {corte.shape}")
+\end{Codigo}
+
+
+\begin{Salida}{2A · Salida guardada}
+Corte k=46 · z=20 mm · forma (117, 99)
+\end{Salida}
+
+
+\needspace{8\baselineskip}
+
+\subsection*{2B · Elegir la ventana de grises}
+
+\phantomsection\label{vivo:2b}
+
+La ventana tiene dos extremos: negro desde el primero y blanco desde el segundo. Los valores intermedios se reparten entre tonos de gris.
+
+\Fuente{\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Taller_en_vivo_60min.ipynb\#scrollTo=codigo-2b}{Abrir 2B en Colab} · \href{https://fisikmedik.github.io/taller-imagenes-medicas-python/presentacion.html\#7}{Ir a la diapositiva 7}}
+
+\begin{Codigo}{2B · Código exacto del cuaderno}
+ventana = (0.35, 0.90)
+assert ventana[0] < ventana[1], "El primer extremo debe ser menor que el segundo."
+print("Negro desde", ventana[0], "· blanco desde", ventana[1])
+\end{Codigo}
+
+
+\begin{Salida}{2B · Salida guardada}
+Negro desde 0.35 · blanco desde 0.9
+\end{Salida}
+
+
+\needspace{7\baselineskip}\begin{Practica}{Variación opcional y pasos que debes repetir}
+
+Para cambiar k, edita \textbf{2A} y ejecuta \textbf{2A–2C}. Para cambiar solo ventana, edita \textbf{2B} y ejecuta \textbf{2B–2C}. Al terminar, restaura k=46 y ventana=(0.35, 0.90), y ejecuta 2A–2C. Si quieres conservar otro corte, vuelve a ejecutar también los bloques 3–7: usan ese corte.
+
+\end{Practica}
+
+\needspace{8\baselineskip}
+
+\subsection*{2C · Comparar y comprobar}
+
+\phantomsection\label{vivo:2c}
+
+Dibujamos el mismo corte con dos ventanas y comprobamos que sus valores siguen intactos. La figura se crea completa en esta celda.
+
+\Fuente{\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Taller_en_vivo_60min.ipynb\#scrollTo=codigo-2c}{Abrir 2C en Colab} · \href{https://fisikmedik.github.io/taller-imagenes-medicas-python/presentacion.html\#7}{Ir a la diapositiva 7}}
+
+\begin{Codigo}{2C · Código exacto del cuaderno}
+fig, ax = plt.subplots(1, 2, figsize=(10, 4.8), layout="constrained")
+for panel, limites in zip(ax, [(0, 1), ventana]):
+    panel.imshow(corte, cmap="gray", origin="lower", extent=extension, vmin=limites[0], vmax=limites[1])
+    panel.set(title=f"k={k}, z={z[k]:.0f} mm · ventana {limites}", xlabel="x mm · L → R", ylabel="y mm · P → A")
+plt.show()
+print("¿La matriz conserva sus valores?", np.array_equal(corte, datos[:, :, k].T))
+\end{Codigo}
+
+
+\Figura{vivo_2c.png}{2C · Comparar y comprobar. Salida guardada exacta del cuaderno en vivo.}{.38}
+
+\begin{Salida}{2C · Salida guardada}
+¿La matriz conserva sus valores? True
+\end{Salida}
+
+
+\clearpage
+
+\section*{Bloque 3 · Contar intensidades: el histograma y el fondo}
+
+\addcontentsline{toc}{section}{Bloque 3 · Histograma y fondo}
+
+\label{vivo:bloque3}
+
+\Fuente{20–27 minutos · Presentación, diapositivas 8 · Desarrollo conceptual: p.\,\pageref{cap:histogramas}.}
+
+\textbf{20–27 minutos · Demostración con predicción.} Requiere los bloques 1–2. El eje horizontal del histograma muestra intensidades; el vertical, cuántos píxeles caen en cada intervalo. El histograma pierde información de ubicación: imágenes con los mismos valores en distinto orden pueden compartirlo.
+
+Comparamos el corte completo con un \textbf{soporte} definido por valores mayores que una millonésima. Es una regla práctica para excluir el fondo casi nulo de esta plantilla; no una segmentación cerebral validada.
+
+\needspace{8\baselineskip}
+
+\subsection*{3A · Elegir qué valores contar}
+
+\phantomsection\label{vivo:3a}
+
+El soporte es una máscara que excluye el fondo casi nulo. valores reúne las intensidades seleccionadas; bins indica cuántos intervalos tendrá el histograma.
+
+\Fuente{\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Taller_en_vivo_60min.ipynb\#scrollTo=codigo-3a}{Abrir 3A en Colab} · \href{https://fisikmedik.github.io/taller-imagenes-medicas-python/presentacion.html\#8}{Ir a la diapositiva 8}}
+
+\begin{Codigo}{3A · Código exacto del cuaderno}
+bins = 20
+soporte = corte > 1e-6
+valores = corte[soporte]
+print(f"Total: {corte.size} · soporte: {valores.size} · excluidos: {corte.size-valores.size}")
+\end{Codigo}
+
+
+\begin{Salida}{3A · Salida guardada}
+Total: 11583 · soporte: 4859 · excluidos: 6724
+\end{Salida}
+
+
+\needspace{7\baselineskip}\begin{Practica}{Variación opcional y pasos que debes repetir}
+
+Para probar bins=80, edita \textbf{3A} y ejecuta \textbf{3A–3B}. Después restaura bins=20 y repite ambos pasos. Agrupar en más intervalos no crea píxeles.
+
+\end{Practica}
+
+\needspace{8\baselineskip}
+
+\subsection*{3B · Dibujar los histogramas}
+
+\phantomsection\label{vivo:3b}
+
+Comparamos todos los valores del corte con los del soporte. Lee los números del eje vertical: las escalas de los dos paneles se ajustan por separado.
+
+\Fuente{\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Taller_en_vivo_60min.ipynb\#scrollTo=codigo-3b}{Abrir 3B en Colab} · \href{https://fisikmedik.github.io/taller-imagenes-medicas-python/presentacion.html\#8}{Ir a la diapositiva 8}}
+
+\begin{Codigo}{3B · Código exacto del cuaderno}
+fig, ax = plt.subplots(1, 2, figsize=(10, 4), layout="constrained")
+for panel, muestra, nombre in zip(ax, [corte.ravel(), valores], ["Todo el corte", "Solo soporte > 1e-6"]):
+    panel.hist(muestra, bins=bins, range=(0, 1), color="#007f89", edgecolor="white")
+    panel.set(title=f"{nombre} · {muestra.size} píxeles", xlabel="Intensidad relativa", ylabel="Cantidad de píxeles")
+plt.show()
+print(f"Total: {corte.size} · soporte: {valores.size} · excluidos: {corte.size-valores.size}")
+\end{Codigo}
+
+
+\Figura{vivo_3b.png}{3B · Dibujar los histogramas. Salida guardada exacta del cuaderno en vivo.}{.38}
+
+\begin{Salida}{3B · Salida guardada}
+Total: 11583 · soporte: 4859 · excluidos: 6724
+\end{Salida}
+
+
+\clearpage
+
+\section*{Bloque 4 · Elegir un percentil y ver su máscara}
+
+\addcontentsline{toc}{section}{Bloque 4 · Percentil y máscara}
+
+\label{vivo:bloque4}
+
+\Fuente{27–35 minutos · Presentación, diapositivas 9 · Desarrollo conceptual: p.\,\pageref{cap:histogramas}.}
+
+\textbf{27–35 minutos · Segunda práctica.} Requiere los bloques 1–3. Un percentil es una posición en la lista ordenada de intensidades. El percentil 90 calcula un valor de corte; no significa automáticamente intensidad 0.90.
+
+Una \textbf{máscara} guarda verdadero o falso en cada posición. Aquí selecciona píxeles del soporte cuya intensidad alcanza o supera el umbral. Es una regla numérica, sin etiqueta clínica.
+
+\needspace{7\baselineskip}\begin{Practica}{Variación opcional y pasos que debes repetir}
+
+Para probar percentil=75, edita \textbf{4A} y ejecuta \textbf{4A–4C}. Al terminar, restaura percentil=90 y repite los tres pasos. Ejecutar solo el dibujo reutiliza la máscara anterior.
+
+\end{Practica}
+
+\needspace{8\baselineskip}
+
+\subsection*{4A · Calcular el umbral}
+
+\phantomsection\label{vivo:4a}
+
+El percentil indica una posición en la distribución. La salida es una intensidad calculada a partir de valores; percentil 90 no significa intensidad 0.90.
+
+\Fuente{\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Taller_en_vivo_60min.ipynb\#scrollTo=codigo-4a}{Abrir 4A en Colab} · \href{https://fisikmedik.github.io/taller-imagenes-medicas-python/presentacion.html\#9}{Ir a la diapositiva 9}}
+
+\begin{Codigo}{4A · Código exacto del cuaderno}
+percentil = 90
+assert 0 <= percentil <= 100
+umbral = np.percentile(valores, percentil)
+print(f"p{percentil} → intensidad umbral {umbral:.6f}")
+\end{Codigo}
+
+
+\begin{Salida}{4A · Salida guardada}
+p90 → intensidad umbral 0.878431
+\end{Salida}
+
+
+\needspace{8\baselineskip}
+
+\subsection*{4B · Construir la máscara}
+
+\phantomsection\label{vivo:4b}
+
+\& exige que se cumplan ambas condiciones: pertenecer al soporte y alcanzar el umbral. True cuenta como uno al sumar la máscara.
+
+\Fuente{\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Taller_en_vivo_60min.ipynb\#scrollTo=codigo-4b}{Abrir 4B en Colab} · \href{https://fisikmedik.github.io/taller-imagenes-medicas-python/presentacion.html\#9}{Ir a la diapositiva 9}}
+
+\begin{Codigo}{4B · Código exacto del cuaderno}
+mascara = soporte & (corte >= umbral)
+porcentaje = 100 * mascara.sum() / valores.size
+print(f"Seleccionados: {mascara.sum()} / {valores.size} = {porcentaje:.2f}% del soporte")
+\end{Codigo}
+
+
+\begin{Salida}{4B · Salida guardada}
+Seleccionados: 523 / 4859 = 10.76% del soporte
+\end{Salida}
+
+
+\needspace{8\baselineskip}
+
+\subsection*{4C · Ver la regla y su resultado}
+
+\phantomsection\label{vivo:4c}
+
+La línea vertical señala el umbral en el histograma. La imagen de la derecha localiza las posiciones seleccionadas, en blanco.
+
+\Fuente{\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Taller_en_vivo_60min.ipynb\#scrollTo=codigo-4c}{Abrir 4C en Colab} · \href{https://fisikmedik.github.io/taller-imagenes-medicas-python/presentacion.html\#9}{Ir a la diapositiva 9}}
+
+\begin{Codigo}{4C · Código exacto del cuaderno}
+fig, ax = plt.subplots(1, 2, figsize=(10, 4.5), layout="constrained")
+ax[0].hist(valores, bins=40, range=(0, 1), color="#007f89", edgecolor="white")
+ax[0].axvline(umbral, color="#e9654b", label=f"p{percentil} = {umbral:.3f}")
+ax[0].legend()
+ax[0].set(xlabel="Intensidad relativa", ylabel="Cantidad de píxeles", title="Elegir una regla")
+ax[1].imshow(mascara, cmap="gray", origin="lower", extent=extension, vmin=0, vmax=1, interpolation="nearest")
+ax[1].set(title=f"Seleccionado: {porcentaje:.2f}% del soporte", xlabel="x mm · L → R", ylabel="y mm · P → A")
+plt.show()
+print(f"Umbral: {umbral:.6f} · seleccionados: {mascara.sum()} / {valores.size}")
+\end{Codigo}
+
+
+\Figura{vivo_4c.png}{4C · Ver la regla y su resultado. Salida guardada exacta del cuaderno en vivo.}{.38}
+
+\begin{Salida}{4C · Salida guardada}
+Umbral: 0.878431 · seleccionados: 523 / 4859
+\end{Salida}
+
+
+\clearpage
+
+\section*{Bloque 5 · Curvas sobre la plantilla: una línea no es una región}
+
+\addcontentsline{toc}{section}{Bloque 5 · Curva y región}
+
+\label{vivo:bloque5}
+
+\Fuente{35–43 minutos · Presentación, diapositivas 10 · Desarrollo conceptual: p.\,\pageref{cap:curvas}.}
+
+\textbf{35–43 minutos · Observación guiada y variación breve.} Requiere los bloques 1–3. La curva sigue posiciones de \textbf{igual intensidad}; la máscara selecciona posiciones con intensidad \textbf{mayor o igual}. Ambas usan aquí un nivel absoluto de 0.7, que no equivale al percentil 70.
+
+\texttt{contour} estima el cruce del nivel entre centros vecinos; no necesita pasar por el centro de un píxel. Usamos x/y en milímetros para alinear las curvas con la imagen. Una misma intensidad puede aparecer en varias regiones separadas y no constituye una frontera anatómica validada.
+
+\needspace{8\baselineskip}
+
+\subsection*{5A · Fijar un nivel y una región}
+
+\phantomsection\label{vivo:5a}
+
+Elegimos una intensidad absoluta. La región incluye posiciones mayores o iguales; la curva que dibujaremos después representa igualdad.
+
+\Fuente{\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Taller_en_vivo_60min.ipynb\#scrollTo=codigo-5a}{Abrir 5A en Colab} · \href{https://fisikmedik.github.io/taller-imagenes-medicas-python/presentacion.html\#10}{Ir a la diapositiva 10}}
+
+\begin{Codigo}{5A · Código exacto del cuaderno}
+nivel = 0.7
+region = soporte & (corte >= nivel)
+print(f"Nivel {nivel}: {region.sum()} posiciones de la región seleccionada")
+\end{Codigo}
+
+
+\begin{Salida}{5A · Salida guardada}
+Nivel 0.7: 2820 posiciones de la región seleccionada
+\end{Salida}
+
+
+\needspace{7\baselineskip}\begin{Practica}{Variación opcional y pasos que debes repetir}
+
+Para probar nivel=0.6, edita \textbf{5A} y ejecuta \textbf{5A–5B}. Al terminar, restaura nivel=0.7 y repite ambos pasos.
+
+\end{Practica}
+
+\needspace{8\baselineskip}
+
+\subsection*{5B · Comparar curva y máscara}
+
+\phantomsection\label{vivo:5b}
+
+Superponemos la curva al cerebro y mostramos la región a su lado. Ambas usan el mismo corte, las mismas coordenadas y el mismo nivel.
+
+\Fuente{\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Taller_en_vivo_60min.ipynb\#scrollTo=codigo-5b}{Abrir 5B en Colab} · \href{https://fisikmedik.github.io/taller-imagenes-medicas-python/presentacion.html\#10}{Ir a la diapositiva 10}}
+
+\begin{Codigo}{5B · Código exacto del cuaderno}
+fig, ax = plt.subplots(1, 2, figsize=(10, 4.8), layout="constrained")
+ax[0].imshow(corte, cmap="gray", origin="lower", extent=extension, vmin=0, vmax=1)
+lineas = ax[0].contour(x, y, corte, levels=[nivel], colors=["#efaa42"], linewidths=1.2)
+ax[0].clabel(lineas, fmt="%.1f", fontsize=8)
+ax[1].imshow(region, cmap="gray", origin="lower", extent=extension, vmin=0, vmax=1, interpolation="nearest")
+for panel, titulo in zip(ax, [f"Curva: intensidad = {nivel}", f"Máscara: intensidad ≥ {nivel}"]):
+    panel.set(title=titulo, xlabel="x mm · L → R", ylabel="y mm · P → A")
+plt.show()
+\end{Codigo}
+
+
+\Figura{vivo_5b.png}{5B · Comparar curva y máscara. Salida guardada exacta del cuaderno en vivo.}{.38}
+
+\clearpage
+
+\section*{Bloque 6 · Comparar filtros con la misma entrada}
+
+\addcontentsline{toc}{section}{Bloque 6 · Filtros}
+
+\label{vivo:bloque6}
+
+\Fuente{43–50 minutos · Presentación, diapositivas 11 · Desarrollo conceptual: p.\,\pageref{cap:filtros}.}
+
+\textbf{43–50 minutos · Tercera práctica.} Requiere los bloques 1–2. Añadimos ruido normal artificial con semilla fija y comparamos media, Gauss y mediana sobre la misma entrada. El modelo de ruido es didáctico; no reproduce todas las características del ruido de una resonancia real.
+
+La media promedia vecinos; Gauss da más peso a los cercanos; la mediana elige el valor central de una lista ordenada. Todos pueden reducir fluctuaciones y también modificar detalles reales. \texttt{sigma\_ruido} expresa variación de intensidad; \texttt{sigma\_pixeles} expresa anchura espacial del filtro. Son parámetros distintos.
+
+\needspace{8\baselineskip}
+
+\subsection*{6A · Crear una entrada con ruido}
+
+\phantomsection\label{vivo:6a}
+
+La semilla fija hace reproducible el ejemplo. Creamos el generador y el ruido en la misma celda: repetirla con los mismos parámetros produce la misma entrada.
+
+\Fuente{\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Taller_en_vivo_60min.ipynb\#scrollTo=codigo-6a}{Abrir 6A en Colab} · \href{https://fisikmedik.github.io/taller-imagenes-medicas-python/presentacion.html\#11}{Ir a la diapositiva 11}}
+
+\begin{Codigo}{6A · Código exacto del cuaderno}
+semilla = 2026
+sigma_ruido = 0.06
+sigma_pixeles = 1.2
+rng = np.random.default_rng(semilla)
+ruido = rng.normal(0, sigma_ruido, size=corte.shape).astype(np.float32)
+ruidosa = corte + ruido
+print(f"Ruido añadido: mínimo {ruidosa.min():.3f}, máximo {ruidosa.max():.3f}; corte original conservado.")
+\end{Codigo}
+
+
+\begin{Salida}{6A · Salida guardada}
+Ruido añadido: mínimo -0.239, máximo 1.110; corte original conservado.
+\end{Salida}
+
+
+\needspace{8\baselineskip}
+
+\subsection*{6B · Calcular la media}
+
+\phantomsection\label{vivo:6b}
+
+Cada salida promedia una vecindad de 3 × 3. reflect indica cómo prolongar los valores al tratar los límites de la matriz.
+
+\Fuente{\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Taller_en_vivo_60min.ipynb\#scrollTo=codigo-6b}{Abrir 6B en Colab} · \href{https://fisikmedik.github.io/taller-imagenes-medicas-python/presentacion.html\#11}{Ir a la diapositiva 11}}
+
+\begin{Codigo}{6B · Código exacto del cuaderno}
+media = ndimage.uniform_filter(ruidosa, size=3, mode="reflect")
+print("Media calculada:", media.shape)
+\end{Codigo}
+
+
+\begin{Salida}{6B · Salida guardada}
+Media calculada: (117, 99)
+\end{Salida}
+
+
+\needspace{8\baselineskip}
+
+\subsection*{6C · Calcular el filtro gaussiano}
+
+\phantomsection\label{vivo:6c}
+
+Gauss pondera los vecinos según su distancia. sigma\_pixeles controla la anchura espacial del filtro; no es sigma\_ruido.
+
+\Fuente{\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Taller_en_vivo_60min.ipynb\#scrollTo=codigo-6c}{Abrir 6C en Colab} · \href{https://fisikmedik.github.io/taller-imagenes-medicas-python/presentacion.html\#11}{Ir a la diapositiva 11}}
+
+\begin{Codigo}{6C · Código exacto del cuaderno}
+gauss = ndimage.gaussian_filter(ruidosa, sigma=sigma_pixeles, mode="reflect")
+print(f"Gauss calculado: sigma={sigma_pixeles} píxeles, {sigma_pixeles*pasos[0]:.1f} mm por eje")
+\end{Codigo}
+
+
+\begin{Salida}{6C · Salida guardada}
+Gauss calculado: sigma=1.2 píxeles, 2.4 mm por eje
+\end{Salida}
+
+
+\needspace{8\baselineskip}
+
+\subsection*{6D · Calcular la mediana}
+
+\phantomsection\label{vivo:6d}
+
+Ordena los nueve valores vecinos y elige el central. Utiliza exactamente la misma entrada ruidosa que los otros filtros.
+
+\Fuente{\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Taller_en_vivo_60min.ipynb\#scrollTo=codigo-6d}{Abrir 6D en Colab} · \href{https://fisikmedik.github.io/taller-imagenes-medicas-python/presentacion.html\#11}{Ir a la diapositiva 11}}
+
+\begin{Codigo}{6D · Código exacto del cuaderno}
+mediana = ndimage.median_filter(ruidosa, size=3, mode="reflect")
+print("Mediana calculada:", mediana.shape)
+\end{Codigo}
+
+
+\begin{Salida}{6D · Salida guardada}
+Mediana calculada: (117, 99)
+\end{Salida}
+
+
+\needspace{7\baselineskip}\begin{Practica}{Variación opcional y pasos que debes repetir}
+
+sigma\_pixeles se define en \textbf{6A}. Para probar 0.6 o 2.4, cambia solo ese parámetro y ejecuta \textbf{6A–6E}. La semilla y sigma\_ruido permanecen iguales. Antes de seguir al bloque 7, restaura sigma\_pixeles=1.2 y repite 6A–6E. Si repites un experimento de bordes tras cambiar el filtro, vuelve a ejecutar también 7A–7D.
+
+\end{Practica}
+
+\needspace{8\baselineskip}
+
+\subsection*{6E · Comparar las cuatro imágenes}
+
+\phantomsection\label{vivo:6e}
+
+Mostramos la entrada y las tres salidas con una ventana común de 0 a 1. Así, un mismo gris representa el mismo valor en los cuatro paneles.
+
+\Fuente{\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Taller_en_vivo_60min.ipynb\#scrollTo=codigo-6e}{Abrir 6E en Colab} · \href{https://fisikmedik.github.io/taller-imagenes-medicas-python/presentacion.html\#11}{Ir a la diapositiva 11}}
+
+\begin{Codigo}{6E · Código exacto del cuaderno}
+matrices = [ruidosa, media, gauss, mediana]
+titulos = ["Misma entrada con ruido", "Media 3 × 3", f"Gauss σ={sigma_pixeles} px", "Mediana 3 × 3"]
+fig, ax = plt.subplots(2, 2, figsize=(9, 9), layout="constrained")
+for panel, matriz, titulo in zip(ax.ravel(), matrices, titulos):
+    panel.imshow(matriz, cmap="gray", origin="lower", extent=extension, vmin=0, vmax=1)
+    panel.set(title=titulo, xlabel="x mm · L → R", ylabel="y mm · P → A")
+plt.show()
+print(f"Sigma Gauss: {sigma_pixeles * pasos[0]:.1f} mm por eje del plano; ruido: mínimo {ruidosa.min():.3f}, máximo {ruidosa.max():.3f}")
+\end{Codigo}
+
+
+\Figura{vivo_6e.png}{6E · Comparar las cuatro imágenes. Salida guardada exacta del cuaderno en vivo.}{.38}
+
+\begin{Salida}{6E · Salida guardada}
+Sigma Gauss: 2.4 mm por eje del plano; ruido: mínimo -0.239, máximo 1.110
+\end{Salida}
+
+
+\clearpage
+
+\section*{Bloque 7 · Sobel: medir cambios con una escala compartida}
+
+\addcontentsline{toc}{section}{Bloque 7 · Sobel}
+
+\label{vivo:bloque7}
+
+\Fuente{50–55 minutos · Presentación, diapositivas 12 · Desarrollo conceptual: p.\,\pageref{cap:bordes}.}
+
+\textbf{50–55 minutos · Demostración comparativa.} Requiere el bloque 6. Sobel calcula respuestas de cambio horizontal y vertical; combinamos ambas mediante una magnitud. Una zona brillante pero uniforme puede tener poca respuesta. El ruido también genera cambios.
+
+Comparamos la misma entrada antes y después de Gauss. Conservamos un máximo de color común y el mismo umbral absoluto. La barra muestra \textbf{respuesta Sobel}, no intensidad RM ni una derivada calibrada por milímetro.
+
+\needspace{8\baselineskip}
+
+\subsection*{7A · Medir cambios antes de suavizar}
+
+\phantomsection\label{vivo:7a}
+
+Sobel calcula cambios al recorrer columnas y filas. La raíz de la suma de cuadrados reúne ambas respuestas en una magnitud sin signo.
+
+\Fuente{\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Taller_en_vivo_60min.ipynb\#scrollTo=codigo-7a}{Abrir 7A en Colab} · \href{https://fisikmedik.github.io/taller-imagenes-medicas-python/presentacion.html\#12}{Ir a la diapositiva 12}}
+
+\begin{Codigo}{7A · Código exacto del cuaderno}
+dx = ndimage.sobel(ruidosa, axis=1, mode="reflect")
+dy = ndimage.sobel(ruidosa, axis=0, mode="reflect")
+gradiente = np.sqrt(dx**2 + dy**2)
+print("Magnitud antes de suavizar:", gradiente.shape)
+\end{Codigo}
+
+
+\begin{Salida}{7A · Salida guardada}
+Magnitud antes de suavizar: (117, 99)
+\end{Salida}
+
+
+\needspace{8\baselineskip}
+
+\subsection*{7B · Medir cambios después de Gauss}
+
+\phantomsection\label{vivo:7b}
+
+Repetimos las mismas operaciones sobre gauss. No cambiamos la orientación ni la forma de combinar las dos direcciones.
+
+\Fuente{\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Taller_en_vivo_60min.ipynb\#scrollTo=codigo-7b}{Abrir 7B en Colab} · \href{https://fisikmedik.github.io/taller-imagenes-medicas-python/presentacion.html\#12}{Ir a la diapositiva 12}}
+
+\begin{Codigo}{7B · Código exacto del cuaderno}
+dx_suave = ndimage.sobel(gauss, axis=1, mode="reflect")
+dy_suave = ndimage.sobel(gauss, axis=0, mode="reflect")
+gradiente_suave = np.sqrt(dx_suave**2 + dy_suave**2)
+print("Magnitud después de Gauss:", gradiente_suave.shape)
+\end{Codigo}
+
+
+\begin{Salida}{7B · Salida guardada}
+Magnitud después de Gauss: (117, 99)
+\end{Salida}
+
+
+\needspace{8\baselineskip}
+
+\subsection*{7C · Fijar una comparación común}
+
+\phantomsection\label{vivo:7c}
+
+Usamos el mismo máximo de color y el mismo umbral en las dos imágenes. Una normalización distinta para cada una impediría interpretar los colores de la misma manera.
+
+\Fuente{\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Taller_en_vivo_60min.ipynb\#scrollTo=codigo-7c}{Abrir 7C en Colab} · \href{https://fisikmedik.github.io/taller-imagenes-medicas-python/presentacion.html\#12}{Ir a la diapositiva 12}}
+
+\begin{Codigo}{7C · Código exacto del cuaderno}
+maximo_comun = max(float(gradiente.max()), float(gradiente_suave.max()), 1e-12)
+umbral_borde = 0.6
+mapas = [gradiente, gradiente_suave, gradiente >= umbral_borde, gradiente_suave >= umbral_borde]
+titulos = ["Sobel con ruido", f"Sobel tras Gauss σ={sigma_pixeles} px", f"Respuesta ≥ {umbral_borde} antes", f"Respuesta ≥ {umbral_borde} después"]
+print(f"Escala común: 0–{maximo_comun:.3f} · umbral de respuesta: {umbral_borde}")
+\end{Codigo}
+
+
+\begin{Salida}{7C · Salida guardada}
+Escala común: 0–3.647 · umbral de respuesta: 0.6
+\end{Salida}
+
+
+\needspace{7\baselineskip}\begin{Practica}{Variación opcional y pasos que debes repetir}
+
+Para probar umbral\_borde=0.8, edita \textbf{7C} y ejecuta \textbf{7C–7D}. No hace falta recalcular Sobel si las imágenes de entrada son las mismas. Restaura 0.6 y repite 7C–7D para conservar la referencia.
+
+\end{Practica}
+
+\needspace{8\baselineskip}
+
+\subsection*{7D · Ver magnitudes y selecciones}
+
+\phantomsection\label{vivo:7d}
+
+La fila superior muestra respuestas Sobel y la inferior, las máscaras que superan el umbral. Los conteos describen selecciones, no aciertos clínicos.
+
+\Fuente{\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Taller_en_vivo_60min.ipynb\#scrollTo=codigo-7d}{Abrir 7D en Colab} · \href{https://fisikmedik.github.io/taller-imagenes-medicas-python/presentacion.html\#12}{Ir a la diapositiva 12}}
+
+\begin{Codigo}{7D · Código exacto del cuaderno}
+fig, ax = plt.subplots(2, 2, figsize=(9, 9), layout="constrained")
+for indice, panel in enumerate(ax.ravel()):
+    panel.imshow(mapas[indice], cmap="magma" if indice < 2 else "gray", origin="lower", extent=extension, vmin=0, vmax=maximo_comun if indice < 2 else 1)
+    panel.set(title=titulos[indice], xlabel="x mm · L → R", ylabel="y mm · P → A")
+fig.colorbar(ax[0, 0].images[0], ax=ax[0, :], shrink=0.8, label="Respuesta Sobel · escala común")
+plt.show()
+print(f"Umbral {umbral_borde}: seleccionados antes/después = {(gradiente >= umbral_borde).sum()} / {(gradiente_suave >= umbral_borde).sum()}")
+\end{Codigo}
+
+
+\Figura{vivo_7d.png}{7D · Ver magnitudes y selecciones. Salida guardada exacta del cuaderno en vivo.}{.40}
+
+\begin{Salida}{7D · Salida guardada}
+Umbral 0.6: seleccionados antes/después = 2471 / 1495
+\end{Salida}
+
+
+\clearpage
+
+\section*{Bloque 8 · Explicar el recorrido y sus límites}
+
+\addcontentsline{toc}{section}{Bloque 8 · Recorrido y preguntas}
+
+\label{vivo:bloque8}
+
+\Fuente{55–60 minutos · Presentación, diapositivas 13–16 · Desarrollo conceptual: p.\,\pageref{cap:ml}.}
+
+\textbf{55–60 minutos · Evaluación de salida.} Requiere \texttt{plt} del bloque 1; interpreta el recorrido después de los bloques 2–7. Ejecuta 8A–8B para ver el mapa y responde las tres preguntas que aparecen debajo antes de leer sus soluciones.
+
+\needspace{8\baselineskip}
+
+\subsection*{8A · Recordar el recorrido}
+
+\phantomsection\label{vivo:8a}
+
+Las cinco frases resumen qué hicimos. Son etapas de trabajo, no un modelo entrenado.
+
+\Fuente{\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Taller_en_vivo_60min.ipynb\#scrollTo=codigo-8a}{Abrir 8A en Colab} · \href{https://fisikmedik.github.io/taller-imagenes-medicas-python/presentacion.html\#13}{Ir a la diapositiva 13}}
+
+\begin{Codigo}{8A · Código exacto del cuaderno}
+etapas = ["Datos públicos\ny geometría", "Mirar cortes\ny contraste", "Contar y\nseleccionar", "Comparar filtros\ny cambios", "Explicar límites\ny evaluar"]
+print(" → ".join(etapa.replace("\n", " ") for etapa in etapas))
+\end{Codigo}
+
+
+\begin{Salida}{8A · Salida guardada}
+Datos públicos y geometría → Mirar cortes y contraste → Contar y seleccionar → Comparar filtros y cambios → Explicar límites y evaluar
+\end{Salida}
+
+
+\needspace{7\baselineskip}\begin{Practica}{Variación opcional y pasos que debes repetir}
+
+Has recorrido los mismos ocho temas con pasos más pequeños. Para repetir todo desde cero, reinicia el entorno y ejecuta de arriba abajo; para experimentar, sigue el recorrido indicado en cada bloque.
+
+\end{Practica}
+
+\needspace{8\baselineskip}
+
+\subsection*{8B · Dibujar el mapa final}
+
+\phantomsection\label{vivo:8b}
+
+Cada tarjeta representa una etapa. Después responde las tres preguntas, una por una, antes de abrir sus soluciones.
+
+\Fuente{\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Taller_en_vivo_60min.ipynb\#scrollTo=codigo-8b}{Abrir 8B en Colab} · \href{https://fisikmedik.github.io/taller-imagenes-medicas-python/presentacion.html\#13}{Ir a la diapositiva 13}}
+
+\begin{Codigo}{8B · Código exacto del cuaderno}
+fig, ax = plt.subplots(figsize=(12, 2.4), layout="constrained")
+ax.set(xlim=(-0.6, 4.6), ylim=(-0.6, 0.6))
+ax.axis("off")
+for indice, texto in enumerate(etapas):
+    ax.text(indice, 0, texto, ha="center", va="center", fontsize=12, bbox={"boxstyle": "round,pad=0.6", "facecolor": "#e5f3f3", "edgecolor": "#007f89"})
+    if indice < len(etapas)-1:
+        ax.annotate("", xy=(indice+0.65, 0), xytext=(indice+0.35, 0), arrowprops={"arrowstyle": "->", "color": "#18354a"})
+plt.show()
+\end{Codigo}
+
+
+\Figura{vivo_8b.png}{8B · Dibujar el mapa final. Salida guardada exacta del cuaderno en vivo.}{.38}
+
+\clearpage
+
+\needspace{7\baselineskip}\begin{Practica}{Pregunta final 1}
+
+Al cambiar vmin y vmax, una región se ve más blanca. ¿Demuestra que sus valores aumentaron?
+
+\textbf{Respuesta.} \textbf{No.} Cambió la traducción visual. Compara las matrices para demostrar un cambio de valores.
+
+\end{Practica}
+
+\needspace{7\baselineskip}\begin{Practica}{Pregunta final 2}
+
+Una máscara selecciona intensidades altas. ¿Demuestra que ha localizado enfermedad?
+
+\textbf{Respuesta.} \textbf{No.} Solo muestra posiciones que cumplen una regla. El significado clínico requiere definición, referencia y validación.
+
+\end{Practica}
+
+\needspace{7\baselineskip}\begin{Practica}{Pregunta final 3}
+
+Una persona aporta 100 cortes. ¿Podemos repartir unos en entrenamiento y otros en prueba para evaluar generalización a personas nuevas?
+
+\textbf{Respuesta.} \textbf{No es una separación apropiada para esa pregunta.} Las imágenes de cada persona deben mantenerse juntas. Separar por paciente evita compartir sus características entre entrenamiento y prueba; también se necesitan etiquetas fiables y un diseño adecuado.
+
+\end{Practica}
+
+\needspace{7\baselineskip}\begin{Idea}{Después de la hora: profundizar sin cambiar de referencia}
+
+La ruta obligatoria termina aquí. Los capítulos siguientes conservan las 24 lecciones del cuaderno completo y amplían los conceptos con matrices pequeñas, cuentas a mano, diagramas y ruido de impulsos. Sus números son lecciones de ampliación, no los pasos 1A–8B que acabas de seguir. Consulta el anexo B para localizar cada tema en ambas rutas.
+
+\end{Idea}
+
+\chapter[Píxeles y cortes]{Ampliación: de los números a los cortes}
 
 \label{cap:cortes}
 
@@ -482,7 +1398,7 @@ Relacionarás una casilla con su tono, distinguirás filas y columnas y podrás 
 
 \section{De una tabla de números a una imagen: leer y cambiar un píxel}
 
-\Fuente{Tutorial 1 · Lecciones del cuaderno: 2, 3}
+\Fuente{Tutorial 1 · Ampliación: lecciones del cuaderno completo: 2, 3}
 
 Antes de reconocer un cerebro, conviene construir una imagen que podamos entender por completo. La matriz juguete tiene seis filas y seis columnas: contiene treinta y seis números. Cada casilla ocupará una posición en la pantalla y su valor decidirá el tono que veremos. Con la escala elegida, cero se representa en negro y cinco en blanco; los valores intermedios reciben grises intermedios. Píxel nombra ese elemento de una imagen bidimensional. No significa que el objeto real esté hecho de pequeños cuadrados: es la forma en que lo representamos mediante muestras.
 
@@ -619,7 +1535,7 @@ Respuesta. Selecciona la cuarta fila y la cuarta columna, porque los índices co
 
 \section{Del píxel al vóxel: localizar un corte en un volumen}
 
-\Fuente{Tutorial 2 · Lecciones del cuaderno: 4, 5, 6}
+\Fuente{Tutorial 2 · Ampliación: lecciones del cuaderno completo: 4, 5, 6}
 
 Una imagen tridimensional añade una tercera dirección a la tabla anterior. Podemos imaginar una pila ordenada de cortes, pero el archivo guarda una sola matriz con tres índices. Un vóxel representa un elemento de volumen. En la plantilla del taller hay 99 muestras en el primer eje, 117 en el segundo y 95 en el tercero. Esta forma describe cuántos elementos existen; todavía no informa cuánto espacio ocupa cada uno. Por eso necesitamos tanto la matriz como la información geométrica que acompaña al archivo.
 
@@ -818,7 +1734,7 @@ Separarás apariencia de datos. Construirás un histograma, interpretarás sus e
 
 \section{Contraste: cambiar la ventana por la que miramos los mismos datos}
 
-\Fuente{Tutorial 3 · Lecciones del cuaderno: 7}
+\Fuente{Tutorial 3 · Ampliación: lecciones del cuaderno completo: 7}
 
 Una matriz no viene acompañada de un único brillo obligatorio. Para verla necesitamos una regla que transforme números en colores. La ventana de visualización fija un extremo inferior y uno superior: en gris, el inferior aparece negro y el superior blanco. Los valores comprendidos entre ambos se reparten a lo largo de la escala. Elegir esta ventana es comparable a ajustar una regla de lectura. Puede hacer visibles pequeñas diferencias o esconderlas, aunque la matriz almacenada permanezca exactamente igual.
 
@@ -910,7 +1826,7 @@ Respuesta. No. Cambió la correspondencia entre intensidad y gris. Para demostra
 
 \section{Construir un histograma a mano y comprobarlo con Python}
 
-\Fuente{Tutorial 4 · Lecciones del cuaderno: 8}
+\Fuente{Tutorial 4 · Ampliación: lecciones del cuaderno completo: 8}
 
 Un histograma responde cuántos valores caen dentro de cada intervalo. Empecemos sin computadora: recorre la matriz pequeña, marca cada cero y cuenta veinte. Repite para los unos y los doses; hay seis de cada uno. Después aparecen dos treses, un cuatro y un cinco. La suma veinte más seis más seis más dos más uno más uno da treinta y seis, exactamente la cantidad de casillas. Esa igualdad es una comprobación sencilla de que no hemos olvidado ni contado dos veces un píxel.
 
@@ -1010,7 +1926,7 @@ Respuesta. Sí. El histograma cuenta valores, pero descarta sus posiciones. Reor
 
 \section{Histograma de la resonancia: decidir qué contamos y con cuántos intervalos}
 
-\Fuente{Tutorial 5 · Lecciones del cuaderno: 9, 10}
+\Fuente{Tutorial 5 · Ampliación: lecciones del cuaderno completo: 9, 10}
 
 El salto desde la matriz pequeña a la resonancia no cambia la pregunta: seguimos contando valores. Lo que cambia es el número de muestras y la variedad de intensidades. El corte axial tiene 117 filas y 99 columnas, es decir, 11 583 píxeles. Muchos pertenecen al fondo exterior de la plantilla. Si contamos toda la matriz, el gran grupo cercano a cero puede dominar el gráfico y comprimir visualmente las diferencias entre las intensidades del objeto que deseamos explorar.
 
@@ -1132,7 +2048,7 @@ Respuesta. No. La regla excluye intensidades casi nulas de esta plantilla, pero 
 
 \section{De un percentil a una máscara: convertir una regla en una selección visible}
 
-\Fuente{Tutorial 6 · Lecciones del cuaderno: 11}
+\Fuente{Tutorial 6 · Ampliación: lecciones del cuaderno completo: 11}
 
 Un percentil resume la posición de un valor dentro de una lista ordenada. Para entender el percentil noventa, imagina ordenar las intensidades del soporte desde la menor hasta la mayor y buscar un punto cercano al noventa por ciento de ese recorrido. El resultado es un valor de intensidad, llamado aquí umbral. El número noventa describe una posición porcentual; no afirma que el umbral sea 0.90. En esta plantilla el valor obtenido ronda 0.878431 porque depende de la distribución concreta que acabamos de contar.
 
@@ -1255,7 +2171,7 @@ Interpretarás una línea de igual intensidad, la compararás con una máscara y
 
 \section{Curvas de nivel: seguir una misma intensidad en una colina sencilla}
 
-\Fuente{Tutorial 7 · Lecciones del cuaderno: 12}
+\Fuente{Tutorial 7 · Ampliación: lecciones del cuaderno completo: 12}
 
 Una curva de nivel une posiciones donde una función tiene el mismo valor. Un mapa topográfico usa curvas de igual altura; en una imagen podemos usar curvas de igual intensidad. Para aprender la idea sin distracciones anatómicas, creamos una colina matemática: el centro tiene valor uno y los valores disminuyen suavemente al alejarnos. La dibujamos desde arriba con colores y elegimos cuatro niveles: 0.2, 0.4, 0.6 y 0.8. Cada línea seguirá uno de esos valores, aunque pase entre las muestras de la cuadrícula.
 
@@ -1349,7 +2265,7 @@ Respuesta. No. 0.8 indica intensidad, no rapidez de cambio. Una región clara pu
 
 \section{Curvas de nivel sobre la plantilla cerebral: líneas de igualdad y regiones por umbral}
 
-\Fuente{Tutorial 8 · Lecciones del cuaderno: 13, 14}
+\Fuente{Tutorial 8 · Ampliación: lecciones del cuaderno completo: 13, 14}
 
 Ahora aplicamos la misma operación al corte cerebral de la plantilla. El fondo gris muestra intensidades de la resonancia y encima dibujamos curvas correspondientes a 0.4, 0.6 y 0.8. La pregunta es idéntica a la de la colina: ¿por dónde pasan esos valores? Lo nuevo es la complejidad del campo de intensidades. Un mismo nivel puede aparecer en muchas regiones separadas; sus curvas pueden formar varios lazos separados o aproximarse a otras. Esta complejidad no modifica la definición matemática.
 
@@ -1494,7 +2410,7 @@ Calcularás una media y una mediana, interpretarás sigma y compararás filtros 
 
 \section{Crear ruido controlado para comparar operaciones con una entrada conocida}
 
-\Fuente{Tutorial 9 · Lecciones del cuaderno: 15}
+\Fuente{Tutorial 9 · Ampliación: lecciones del cuaderno completo: 15}
 
 Para estudiar un filtro necesitamos saber qué imagen recibió. En este experimento conservamos el corte original y creamos otra versión sumándole pequeñas variaciones aleatorias. De esta forma conocemos el punto de partida y podemos atribuir las diferencias a la perturbación añadida y al procesamiento posterior. El ruido hace visible una dificultad habitual: cambios locales que no pertenecen al patrón que deseamos observar. Aquí es una herramienta pedagógica controlada, no una reproducción exacta de cómo se genera el ruido en un equipo de resonancia.
 
@@ -1595,7 +2511,7 @@ Respuesta. La semilla permite que todos reciban la misma perturbación y que pod
 
 \section{Filtro de media: calcular una vecindad y comprender el desenfoque}
 
-\Fuente{Tutorial 10 · Lecciones del cuaderno: 23, 18}
+\Fuente{Tutorial 10 · Ampliación: lecciones del cuaderno completo: 23, 18}
 
 Un filtro local calcula un nuevo valor usando una vecindad alrededor de cada posición. En un filtro de media de tres por tres intervienen nueve números. Se suman y se divide entre nueve; el resultado sustituye al valor central en la imagen de salida. Después la ventana se desplaza y se repite el procedimiento. La entrada se conserva como referencia. Imaginar una pequeña ventana que recorre la matriz ayuda a entender cómo una regla sencilla puede transformar todos los píxeles de una imagen.
 
@@ -1730,7 +2646,7 @@ Respuesta. El punto participa en varias ventanas: sus vecinos bajos reducen la m
 
 \section{Filtro gaussiano: dar más peso a los vecinos cercanos}
 
-\Fuente{Tutorial 11 · Lecciones del cuaderno: 16}
+\Fuente{Tutorial 11 · Ampliación: lecciones del cuaderno completo: 16}
 
 El filtro gaussiano también combina valores vecinos, pero no concede el mismo peso a todos. Las posiciones más cercanas al centro influyen más y las más lejanas influyen menos, siguiendo una distribución con forma de campana. Esos pesos se normalizan para que una región constante permanezca constante. La idea puede entenderse sin derivar la fórmula: en lugar de repartir nueve votos idénticos, usamos un promedio ponderado cuya influencia disminuye suavemente con la distancia. El cálculo se repite a lo largo de la imagen.
 
@@ -1833,7 +2749,7 @@ Respuesta. No. Sigma 1.2 representa muestras: equivale a 1.2 mm con pasos de 1 m
 
 \section{Mediana y ruido de impulsos: ordenar antes de elegir}
 
-\Fuente{Tutorial 12 · Lecciones del cuaderno: 17, 24}
+\Fuente{Tutorial 12 · Ampliación: lecciones del cuaderno completo: 17, 24}
 
 La mediana se obtiene ordenando una lista y escogiendo su valor central. Para nueve números, elegimos el quinto después de ordenarlos. En la vecindad con ocho valores diez y un noventa, el quinto valor es diez. Esto explica por qué la mediana no reacciona al extremo igual que la media: no suma todas las intensidades para producir una fracción. Es una operación no lineal basada en el orden. Un valor muy alto puede cambiar de magnitud sin cambiar quién ocupa la posición central.
 
@@ -1992,7 +2908,7 @@ Relacionarás el cambio de intensidad con la pendiente de un perfil y reconocer�
 
 \section{Antes de Sobel: leer un perfil y medir diferencias entre vecinos}
 
-\Fuente{Tutorial 13 · Lecciones del cuaderno: 19}
+\Fuente{Tutorial 13 · Ampliación: lecciones del cuaderno completo: 19}
 
 Un perfil es una secuencia de intensidades a lo largo de una dirección. En lugar de observar toda la imagen de una vez, imaginamos recorrer una fila y anotar sus valores. Nuestro perfil artificial comienza con cinco ceros y continúa con cinco unos. El gráfico superior permite reconocer una zona constante baja, un salto y una zona constante alta. La pregunta ahora no es qué parte tiene mayor intensidad, sino entre qué vecinos cambia el valor. Esta diferencia de pregunta separa brillo de borde.
 
@@ -2086,7 +3002,7 @@ Respuesta. Porque diez muestras forman nueve pares consecutivos. La primera dife
 
 \section{Sobel y suavizado: comparar respuestas de borde con una escala común}
 
-\Fuente{Tutorial 14 · Lecciones del cuaderno: 20, 21}
+\Fuente{Tutorial 14 · Ampliación: lecciones del cuaderno completo: 20, 21}
 
 Sobel aproxima cambios espaciales mediante una combinación de diferencias y pesos locales. Calculamos una respuesta horizontal dx y otra vertical dy. En nuestra matriz corte, axis=1 recorre columnas, relacionadas con x, y axis=0 recorre filas, relacionadas con y. No debemos trasladar esos números de eje a cualquier arreglo sin comprobar su organización. Las respuestas pueden ser positivas o negativas según el sentido del cambio. La primera figura muestra sus valores absolutos para comparar magnitudes sin que los signos dominen los colores.
 
@@ -2255,7 +3171,7 @@ Podrás explicar cada etapa de una secuencia, documentar parámetros y distingui
 
 \section{Integrar el recorrido y preparar una pregunta de aprendizaje automático}
 
-\Fuente{Tutorial 15 · Lecciones del cuaderno: 22}
+\Fuente{Tutorial 15 · Ampliación: lecciones del cuaderno completo: 22}
 
 El recorrido comienza con una matriz y una geometría, elige una forma de visualizarla, describe intensidades, construye selecciones y aplica operaciones locales. Cada etapa responde una pregunta distinta. El histograma resume distribución; la máscara conserva posiciones que cumplen una regla; las curvas siguen valores iguales; el gradiente describe cambios. Al integrarlas no conviene sustituir una definición por otra. El primer aprendizaje útil para machine learning es poder decir qué representa cada variable, cómo se obtuvo y qué información se perdió o transformó.
 
@@ -2434,7 +3350,7 @@ Seguirás la sesión de 60 minutos con ocho bloques y localizarás las 24 leccio
 
 \end{Idea}
 
-C1–C8 designan los ocho bloques de Taller\_en\_vivo\_60min.ipynb, repartidos en 28 celdas cortas. Sus pasos se rotulan 1A, 1B y así sucesivamente; C1 reúne 1A–1G. Las lecciones 1–24 pertenecen a Taller\_imagenes\_medicas.ipynb, el cuaderno completo del libro. Ambos se ejecutan de arriba abajo; sus números no son intercambiables.
+La ruta de Taller\_en\_vivo\_60min.ipynb tiene ocho bloques y 28 pasos, de 1A a 8B. Los rótulos C1–C8 de ediciones anteriores equivalen a Bloque 1–8; no son identificadores de celdas. Para alternar entre los materiales busca el paso concreto, por ejemplo 4B. Las lecciones 1–24 pertenecen a Taller\_imagenes\_medicas.ipynb, el cuaderno completo del libro. Ambos se ejecutan de arriba abajo; sus números no son intercambiables.
 
 
 \section{Una hora: observar, predecir y probar}
@@ -2444,20 +3360,15 @@ C1–C8 designan los ocho bloques de Taller\_en\_vivo\_60min.ipynb, repartidos e
 Ejecuta 1A–1E antes de comenzar la hora para que la preparación no ocupe la práctica. Durante la sesión, observa la figura, explica una predicción y modifica solo la línea indicada. Las explicaciones detalladas se leen después; no es necesario comprender todas las líneas antes de experimentar.
 
 
-\begin{longtable}{@{}p{.15\linewidth}p{.12\linewidth}p{.66\linewidth}@{}}\toprule\textbf{Minutos}&\textbf{Bloques}&\textbf{Actividad y evidencia}\\\midrule\endhead
-
-0–10&C1&Reconoce tres planos del mismo volumen y sus coordenadas en milímetros.\\\addlinespace[6pt]
-
-10–20&C2&Mueve el corte y cambia la ventana; distingue posición, apariencia y valores almacenados.\\\addlinespace[6pt]
-
-20–35&C3–C4&Lee el histograma del soporte y prueba un percentil: observa el umbral y la máscara.\\\addlinespace[6pt]
-
-35–43&C5&Compara una curva de igual intensidad con una región seleccionada por umbral.\\\addlinespace[6pt]
-
-43–55&C6–C7&Prueba sigma y compara filtros y respuestas de Sobel sobre la misma entrada, con escala común.\\\addlinespace[6pt]
-
-55–60&C8&Explica tres límites: ventana, máscara y separación de pacientes al evaluar ML.\\\addlinespace[6pt]
-
+\begin{longtable}{@{}p{.13\linewidth}p{.14\linewidth}p{.19\linewidth}p{.44\linewidth}@{}}\toprule\textbf{Minutos}&\textbf{Bloque}&\textbf{Pasos}&\textbf{Actividad}\\\midrule\endhead
+0–10&1&1A–1G&Plantilla y planos\\\addlinespace[5pt]
+10–20&2&2A–2C&Corte y contraste\\\addlinespace[5pt]
+20–27&3&3A–3B&Histograma y fondo\\\addlinespace[5pt]
+27–35&4&4A–4C&Percentil y máscara\\\addlinespace[5pt]
+35–43&5&5A–5B&Curva y región\\\addlinespace[5pt]
+43–50&6&6A–6E&Filtros\\\addlinespace[5pt]
+50–55&7&7A–7D&Sobel\\\addlinespace[5pt]
+55–60&8&8A–8B&Recorrido y preguntas\\\addlinespace[5pt]
 \bottomrule\end{longtable}
 
 \section{Qué cambiar y qué restaurar}
@@ -2467,15 +3378,15 @@ Un parámetro es una opción que recibe una operación. Al cambiarlo, ejecuta la
 
 \begin{itemize}
 
-\item C2 · Corte: cambia k = 46 por k = 56. Busca qué anatomía aparece y lee la nueva posición. Después restaura k = 46 y ejecuta C2.
+\item 2A · Corte: cambia k = 46 por k = 56. Busca qué anatomía aparece y lee la nueva posición. Después restaura k = 46 y ejecuta 2A–2C.
 
-\item C2 · Contraste: cambia ventana = (0.35, 0.90) por ventana = (0.60, 0.80). Predice qué intensidades se verán negras o blancas. Restaura (0.35, 0.90) y ejecuta C2 antes de C3.
+\item 2B · Contraste: cambia ventana = (0.35, 0.90) por ventana = (0.60, 0.80). Predice qué intensidades se verán negras o blancas. Restaura (0.35, 0.90) y ejecuta 2B–2C antes de 3A–3B.
 
-\item C4 · Selección: cambia percentil = 90 por percentil = 75. Anticipa si se seleccionarán más posiciones; comprueba el umbral, la máscara y el porcentaje. Restaura 90 y ejecuta C4.
+\item 4A · Selección: cambia percentil = 90 por percentil = 75. Anticipa si se seleccionarán más posiciones; comprueba el umbral, la máscara y el porcentaje. Restaura 90 y ejecuta 4A–4C.
 
-\item C5 · Curva: cambia nivel = 0.7 por nivel = 0.6 y compara la trayectoria con la región rellena. Restaura 0.7 y ejecuta C5.
+\item 5A · Curva: cambia nivel = 0.7 por nivel = 0.6 y compara la trayectoria con la región rellena. Restaura 0.7 y ejecuta 5A–5B.
 
-\item C6 · Suavizado: cambia sigma\_pixeles = 1.2 por 0.6 o 2.4. Observa textura y detalles pequeños. Restaura 1.2 y ejecuta C6 antes de C7; Sobel utiliza la imagen filtrada que produjo C6.
+\item 6A · Suavizado: cambia sigma\_pixeles = 1.2 por 0.6 o 2.4. Observa textura y detalles pequeños. Restaura 1.2 y ejecuta 6A–6E antes de 7A–7D; Sobel utiliza gauss, calculada en 6C.
 
 \end{itemize}
 
@@ -2488,7 +3399,7 @@ Antes de ejecutar, escribe qué control cambias y qué esperas ver. Después se�
 
 \end{Idea}
 
-\section{C8: tres preguntas finales, con respuesta}
+\section{Bloque 8: tres preguntas finales, con respuesta}
 
 \needspace{6\baselineskip}
 
@@ -2517,6 +3428,68 @@ No. Para evaluar generalización a pacientes nuevos, separa por paciente: sus co
 
 \end{Practica}
 
+\section{Índice de los 28 pasos del taller}
+
+\begin{longtable}{@{}p{.10\linewidth}p{.62\linewidth}p{.18\linewidth}@{}}\toprule\textbf{Paso}&\textbf{Tarea concreta}&\textbf{Página}\\\midrule\endhead
+
+1A&Preparar las bibliotecas&\pageref{vivo:1a}\\\addlinespace[3pt]
+
+1B&Importar las herramientas&\pageref{vivo:1b}\\\addlinespace[3pt]
+
+1C&Abrir la plantilla&\pageref{vivo:1c}\\\addlinespace[3pt]
+
+1D&Comprobar los datos y la geometría&\pageref{vivo:1d}\\\addlinespace[3pt]
+
+1E&Relacionar índices y milímetros&\pageref{vivo:1e}\\\addlinespace[3pt]
+
+1F&Preparar los tres planos&\pageref{vivo:1f}\\\addlinespace[3pt]
+
+1G&Mostrar las imágenes&\pageref{vivo:1g}\\\addlinespace[3pt]
+
+2A&Elegir y extraer un corte&\pageref{vivo:2a}\\\addlinespace[3pt]
+
+2B&Elegir la ventana de grises&\pageref{vivo:2b}\\\addlinespace[3pt]
+
+2C&Comparar y comprobar&\pageref{vivo:2c}\\\addlinespace[3pt]
+
+3A&Elegir qué valores contar&\pageref{vivo:3a}\\\addlinespace[3pt]
+
+3B&Dibujar los histogramas&\pageref{vivo:3b}\\\addlinespace[3pt]
+
+4A&Calcular el umbral&\pageref{vivo:4a}\\\addlinespace[3pt]
+
+4B&Construir la máscara&\pageref{vivo:4b}\\\addlinespace[3pt]
+
+4C&Ver la regla y su resultado&\pageref{vivo:4c}\\\addlinespace[3pt]
+
+5A&Fijar un nivel y una región&\pageref{vivo:5a}\\\addlinespace[3pt]
+
+5B&Comparar curva y máscara&\pageref{vivo:5b}\\\addlinespace[3pt]
+
+6A&Crear una entrada con ruido&\pageref{vivo:6a}\\\addlinespace[3pt]
+
+6B&Calcular la media&\pageref{vivo:6b}\\\addlinespace[3pt]
+
+6C&Calcular el filtro gaussiano&\pageref{vivo:6c}\\\addlinespace[3pt]
+
+6D&Calcular la mediana&\pageref{vivo:6d}\\\addlinespace[3pt]
+
+6E&Comparar las cuatro imágenes&\pageref{vivo:6e}\\\addlinespace[3pt]
+
+7A&Medir cambios antes de suavizar&\pageref{vivo:7a}\\\addlinespace[3pt]
+
+7B&Medir cambios después de Gauss&\pageref{vivo:7b}\\\addlinespace[3pt]
+
+7C&Fijar una comparación común&\pageref{vivo:7c}\\\addlinespace[3pt]
+
+7D&Ver magnitudes y selecciones&\pageref{vivo:7d}\\\addlinespace[3pt]
+
+8A&Recordar el recorrido&\pageref{vivo:8a}\\\addlinespace[3pt]
+
+8B&Dibujar el mapa final&\pageref{vivo:8b}\\\addlinespace[3pt]
+
+\bottomrule\end{longtable}
+
 \section{Después de la sesión: las 24 lecciones}
 
 \href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Taller_imagenes_medicas.ipynb}{Abrir el cuaderno completo · estudio autónomo}\par
@@ -2529,7 +3502,7 @@ Si una celda falla por un nombre no definido, vuelve a ejecutar su preparación.
 
 \clearpage
 
-\begin{longtable}{@{}p{.08\linewidth}p{.40\linewidth}p{.45\linewidth}@{}}\toprule\textbf{Celda}&\textbf{Lección}&\textbf{Qué comprobar}\\\midrule\endhead
+\begin{longtable}{@{}p{.10\linewidth}p{.38\linewidth}p{.45\linewidth}@{}}\toprule\textbf{Lección}&\textbf{Tema de ampliación}&\textbf{Qué comprobar}\\\midrule\endhead
 
 1&Primero miremos las imágenes&Tres vistas, un mismo volumen.\\\addlinespace[5pt]
 

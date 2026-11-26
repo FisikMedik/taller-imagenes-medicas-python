@@ -13,7 +13,7 @@ Taller introductorio de la [Escuela de Machine Learning y Data Science en Hondur
 
 [Diapositivas web](https://FisikMedik.github.io/taller-imagenes-medicas-python/presentacion.html) · [Presentación PDF](Presentacion_taller.pdf) · [PowerPoint editable](Presentacion_taller.pptx) · [Explorador visual](https://FisikMedik.github.io/taller-imagenes-medicas-python/explorador.html)
 
-**Ampliación opcional:** [Presentación interactiva de ML](https://fisikmedik.github.io/taller-imagenes-medicas-python/presentacion_ml.html) · [De radiografías a predicciones: tutorial completo](https://fisikmedik.github.io/taller-imagenes-medicas-python/modulo_ml.html) · [Abrir el módulo en Colab](https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Modulo_ML_radiografias.ipynb)
+**Ampliación opcional:** [Presentación interactiva de ML](https://fisikmedik.github.io/taller-imagenes-medicas-python/presentacion_ml.html) · [PowerPoint de ML](Presentacion_modulo_ML.pptx) · [Diapositivas ML en PDF](Presentacion_modulo_ML.pdf) · [De radiografías a predicciones: tutorial completo](https://fisikmedik.github.io/taller-imagenes-medicas-python/modulo_ml.html) · [Abrir el módulo en Colab](https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Modulo_ML_radiografias.ipynb)
 
 ![Tres cortes de la misma plantilla cerebral: axial, coronal y sagital](imagenes/mri_intensity.png)
 
@@ -37,7 +37,7 @@ No necesitas leer todo el libro antes de asistir. Como lectura previa opcional, 
 | [Presentación](https://FisikMedik.github.io/taller-imagenes-medicas-python/presentacion.html) | Para seguir la explicación o facilitarla | 16 diapositivas en el orden del cuaderno de 60 minutos, con acceso a sus 28 pasos y seis demostraciones interactivas. PDF y PowerPoint con vistas estáticas y notas. |
 | [Explorador](https://FisikMedik.github.io/taller-imagenes-medicas-python/explorador.html) | Antes, durante o sin Python | Tres cortes, ventana de contraste, histograma y máscara por percentil; sin dependencias web. |
 | [Cuaderno completo](https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Taller_imagenes_medicas.ipynb) | Estudio posterior, en varias sesiones | 24 lecciones detalladas, salidas guardadas, matrices, filtros y ampliaciones. |
-| [Manual ilustrado](Guia_visual_imagenes_medicas.pdf) | Consulta y lectura autónoma | 97 páginas, 8 capítulos, 3 anexos, 15 tutoriales y 31 figuras diferentes. |
+| [Manual ilustrado](Guia_visual_imagenes_medicas.pdf) | Consulta y lectura autónoma | 123 páginas: lectura previa, ruta de 60 minutos con sus 28 pasos y lecciones de ampliación; código, salidas e interpretación. |
 | [Módulo opcional de ML](modulo_ml.html) | 45–60 minutos adicionales o estudio posterior | [Presentación interactiva](https://fisikmedik.github.io/taller-imagenes-medicas-python/presentacion_ml.html) de 14 diapositivas en el orden de los 12 bloques; cuaderno de 12 bloques y 58 pasos breves sobre radiografías, regresión logística, validación y errores. |
 
 El manual explica qué es un píxel, cómo leer una matriz, de dónde procede ICBM152 y qué hace Nilearn. Distingue imagen individual, plantilla, atlas y espacio de referencia. Sus tutoriales combinan código, salida e interpretación. El **[proyecto LaTeX completo](Fuente_LaTeX_manual.zip)** contiene los recursos necesarios para editarlo y recompilarlo; también puedes leer la [fuente principal](Guia_visual_imagenes_medicas.tex).
@@ -61,7 +61,7 @@ Abre la **[presentación web](https://fisikmedik.github.io/taller-imagenes-medic
 
 La web muestra **Python equivalente** y calcula estas demostraciones en JavaScript; no instala ni ejecuta un intérprete de Python. En el cuaderno de Colab se ejecuta Python. Las curvas de los seis niveles se calcularon previamente con Matplotlib. La presentación lleva sus datos y funciona sin conexión al descargarla; Colab y los enlaces externos necesitan internet.
 
-Las copias **PDF y PowerPoint son estáticas**. Para mover los controles utiliza la presentación web. Las notas del instructor mantienen tiempos, preguntas y soluciones.
+Las copias **PDF y PowerPoint son estáticas**. Para mover los controles utiliza la presentación web. Las notas del instructor mantienen tiempos, preguntas y soluciones. Los dos PowerPoint usan los mismos bloques y pasos de sus notebooks: el principal tiene 16 diapositivas y el de ML, 14. Cada bloque identifica las celdas que debes abrir; las notas contienen explicaciones, código y referencias a las salidas.
 
 El [explorador](explorador.html) también enlaza controles, instrucciones y cifras. Los cuadernos comienzan con imágenes visibles y dejan las respuestas en apartados desplegables para intentar resolver las preguntas primero.
 
@@ -69,7 +69,7 @@ El [explorador](explorador.html) también enlaza controles, instrucciones y cifr
 
 Las dos presentaciones siguen el orden de sus respectivos cuadernos. La principal recorre los **8 bloques y 28 pasos**; la opcional, los **12 bloques y 58 pasos**. En cada diapositiva, consulta el bloque y el intervalo de pasos indicados.
 
-1. Elige **Paso del cuaderno** para localizar un identificador estable, como **3C**. Ese identificador coincide con el título del paso en Colab; el contador de ejecución entre corchetes puede cambiar al repetir celdas.
+1. Elige **Paso del cuaderno** para localizar un identificador estable, como **6E**. Ese identificador coincide con el título del paso en Colab; el contador de ejecución entre corchetes puede cambiar al repetir celdas.
 2. Abre **Código y salida guardada** para ver el código exacto y el resultado de referencia de esa celda dentro de la presentación.
 3. Usa **Abrir esta celda en Colab** cuando quieras ejecutar o modificar Python. El enlace abre la celda seleccionada; no ejecuta los pasos previos. Si la sesión está vacía, comienza en **1A** y ejecuta en orden.
 4. Regresa a la pestaña de la presentación para continuar. **Instrucción anterior/siguiente** recorre las líneas de la demostración interactiva; los pasos **1A, 1B…** identifican las celdas del cuaderno.
@@ -80,7 +80,7 @@ Las demostraciones y las salidas guardadas están identificadas por separado. Mo
 
 Esta ampliación permite **entrenar y evaluar un primer modelo de aprendizaje automático** con imágenes médicas. Reserva **45–60 minutos adicionales**; la sesión principal del programa sigue durando una hora. Si sólo se solicita una demostración de 15 minutos, utiliza las **salidas guardadas de los bloques 1, 6, 9 y 11**. El cuaderno conserva los 12 temas, repartidos en **58 pasos breves de código**. Para ejecutarlo, comienza en el paso **1A** y sigue todos los pasos en orden.
 
-**[Abrir la presentación interactiva de ML](https://fisikmedik.github.io/taller-imagenes-medicas-python/presentacion_ml.html)** · **[Leer el tutorial visual sin ejecutar código](modulo_ml.html)** · **[Practicar en Google Colab](https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Modulo_ML_radiografias.ipynb)** · [Descargar el cuaderno](Modulo_ML_radiografias.ipynb) · [Guía ilustrada en PDF](Guia_modulo_ML.pdf)
+**[Abrir la presentación interactiva de ML](https://fisikmedik.github.io/taller-imagenes-medicas-python/presentacion_ml.html)** · **[Leer el tutorial visual sin ejecutar código](modulo_ml.html)** · **[Practicar en Google Colab](https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Modulo_ML_radiografias.ipynb)** · [Descargar el cuaderno](Modulo_ML_radiografias.ipynb) · [Guía ilustrada en PDF](Guia_modulo_ML.pdf) · [PowerPoint editable de ML](Presentacion_modulo_ML.pptx) · [Diapositivas ML en PDF](Presentacion_modulo_ML.pdf)
 
 El recorrido comienza con radiografías y explica qué son una muestra, una característica y una etiqueta. Después transforma cada imagen de 28 × 28 píxeles en 784 valores, compara con una regla que siempre predice la clase mayoritaria y entrena una **regresión logística**. Es un clasificador supervisado que funciona con CPU; no es una red neuronal convolucional. Las explicaciones acompañan al código, a las figuras y a los ejercicios resueltos.
 
@@ -213,7 +213,7 @@ Esa edición original de doce celdas también se ejecutó correctamente en **Goo
 
 Los intervalos de [requisitos_ml.txt](requisitos_ml.txt) no congelan un entorno idéntico. Las diferencias entre versiones pueden modificar el ajuste numérico, los resultados y la opción seleccionada cuando sus valores de validación son cercanos. **No cambies el modelo después de mirar prueba para reproducir los números del PDF**: conserva la selección hecha con validación y registra tus versiones y resultados. Estas comprobaciones de ejecución no equivalen a validación clínica ni demuestran independencia entre pacientes.
 
-El manual se compiló con XeLaTeX y se revisaron visualmente sus 97 páginas. También se extrajo el ZIP de la fuente en una carpeta independiente y se recompiló: conserva las 97 páginas y el mismo contenido textual. El generador portátil reprodujo las 20 figuras nuevas con huellas SHA-256 idénticas. El paquete incluye las imágenes ya preparadas, los datos públicos, las fuentes de código con su licencia y las instrucciones de compilación; Python solo se necesita si deseas regenerar las figuras.
+La revisión del 26 de noviembre sincroniza el manual principal (123 páginas), la guía de ML (24 páginas) y ambos PowerPoint con los identificadores actuales de sus notebooks. La ruta breve conserva 28 pasos y la opcional, 58; el cuaderno extendido conserva sus 24 lecciones independientes. Las fuentes LaTeX actualizadas se entregan junto con cada manual. La edición anterior de 97 páginas del manual principal se recompiló desde su ZIP y conservó el mismo contenido textual. El generador portátil reprodujo las 20 figuras nuevas con huellas SHA-256 idénticas. El paquete incluye las imágenes ya preparadas, los datos públicos, las fuentes de código con su licencia y las instrucciones de compilación; Python solo se necesita si deseas regenerar las figuras.
 
 ## Archivos del repositorio
 
@@ -222,6 +222,7 @@ El manual se compiló con XeLaTeX y se revisaron visualmente sus 97 páginas. Ta
 - [`presentacion.html`](presentacion.html), [`Presentacion_taller.pdf`](Presentacion_taller.pdf) y [`Presentacion_taller.pptx`](Presentacion_taller.pptx): diapositivas web, copia para lectura y versión editable.
 - [`explorador.html`](explorador.html): herramienta autónoma con datos incorporados; puede abrirse sin conexión.
 - [`Modulo_ML_radiografias.ipynb`](Modulo_ML_radiografias.ipynb) y [`modulo_ml.html`](modulo_ml.html): práctica opcional de aprendizaje automático y lectura completa con código, explicaciones y salidas.
+- [`presentacion_ml.html`](presentacion_ml.html), [`Presentacion_modulo_ML.pdf`](Presentacion_modulo_ML.pdf) y [`Presentacion_modulo_ML.pptx`](Presentacion_modulo_ML.pptx): presentación interactiva del módulo, copia estática y PowerPoint editable.
 - [`Guia_modulo_ML.pdf`](Guia_modulo_ML.pdf), [`Guia_modulo_ML.tex`](Guia_modulo_ML.tex) y [`Fuente_LaTeX_modulo_ML.zip`](Fuente_LaTeX_modulo_ML.zip): guía adicional y fuentes para editarla.
 - [`requisitos_ml.txt`](requisitos_ml.txt) y [`resultados_modulo_ml.json`](resultados_modulo_ml.json): bibliotecas y ficha de la ejecución del módulo.
 - [`datos/pneumoniamnist.npz`](datos/pneumoniamnist.npz) y [`datos/FUENTES_PneumoniaMNIST.txt`](datos/FUENTES_PneumoniaMNIST.txt): archivo público original y atribución con auditoría documentada.
@@ -273,7 +274,7 @@ La organización de esta edición —acceso web, diapositivas, Colab, ejercicios
 
 El sitio es el recurso del expositor y se mantiene en su repositorio personal. La información institucional y posibles cambios de horario corresponden a la [web oficial](https://machine-learning-honduras.org/).
 
-**Autor del material docente:** Juan Calderón · **Revisión de materiales, acceso y sesión:** 25 de noviembre de 2026 · **Edición del manual:** 25 de noviembre de 2026.
+**Autor del material docente:** Juan Calderón · **Revisión de materiales, acceso y sesión:** 26 de noviembre de 2026 · **Edición de los manuales:** 26 de noviembre de 2026.
 
 ### Revisión didáctica del 25 de noviembre de 2026
 

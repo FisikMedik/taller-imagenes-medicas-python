@@ -18,7 +18,7 @@
 \end{titlepage}
 \setcounter{page}{2}
 
-\Pagina{ANTES DE ABRIR EL CUADERNO}{Qué vamos a construir}{Primera lectura: páginas 2–6, unos 15–20 minutos. Práctica guiada: 45–60 minutos adicionales.}
+\Pagina{ANTES DE ABRIR EL CUADERNO}{Qué vamos a construir}{Primera lectura: introducción y bloques 1–4, unos 15–20 minutos. Práctica guiada: 45–60 minutos adicionales.}
 Este módulo amplía el taller de procesamiento de imágenes. Allí elegíamos reglas, como un umbral o un filtro. Aquí aprenderemos una regla a partir de \textbf{imágenes acompañadas de una etiqueta}. Después comprobaremos qué hace con imágenes reservadas. Esa diferencia es el punto de partida del \textbf{aprendizaje supervisado}.
 \begin{Idea}{La pregunta del ejercicio}
 ¿Puede un modelo sencillo relacionar los 784 valores de una imagen de tórax con las etiquetas \texttt{normal} y \texttt{pneumonia} del conjunto público? Evaluamos esa tarea concreta. No pedimos al estudiante que diagnostique una radiografía.
@@ -34,15 +34,143 @@ Evaluación & Comparar predicciones con etiquetas reservadas y contar aciertos y
 \end{tabularx}\par
 \Sub{Cómo empezar}
 Abre \href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Modulo_ML_radiografias.ipynb}{el cuaderno del módulo en Google Colab}. Inicia sesión si se solicita. Usa CPU, pulsa el triángulo del primer paso de código (1A) y espera a que termine. Continúa de arriba abajo. Si quieres conservar cambios, elige \textbf{Archivo → Guardar una copia en Drive}; el ejercicio no necesita montar tus archivos de Drive.
-El \textbf{bloque 1} prepara las bibliotecas y carga la copia pública local o la descarga. El cuaderno conserva \textbf{12 bloques temáticos}, divididos ahora en \textbf{58 celdas de código breves}: pasos \textbf{1A, 1B, \ldots, 12F}. El número identifica el bloque; la letra, el paso dentro de él. Cada paso tiene su propia explicación y botón de ejecución. Sigue el orden completo; algunos pasos preparan variables y otros muestran la salida. Un \texttt{NameError} suele indicar que falta un paso anterior. Esta guía agrupa las explicaciones y fragmentos por bloque. Las salidas guardadas sirven de apoyo antes de ejecutar.
+El \textbf{bloque 1} prepara las bibliotecas y carga la copia pública local o la descarga. El cuaderno conserva \textbf{12 bloques temáticos}, divididos ahora en \textbf{58 celdas de código breves}: pasos \textbf{1A, 1B, \ldots, 12F}. El número identifica el bloque; la letra, el paso dentro de él. Cada paso tiene su propia explicación y botón de ejecución. Sigue el orden completo; algunos pasos preparan variables y otros muestran la salida. Un \texttt{NameError} suele indicar que falta un paso anterior. Los mapas siguientes enlazan cada paso y su explicación. Los fragmentos ilustran las operaciones indicadas; el código completo y sus salidas están en el cuaderno. Los ejemplos ficticios se rotulan como tales.
 \par Las cifras impresas corresponden a la ejecución local documentada en la página \pageref{registro-ejecucion}. Otra versión de las bibliotecas puede producir resultados y una selección de C diferentes; registra los de tu propia ejecución.
 \begin{Practica}{Dos recorridos}
 En una demostración breve, observa imágenes, entrenamiento, matriz de confusión y errores. Para aprender haciendo, reserva la ampliación completa. Este material es opcional y no modifica por sí solo el horario oficial de la escuela.
 \end{Practica}
 
-\Pagina{BLOQUES 1–2 · CONOCER LOS DATOS}{Qué entra al modelo}{Una colección pública no equivale a datos sin limitaciones.}
+\Pagina{MAPA DEL CUADERNO · 1 DE 3}{De imágenes a una regla}{Los pasos mantienen el mismo nombre y orden que el notebook y la presentación interactiva.}
+\textbf{Cómo usar este mapa:} el identificador azul abre esa celda en Colab; la última columna lleva a la explicación del manual. Ejecuta siempre los pasos anteriores que preparan sus variables.
+\begingroup\small\setlength{\tabcolsep}{5pt}\renewcommand{\arraystretch}{1.16}
+\begin{tabularx}{\linewidth}{@{}p{14mm}Yp{17mm}@{}}\toprule
+\textbf{Paso} & \textbf{Título de la celda} & \textbf{Manual}\\\midrule
+\multicolumn{3}{@{}l@{}}{\color{Teal}\bfseries Bloque 01 · Primero, las imágenes}\\[2pt]
+\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Modulo_ML_radiografias.ipynb\#scrollTo=codigo-1a}{\textbf{1A}} & Cargar las herramientas de preparación & p.\,\pageref{bloque-1}\\
+\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Modulo_ML_radiografias.ipynb\#scrollTo=codigo-1b}{\textbf{1B}} & Preparar las bibliotecas ausentes & p.\,\pageref{bloque-1}\\
+\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Modulo_ML_radiografias.ipynb\#scrollTo=codigo-1c}{\textbf{1C}} & Importar matrices, gráficos y modelos & p.\,\pageref{bloque-1}\\
+\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Modulo_ML_radiografias.ipynb\#scrollTo=codigo-1d}{\textbf{1D}} & Localizar o descargar los datos públicos & p.\,\pageref{bloque-1}\\
+\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Modulo_ML_radiografias.ipynb\#scrollTo=codigo-1e}{\textbf{1E}} & Verificar y abrir el archivo & p.\,\pageref{bloque-1}\\
+\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Modulo_ML_radiografias.ipynb\#scrollTo=codigo-1f}{\textbf{1F}} & Extraer entrenamiento y validación & p.\,\pageref{bloque-1}\\
+\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Modulo_ML_radiografias.ipynb\#scrollTo=codigo-1g}{\textbf{1G}} & Preparar etiquetas y ejemplos de la galería & p.\,\pageref{bloque-1}\\
+\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Modulo_ML_radiografias.ipynb\#scrollTo=codigo-1h}{\textbf{1H}} & Mostrar las primeras radiografías · figura & p.\,\pageref{bloque-1}\\
+\addlinespace[3pt]
+\multicolumn{3}{@{}l@{}}{\color{Teal}\bfseries Bloque 02 · Tres grupos y una revisión de duplicados}\\[2pt]
+\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Modulo_ML_radiografias.ipynb\#scrollTo=codigo-2a}{\textbf{2A}} & Conservar la primera copia de entrenamiento & p.\,\pageref{bloque-2}\\
+\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Modulo_ML_radiografias.ipynb\#scrollTo=codigo-2b}{\textbf{2B}} & Excluir coincidencias de validación & p.\,\pageref{bloque-2}\\
+\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Modulo_ML_radiografias.ipynb\#scrollTo=codigo-2c}{\textbf{2C}} & Comprobar cantidades y etiquetas & p.\,\pageref{bloque-2}\\
+\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Modulo_ML_radiografias.ipynb\#scrollTo=codigo-2d}{\textbf{2D}} & Visualizar las particiones · figura & p.\,\pageref{bloque-2}\\
+\addlinespace[3pt]
+\multicolumn{3}{@{}l@{}}{\color{Teal}\bfseries Bloque 03 · De una imagen a 784 características}\\[2pt]
+\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Modulo_ML_radiografias.ipynb\#scrollTo=codigo-3a}{\textbf{3A}} & Preparar las características de entrenamiento & p.\,\pageref{bloque-3}\\
+\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Modulo_ML_radiografias.ipynb\#scrollTo=codigo-3b}{\textbf{3B}} & Aplicar la misma regla a validación & p.\,\pageref{bloque-3}\\
+\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Modulo_ML_radiografias.ipynb\#scrollTo=codigo-3c}{\textbf{3C}} & Elegir una imagen para inspeccionar & p.\,\pageref{bloque-3}\\
+\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Modulo_ML_radiografias.ipynb\#scrollTo=codigo-3d}{\textbf{3D}} & Relacionar imagen, vector y etiqueta · figura & p.\,\pageref{bloque-3}\\
+\addlinespace[3pt]
+\multicolumn{3}{@{}l@{}}{\color{Teal}\bfseries Bloque 04 · Qué aprende la regresión logística}\\[2pt]
+\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Modulo_ML_radiografias.ipynb\#scrollTo=codigo-4a}{\textbf{4A}} & Elegir sumas para explorar & p.\,\pageref{bloque-4}\\
+\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Modulo_ML_radiografias.ipynb\#scrollTo=codigo-4b}{\textbf{4B}} & Transformar las sumas con la sigmoide & p.\,\pageref{bloque-4}\\
+\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Modulo_ML_radiografias.ipynb\#scrollTo=codigo-4c}{\textbf{4C}} & Ver la curva y sus ejemplos · figura & p.\,\pageref{bloque-4}\\
+\bottomrule\end{tabularx}\endgroup
+\begin{Idea}{La numeración no depende de cuántas veces ejecutes}
+Los códigos 1A, 6E o 12F son identificadores del material. El número entre corchetes que Colab muestra al ejecutar puede cambiar: no lo uses para localizar el paso. «Figura» marca la celda que dibuja; las anteriores preparan sus datos.
+\end{Idea}
+\Fuente{Abrir un enlace no ejecuta Python. En una sesión vacía, comienza por 1A. La presentación permite alternar entre «Paso del cuaderno», «Código y salida guardada» y «Explorar el concepto».}
+
+
+\Pagina{MAPA DEL CUADERNO · 2 DE 3}{Aprender y tomar decisiones}{Los pasos mantienen el mismo nombre y orden que el notebook y la presentación interactiva.}
+\textbf{Cómo usar este mapa:} el identificador azul abre esa celda en Colab; la última columna lleva a la explicación del manual. Ejecuta siempre los pasos anteriores que preparan sus variables.
+\begingroup\small\setlength{\tabcolsep}{5pt}\renewcommand{\arraystretch}{1.16}
+\begin{tabularx}{\linewidth}{@{}p{14mm}Yp{17mm}@{}}\toprule
+\textbf{Paso} & \textbf{Título de la celda} & \textbf{Manual}\\\midrule
+\multicolumn{3}{@{}l@{}}{\color{Teal}\bfseries Bloque 05 · Una referencia que ignora las imágenes}\\[2pt]
+\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Modulo_ML_radiografias.ipynb\#scrollTo=codigo-5a}{\textbf{5A}} & Ajustar la regla mayoritaria & p.\,\pageref{bloque-5}\\
+\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Modulo_ML_radiografias.ipynb\#scrollTo=codigo-5b}{\textbf{5B}} & Predecir con la referencia & p.\,\pageref{bloque-5}\\
+\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Modulo_ML_radiografias.ipynb\#scrollTo=codigo-5c}{\textbf{5C}} & Medir la referencia & p.\,\pageref{bloque-5}\\
+\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Modulo_ML_radiografias.ipynb\#scrollTo=codigo-5d}{\textbf{5D}} & Comparar las dos medidas · figura & p.\,\pageref{bloque-5}\\
+\addlinespace[3pt]
+\multicolumn{3}{@{}l@{}}{\color{Teal}\bfseries Bloque 06 · Entrenar y elegir usando validación}\\[2pt]
+\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Modulo_ML_radiografias.ipynb\#scrollTo=codigo-6a}{\textbf{6A}} & Fijar las opciones de regularización & p.\,\pageref{bloque-6}\\
+\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Modulo_ML_radiografias.ipynb\#scrollTo=codigo-6b}{\textbf{6B}} & Entrenar los tres candidatos & p.\,\pageref{bloque-6}\\
+\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Modulo_ML_radiografias.ipynb\#scrollTo=codigo-6c}{\textbf{6C}} & Organizar la tabla de resultados & p.\,\pageref{bloque-6}\\
+\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Modulo_ML_radiografias.ipynb\#scrollTo=codigo-6d}{\textbf{6D}} & Elegir mediante validación & p.\,\pageref{bloque-6}\\
+\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Modulo_ML_radiografias.ipynb\#scrollTo=codigo-6e}{\textbf{6E}} & Visualizar y registrar la comparación · figura & p.\,\pageref{bloque-6}\\
+\addlinespace[3pt]
+\multicolumn{3}{@{}l@{}}{\color{Teal}\bfseries Bloque 07 · Una predicción, paso a paso}\\[2pt]
+\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Modulo_ML_radiografias.ipynb\#scrollTo=codigo-7a}{\textbf{7A}} & Elegir el ejemplo de validación & p.\,\pageref{bloque-7}\\
+\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Modulo_ML_radiografias.ipynb\#scrollTo=codigo-7b}{\textbf{7B}} & Calcular puntuaciones de validación & p.\,\pageref{bloque-7}\\
+\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Modulo_ML_radiografias.ipynb\#scrollTo=codigo-7c}{\textbf{7C}} & Convertir una puntuación en decisión & p.\,\pageref{bloque-7}\\
+\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Modulo_ML_radiografias.ipynb\#scrollTo=codigo-7d}{\textbf{7D}} & Relacionar entrada y salida · figura & p.\,\pageref{bloque-7}\\
+\addlinespace[3pt]
+\multicolumn{3}{@{}l@{}}{\color{Teal}\bfseries Bloque 08 · Cambiar un umbral cambia los errores}\\[2pt]
+\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Modulo_ML_radiografias.ipynb\#scrollTo=codigo-8a}{\textbf{8A}} & Fijar los umbrales de demostración & p.\,\pageref{bloque-8}\\
+\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Modulo_ML_radiografias.ipynb\#scrollTo=codigo-8b}{\textbf{8B}} & Contar las tres matrices & p.\,\pageref{bloque-8}\\
+\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Modulo_ML_radiografias.ipynb\#scrollTo=codigo-8c}{\textbf{8C}} & Comparar visualmente los errores · figura & p.\,\pageref{bloque-8}\\
+\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Modulo_ML_radiografias.ipynb\#scrollTo=codigo-8d}{\textbf{8D}} & Confirmar las decisiones del informe & p.\,\pageref{bloque-8}\\
+\bottomrule\end{tabularx}\endgroup
+\begin{Idea}{La numeración no depende de cuántas veces ejecutes}
+Los códigos 1A, 6E o 12F son identificadores del material. El número entre corchetes que Colab muestra al ejecutar puede cambiar: no lo uses para localizar el paso. «Figura» marca la celda que dibuja; las anteriores preparan sus datos.
+\end{Idea}
+\Fuente{Abrir un enlace no ejecuta Python. En una sesión vacía, comienza por 1A. La presentación permite alternar entre «Paso del cuaderno», «Código y salida guardada» y «Explorar el concepto».}
+
+
+\Pagina{MAPA DEL CUADERNO · 3 DE 3}{Evaluar y dejar un registro}{Los pasos mantienen el mismo nombre y orden que el notebook y la presentación interactiva.}
+\textbf{Cómo usar este mapa:} el identificador azul abre esa celda en Colab; la última columna lleva a la explicación del manual. Ejecuta siempre los pasos anteriores que preparan sus variables.
+\begingroup\small\setlength{\tabcolsep}{5pt}\renewcommand{\arraystretch}{1.16}
+\begin{tabularx}{\linewidth}{@{}p{14mm}Yp{17mm}@{}}\toprule
+\textbf{Paso} & \textbf{Título de la celda} & \textbf{Manual}\\\midrule
+\multicolumn{3}{@{}l@{}}{\color{Teal}\bfseries Bloque 09 · Abrir el conjunto de prueba}\\[2pt]
+\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Modulo_ML_radiografias.ipynb\#scrollTo=codigo-9a}{\textbf{9A}} & Abrir la partición de prueba & p.\,\pageref{bloque-9}\\
+\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Modulo_ML_radiografias.ipynb\#scrollTo=codigo-9b}{\textbf{9B}} & Comprobar coincidencias exactas & p.\,\pageref{bloque-9}\\
+\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Modulo_ML_radiografias.ipynb\#scrollTo=codigo-9c}{\textbf{9C}} & Preparar las características de prueba & p.\,\pageref{bloque-9}\\
+\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Modulo_ML_radiografias.ipynb\#scrollTo=codigo-9d}{\textbf{9D}} & Predecir con las decisiones fijadas & p.\,\pageref{bloque-9}\\
+\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Modulo_ML_radiografias.ipynb\#scrollTo=codigo-9e}{\textbf{9E}} & Construir la matriz de prueba & p.\,\pageref{bloque-9}\\
+\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Modulo_ML_radiografias.ipynb\#scrollTo=codigo-9f}{\textbf{9F}} & Ver dónde se cuentan los resultados · figura & p.\,\pageref{bloque-9}\\
+\addlinespace[3pt]
+\multicolumn{3}{@{}l@{}}{\color{Teal}\bfseries Bloque 10 · Explicar las métricas con sus denominadores}\\[2pt]
+\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Modulo_ML_radiografias.ipynb\#scrollTo=codigo-10a}{\textbf{10A}} & Calcular sensibilidad & p.\,\pageref{bloque-10}\\
+\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Modulo_ML_radiografias.ipynb\#scrollTo=codigo-10b}{\textbf{10B}} & Calcular especificidad & p.\,\pageref{bloque-10}\\
+\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Modulo_ML_radiografias.ipynb\#scrollTo=codigo-10c}{\textbf{10C}} & Calcular exactitud & p.\,\pageref{bloque-10}\\
+\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Modulo_ML_radiografias.ipynb\#scrollTo=codigo-10d}{\textbf{10D}} & Calcular exactitud equilibrada & p.\,\pageref{bloque-10}\\
+\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Modulo_ML_radiografias.ipynb\#scrollTo=codigo-10e}{\textbf{10E}} & Aplicar también la referencia a prueba & p.\,\pageref{bloque-10}\\
+\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Modulo_ML_radiografias.ipynb\#scrollTo=codigo-10f}{\textbf{10F}} & Preparar las medidas para comparar & p.\,\pageref{bloque-10}\\
+\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Modulo_ML_radiografias.ipynb\#scrollTo=codigo-10g}{\textbf{10G}} & Comparar y explicar los denominadores · figura & p.\,\pageref{bloque-10}\\
+\addlinespace[3pt]
+\multicolumn{3}{@{}l@{}}{\color{Teal}\bfseries Bloque 11 · Mirar aciertos y errores sin maquillarlos}\\[2pt]
+\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Modulo_ML_radiografias.ipynb\#scrollTo=codigo-11a}{\textbf{11A}} & Definir las cuatro casillas & p.\,\pageref{bloque-11}\\
+\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Modulo_ML_radiografias.ipynb\#scrollTo=codigo-11b}{\textbf{11B}} & Elegir el primer ejemplo de cada casilla & p.\,\pageref{bloque-11}\\
+\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Modulo_ML_radiografias.ipynb\#scrollTo=codigo-11c}{\textbf{11C}} & Mostrar los ejemplos seleccionados · figura & p.\,\pageref{bloque-11}\\
+\addlinespace[3pt]
+\multicolumn{3}{@{}l@{}}{\color{Teal}\bfseries Bloque 12 · Guardar el experimento y explicar lo aprendido}\\[2pt]
+\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Modulo_ML_radiografias.ipynb\#scrollTo=codigo-12a}{\textbf{12A}} & Registrar los datos del experimento & p.\,\pageref{bloque-12}\\
+\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Modulo_ML_radiografias.ipynb\#scrollTo=codigo-12b}{\textbf{12B}} & Registrar modelo y decisiones & p.\,\pageref{bloque-12}\\
+\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Modulo_ML_radiografias.ipynb\#scrollTo=codigo-12c}{\textbf{12C}} & Registrar evaluación y ejemplos & p.\,\pageref{bloque-12}\\
+\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Modulo_ML_radiografias.ipynb\#scrollTo=codigo-12d}{\textbf{12D}} & Registrar versiones y límites & p.\,\pageref{bloque-12}\\
+\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Modulo_ML_radiografias.ipynb\#scrollTo=codigo-12e}{\textbf{12E}} & Guardar la ficha en JSON & p.\,\pageref{bloque-12}\\
+\href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Modulo_ML_radiografias.ipynb\#scrollTo=codigo-12f}{\textbf{12F}} & Cerrar con el mapa del experimento · figura & p.\,\pageref{bloque-12}\\
+\bottomrule\end{tabularx}\endgroup
+\begin{Idea}{La numeración no depende de cuántas veces ejecutes}
+Los códigos 1A, 6E o 12F son identificadores del material. El número entre corchetes que Colab muestra al ejecutar puede cambiar: no lo uses para localizar el paso. «Figura» marca la celda que dibuja; las anteriores preparan sus datos.
+\end{Idea}
+\Fuente{Abrir un enlace no ejecuta Python. En una sesión vacía, comienza por 1A. La presentación permite alternar entre «Paso del cuaderno», «Código y salida guardada» y «Explorar el concepto».}
+
+
+\Pagina{BLOQUE 1 · PASOS 1A–1H}{Primero, las imágenes}{Prepara el entorno, verifica el archivo y reconoce qué representa cada imagen.}\label{bloque-1}
 \textbf{PneumoniaMNIST} es una versión pequeña de una colección de radiografías pediátricas de tórax de Kermany y colaboradores. MedMNIST recorta centralmente y reduce cada imagen a \textbf{28 × 28 píxeles}, con una escala de gris. La clase 0 es \texttt{normal}; la clase 1 es \texttt{pneumonia}. Son etiquetas del conjunto: \texttt{normal} no demuestra ausencia de cualquier enfermedad. [1–3]
 El archivo \texttt{.npz} es un paquete comprimido de arreglos de NumPy. Contiene seis arreglos: imágenes y etiquetas para entrenamiento, validación y prueba. No es un DICOM ni aporta su cabecera clínica. Los valores de imagen son enteros de 8 bits; el rango posible es 0–255.
+
+\Figura{celda-01.png}{Salida guardada de 1H: las mismas seis imágenes de entrenamiento y sus etiquetas que abre el notebook. 1G fija sus índices.}{64mm}
+\begin{Codigo}{1E · extracto: verificar antes de abrir}
+assert hashlib.sha256(ruta.read_bytes()).hexdigest() == sha_esperada
+paquete = np.load(ruta, allow_pickle=False)
+\end{Codigo}
+1A–1C preparan e importan las herramientas. 1D localiza o descarga el archivo y fija \texttt{sha\_esperada}. En 1E, SHA-256 calcula una huella y \texttt{assert} detiene el ejercicio si no coincide con la copia auditada. La copia también se contrastó con el MD5 oficial. Estas huellas comprueban integridad, no independencia de pacientes. \texttt{allow\_pickle=False} evita cargar objetos de Python guardados en el paquete.
+1F extrae entrenamiento y validación, 1G elige las imágenes y 1H las muestra. La figura no exige interpretar lesiones: observa la cuadrícula, las etiquetas y la baja resolución.
+\begin{Limite}{Privacidad e independencia son preguntas diferentes}
+El archivo inspeccionado contiene arreglos numéricos, sin campos de identificación de pacientes. Eso no certifica la anonimización de los estudios originales ni permite auditar separación por persona. Para el taller usamos esta publicación autorizada y atribuida; no añadimos estudios privados.
+\end{Limite}
+
+\Pagina{BLOQUE 2 · PASOS 2A–2D}{Tres grupos y una revisión de duplicados}{Separar funciones antes de comparar modelos.}\label{bloque-2}\label{datos-deduplicacion}
 \par\begin{tabularx}{\linewidth}{@{}Yrrr@{}}\toprule
 \textbf{Conjunto} & \textbf{Original} & \textbf{Usado} & \textbf{Función}\\\midrule
 Entrenamiento & 4 708 & 4 690 & Aprender\\
@@ -52,20 +180,18 @@ Prueba & 624 & 624 & Evaluar al final\\\bottomrule
 \Sub{La adaptación docente, explicada}
 La revisión de los arreglos encontró 18 copias exactas adicionales dentro de entrenamiento. Conservamos la primera aparición de cada imagen. Ocho imágenes de validación eran idénticas a imágenes de entrenamiento; las excluimos de validación. No hay etiquetas contradictorias entre los arreglos idénticos encontrados. El archivo original se conserva intacto.
 Prueba mantiene sus 624 imágenes oficiales, incluidas tres copias exactas adicionales internas, para no redefinir su composición después de observar resultados. No encontramos arreglos idénticos entre entrenamiento y prueba ni entre validación y prueba. Esto \textbf{no descarta imágenes parecidas ni varias imágenes de una persona}. Nuestro resultado corresponde a una adaptación documentada del protocolo, no a un benchmark original sin cambios.
-\begin{Codigo}{Integridad antes de cargar · idea del bloque 1}
-digest = hashlib.sha256(ruta.read_bytes()).hexdigest()
-assert digest == sha_esperada
-paquete = np.load(ruta, allow_pickle=False)
-\end{Codigo}
-La primera instrucción calcula una huella SHA-256 del archivo; \texttt{assert} detiene el ejercicio si no coincide con la copia auditada, cuyo valor fija el bloque 1. La copia también se contrastó con el MD5 oficial. Estas huellas comprueban integridad, no independencia de pacientes. \texttt{allow\_pickle=False} evita cargar objetos de Python guardados en el paquete.
-\begin{Limite}{Privacidad e independencia son preguntas diferentes}
-El archivo inspeccionado contiene arreglos numéricos, sin campos de identificación de pacientes. Eso no certifica la anonimización de los estudios originales ni permite auditar separación por persona. Para el taller usamos esta publicación autorizada y atribuida; no añadimos estudios privados.
-\end{Limite}
 
-\Pagina{BLOQUES 2–3 · ORGANIZAR Y REPRESENTAR}{Una imagen se convierte en una fila}{La etiqueta se guarda aparte: no debe filtrarse a las entradas.}
-\Figura{celda-03.png}{La representación cambia de forma, pero conserva el orden de los valores. Cada imagen aporta 784 características.}{66mm}
+\Figura{celda-02.png}{Salida guardada de 2D: clases de entrenamiento y funciones de los tres conjuntos. El conjunto de prueba se abre en 9A.}{62mm}
+\Sub{Sigue las cuatro operaciones}
+\textbf{2A} conserva la primera copia exacta de cada imagen de entrenamiento y la etiqueta de esa misma posición. \textbf{2B} excluye de validación las imágenes idénticas a las de entrenamiento. \textbf{2C} comprueba cantidades y etiquetas. \textbf{2D} dibuja el resumen y muestra qué índices de validación se excluyeron.
+\begin{Idea}{Mantener imagen y etiqueta juntas}
+Si seleccionas filas de imágenes, aplica la misma selección a sus etiquetas. Cambiar sólo una de las dos listas rompería la correspondencia que necesita el aprendizaje supervisado.
+\end{Idea}
+
+\Pagina{BLOQUE 3 · PASOS 3A–3D}{Una imagen se convierte en una fila}{La etiqueta se guarda aparte: no debe filtrarse a las entradas.}\label{bloque-3}
+\Figura{celda-03.png}{Salida guardada de 3D. La representación cambia de forma, pero conserva el orden de los valores. Cada imagen aporta 784 características.}{66mm}
 Una imagen es una matriz de 28 filas y 28 columnas: \(28\times28=784\) posiciones. \texttt{reshape} reorganiza esos valores como una fila. Al reunir imágenes, \(X\) tiene una fila por imagen y una columna por posición de píxel. \(y\) es una lista aparte con una etiqueta por fila. Mantener su correspondencia es esencial.
-\begin{Codigo}{Representación numérica · fragmento conceptual del bloque 3}
+\begin{Codigo}{3A–3B · extractos: preparar las características}
 X_train = imagenes_train.reshape(len(imagenes_train), -1).astype(np.float64) / 255.0
 X_val = imagenes_val.reshape(len(imagenes_val), -1).astype(np.float64) / 255.0
 \end{Codigo}
@@ -79,7 +205,7 @@ La fila conserva las posiciones en un orden conocido. Sin embargo, la regresión
 \textbf{Respuesta:} No: produciría 3 136, cuatro veces 784, porque se duplica tanto el número de filas como el de columnas. Ampliar visualmente la imagen de 28 × 28 no recupera detalles descartados.
 \end{Practica}
 
-\Pagina{BLOQUE 4 · PRIMERO UNA CUENTA}{Cuatro entradas, paso a paso}{Números ficticios para comprobar qué hace una predicción.}
+\Pagina{BLOQUE 4 · EJEMPLO PREVIO A 4A}{Cuatro entradas, paso a paso}{Números ficticios para comprobar qué hace una predicción.}
 \Figura{suma_cuatro_entradas.png}{Entradas y pesos inventados: cada posición aporta un producto. No son valores de radiografías ni pesos aprendidos con pacientes.}{82mm}
 \begin{enumerate}
 \item \textbf{Multiplica cada entrada por su peso.} La segunda contribución es negativa: \(0,80\times(-1)=-0,80\). Un peso puede ser negativo o mayor que uno; no es una intensidad de píxel.
@@ -99,8 +225,8 @@ s_ejemplo = 1 / (1 + np.exp(-z_ejemplo))
 Si la tercera entrada baja de 0,60 a 0,10, su contribución baja de 1,20 a 0,20. Queda \(z=-0,50\), la puntuación es aproximadamente 0,378 y la predicción pasa a clase 0. No se ha reentrenado. Es un ejemplo matemático, no una interpretación anatómica.
 \end{Practica}
 
-\Pagina{BLOQUE 4 · ENTENDER EL MODELO}{Una suma y una transformación}{La regresión logística es un clasificador pese a su nombre.}
-\Figura{sigmoide_manual.png}{La misma sigmoide del bloque 4, con diseño horizontal para la lectura impresa. La línea discontinua marca 0,5.}{45mm}
+\Pagina{BLOQUE 4 · PASOS 4A–4C}{Una suma y una transformación}{La regresión logística es un clasificador pese a su nombre.}\label{bloque-4}
+\Figura{sigmoide_manual.png}{Adaptación ilustrativa de la sigmoide de 4A–4C, con diseño horizontal para la lectura impresa. La línea discontinua marca 0,5.}{45mm}
 Cada entrada \(x_j\) es la intensidad normalizada de un píxel. El modelo aprende un peso \(w_j\) para cada entrada y un término independiente \(b\). Primero calcula un puntaje:
 \[ z=b+\sum_{j=1}^{784}w_jx_j. \qquad s=\frac{1}{1+e^{-z}}. \]
 El símbolo \(\sum\) significa «sumar las contribuciones». Un peso positivo aumenta \(z\) cuando aumenta su entrada; uno negativo lo reduce. La segunda fórmula es la \textbf{sigmoide}. Con \(z=0\), produce \(s=0,5\); con \(z=2\), aproximadamente \(0,881\); con \(z=-2\), aproximadamente \(0,119\).
@@ -117,13 +243,13 @@ Usamos la regla \(s\geq0,5\Rightarrow\) clase 1; si no se cumple, clase 0. Una p
 Es una estimación del modelo para las etiquetas de estos datos. No es una probabilidad clínica validada de que una persona tenga neumonía. El contexto, la calibración y la población de uso importan; la salida de esta práctica no debe utilizarse para decisiones médicas.
 \end{Limite}
 
-\Pagina{BLOQUE 5 · CREAR UNA REFERENCIA}{¿Qué logra una regla trivial?}{Antes de celebrar una cifra, compárala con algo sencillo.}
-\Figura{celda-05.png}{La regla de referencia siempre elige la clase más frecuente de entrenamiento. Se evalúa en validación, igual que las opciones del modelo.}{54mm}
+\Pagina{BLOQUE 5 · PASOS 5A–5D}{¿Qué logra una regla trivial?}{Antes de celebrar una cifra, compárala con algo sencillo.}\label{bloque-5}
+\Figura{celda-05.png}{Salida guardada de 5D. La regla de referencia siempre elige la clase más frecuente de entrenamiento. Se evalúa en validación, igual que las opciones del modelo.}{54mm}
 En el entrenamiento docente hay 1 213 imágenes de clase 0 y 3 477 de clase 1. Una regla que siempre responde clase 1 acertará muchas veces sin mirar los píxeles. \texttt{DummyClassifier}, con la opción \texttt{strategy="most\_frequent"}, construye esa referencia a partir de las etiquetas de entrenamiento.
-\begin{Codigo}{La referencia tiene entrenamiento y predicción}
+\begin{Codigo}{5A–5B · extractos: ajustar y predecir}
 referencia = DummyClassifier(strategy="most_frequent")
 referencia.fit(X_train, y_train)
-pred_val_referencia = referencia.predict(X_val)
+pred_base_val = referencia.predict(X_val)
 \end{Codigo}
 \texttt{fit} identifica la clase mayoritaria. \texttt{predict} produce una respuesta para cada fila de validación. Esta regla usa las frecuencias de las clases, pero ignora los valores de la imagen. Un modelo que no la supera en una medida pertinente merece revisión.
 \begin{Idea}{Un ejemplo que engaña a la exactitud}
@@ -134,40 +260,41 @@ La \textbf{exactitud} cuenta aciertos sobre todas las imágenes. La \textbf{exac
 \textbf{¿La regla trivial aprende algo?} Sí: aprende cuál es la etiqueta más frecuente. Lo que no aprende es una relación útil entre los píxeles y las etiquetas. Por eso es una referencia y no el modelo que buscamos.
 \end{Practica}
 
-\Pagina{BLOQUE 6 · ENTRENAR Y COMPARAR}{Tres opciones, una validación}{La prueba final permanece reservada.}
-\Figura{celda-06.png}{Comparación de entrenamiento y validación para los valores de C previstos antes de abrir la prueba.}{65mm}
+\Pagina{BLOQUE 6 · PASOS 6A–6E}{Tres opciones, una validación}{La prueba final permanece reservada.}\label{bloque-6}
+\Figura{celda-06.png}{Salida guardada de 6E. Comparación de entrenamiento y validación para los valores de C previstos antes de abrir la prueba.}{65mm}
 \textbf{Regularizar} significa limitar la complejidad de los pesos mediante una penalización durante el ajuste. En esta regresión, \(C\) controla inversamente su fuerza: un \(C\) menor implica más penalización. Probaremos \(0,01\), \(0,1\) y \(1\). Que \(C\) sea mayor no garantiza una mejor predicción en imágenes reservadas.
-\begin{Codigo}{Un modelo por cada opción · fragmento conceptual}
-modelo = LogisticRegression(
-    C=C, class_weight="balanced", solver="lbfgs", max_iter=2000
+\begin{Codigo}{6B · extracto del bucle sobre las opciones de C}
+candidato = LogisticRegression(
+    C=C, class_weight="balanced", solver="lbfgs",
+    max_iter=2000, tol=1e-4
 )
-modelo.fit(X_train, y_train)
-pred_val = modelo.predict(X_val)
+candidato.fit(X_train, y_train)
+score_val = balanced_accuracy_score(y_val, candidato.predict(X_val))
 \end{Codigo}
 \texttt{class\_weight="balanced"} da más peso a ejemplos de la clase menos frecuente durante el ajuste; los pesos se calculan con entrenamiento. Esto es distinto de la \textbf{métrica} exactitud equilibrada, que promedia tasas al evaluar. \texttt{lbfgs} es el método numérico de optimización. \texttt{max\_iter} fija un máximo de iteraciones: no obliga a utilizarlas todas ni equivale a entrenar 2 000 imágenes.
-Seleccionamos el valor con mayor exactitud equilibrada de \textbf{validación}. Si hay un empate, conservamos el menor \(C\). El conjunto de prueba no interviene. En la ejecución documentada se seleccionó \textbf{C = 0,1}, con \textbf{95,0\,\%} de exactitud equilibrada de validación.
+6A fija las opciones; 6B entrena y mide; 6C organiza la tabla; 6D selecciona; 6E dibuja. Seleccionamos el valor con mayor exactitud equilibrada de \textbf{validación}. Si hay un empate, conservamos el menor \(C\). El conjunto de prueba no interviene. En la ejecución documentada se seleccionó \textbf{C = 0,1}, con \textbf{95,0\,\%} de exactitud equilibrada de validación.
 \begin{Practica}{Lee ambas curvas}
 Si el resultado en entrenamiento mejora mientras validación empeora, el ajuste podría estar adaptándose demasiado a sus ejemplos. Esa es una señal de \textbf{sobreajuste}, no una prueba automática de su causa. La diferencia entre conjuntos también puede depender de composición y variabilidad.
 \end{Practica}
 
-\Pagina{BLOQUE 7 · HACER UNA PREDICCIÓN}{De una imagen a una respuesta}{Separar lo que entra, lo que sale y con qué se compara.}
-\Figura{celda-07.png}{Ejemplo de validación. El índice identifica una posición del arreglo, no un identificador clínico de paciente.}{70mm}
+\Pagina{BLOQUE 7 · PASOS 7A–7D}{De una imagen a una respuesta}{Separar lo que entra, lo que sale y con qué se compara.}\label{bloque-7}
+\Figura{celda-07.png}{Salida guardada de 7D. Ejemplo de validación. El índice identifica una posición del arreglo, no un identificador clínico de paciente.}{70mm}
 El modelo recibe la fila de 784 intensidades. \texttt{predict\_proba} devuelve dos valores, uno por clase. Sus columnas siguen el orden de \texttt{modelo.classes\_}. El cuaderno comprueba la columna correspondiente a la clase 1 y toma su puntuación. La etiqueta de referencia se usa después para comparar; no se entrega como entrada al predecir.
-\begin{Codigo}{La operación central · fragmento conceptual}
-puntuaciones = modelo.predict_proba(X_val)
-columna_1 = np.flatnonzero(modelo.classes_ == 1)[0]
-score = puntuaciones[indice, columna_1]
-prediccion = int(score >= 0.5)
+\begin{Codigo}{7B–7C · extractos: puntuación y decisión}
+columna_1 = int(np.flatnonzero(modelo.classes_ == 1)[0])
+p_val = modelo.predict_proba(X_val)[:, columna_1]
+p_ejemplo = float(p_val[i_val])
+decision = int(p_ejemplo >= 0.5)
 \end{Codigo}
-Los corchetes seleccionan una fila y una columna. \texttt{flatnonzero} encuentra la posición que cumple la comparación. \texttt{score >= 0.5} produce verdadero o falso; \texttt{int} lo convierte en 1 o 0. Con la etiqueta publicada podemos observar si hay coincidencia, pero una coincidencia individual no demuestra que el método generalice.
+Los corchetes seleccionan una fila y una columna. \texttt{flatnonzero} encuentra la posición que cumple la comparación. \texttt{p\_ejemplo >= 0.5} produce verdadero o falso; \texttt{int} lo convierte en 1 o 0. Con la etiqueta publicada podemos observar si hay coincidencia, pero una coincidencia individual no demuestra que el método generalice.
 \begin{Idea}{Tres elementos que no debemos mezclar}
 \textbf{Entrada:} los píxeles. \textbf{Predicción:} la respuesta calculada. \textbf{Referencia:} la etiqueta proporcionada por el conjunto. No modifiques la etiqueta para hacerla coincidir con el resultado, ni añadas esa etiqueta a las características.
 \end{Idea}
 \begin{Practica}{Prueba y explica}
-Cambia el índice por otro de validación, ejecuta el paso modificado y los siguientes del bloque 7 hasta actualizar la figura, y describe entrada, puntuación, umbral, predicción y referencia. Si cambia la predicción, \textbf{no significa que el modelo se haya reentrenado}: sus pesos siguen siendo los ajustados antes.
+Cambia \texttt{i\_val} en 7A por otro índice válido, ejecuta 7A–7D para actualizar la figura, y describe entrada, puntuación, umbral, predicción y referencia. Si cambia la predicción, \textbf{no significa que el modelo se haya reentrenado}: sus pesos siguen siendo los ajustados antes.
 \end{Practica}
 
-\Pagina{BLOQUE 8 · PRIMERO CONTAR}{Cuatro casos, cuatro casillas}{Aprende a leer la matriz antes de comparar varios umbrales.}
+\Pagina{BLOQUE 8 · EJEMPLO PREVIO A 8A}{Cuatro casos, cuatro casillas}{Aprende a leer la matriz antes de comparar varios umbrales.}
 \Figura{cuatro_casos_confusion.png}{Cuatro casos ficticios con puntuaciones inventadas. La matriz cuenta una vez cada caso: no describe pacientes ni resultados del conjunto médico.}{76mm}
 \begin{enumerate}
 \item \textbf{Decide con el umbral.} Las puntuaciones \([0,20;0,80;0,30;0,70]\) producen predicciones \([0;1;0;1]\) al aplicar \(s\geq0,5\).
@@ -186,25 +313,25 @@ confusion_matrix(y_ejemplo, pred_ejemplo, labels=[0, 1])
 C pasa de FN a VP: 0,30 cumple \texttt{>= 0.3}, que incluye la igualdad. La matriz queda \texttt{[[1, 1], [0, 2]]}. Los otros casos no cambian y la suma sigue siendo cuatro. No han cambiado las puntuaciones ni los pesos.
 \end{Practica}
 
-\Pagina{BLOQUE 8 · VARIAR LA DECISIÓN}{El umbral mueve los errores}{Experimentamos con validación, sin utilizar prueba para elegir.}
-\Figura{celda-08.png}{La misma colección de puntuaciones se convierte en clases con umbrales diferentes. Los pesos del modelo permanecen iguales.}{71mm}
+\Pagina{BLOQUE 8 · PASOS 8A–8D}{El umbral mueve los errores}{Experimentamos con validación, sin utilizar prueba para elegir.}\label{bloque-8}
+\Figura{celda-08.png}{Salida guardada de 8C. La misma colección de puntuaciones se convierte en clases con umbrales diferentes. Los pesos del modelo permanecen iguales.}{71mm}
 Al bajar el umbral, más imágenes se clasifican como 1. Esto no puede disminuir el número de positivos predichos si conservamos las mismas puntuaciones. Puede reducir falsos negativos y aumentar falsos positivos. Al subirlo ocurre el intercambio contrario. Los cambios exactos dependen de dónde estén las puntuaciones respecto a cada umbral.
-\begin{Codigo}{Mismo modelo, tres reglas de decisión}
-for umbral in [0.3, 0.5, 0.7]:
-    pred_val = (p_val >= umbral).astype(int)
-    matriz = confusion_matrix(y_val, pred_val, labels=[0, 1])
+\begin{Codigo}{8B · extracto: repetir con los umbrales de 8A}
+for umbral in umbrales_demo:
+    pred = (p_val >= umbral).astype(int)
+    matriz = confusion_matrix(y_val, pred, labels=[0, 1])
 \end{Codigo}
 El bucle \texttt{for} repite las instrucciones para cada valor. \texttt{astype(int)} convierte una colección de comparaciones a ceros y unos. \texttt{labels=[0,1]} conserva el mismo orden de clases, de modo que las celdas de las matrices sean comparables.
 \begin{Idea}{La regla del informe}
-Este ejercicio conserva \textbf{0,5} como umbral final predefinido. La comparación 0,3/0,5/0,7 sirve para entender el efecto de la decisión; no utiliza el test para buscar una cifra más atractiva. La selección de C sí se hace con validación, siguiendo el criterio definido antes.
+8A fija los umbrales, 8B cuenta, 8C dibuja y 8D confirma las decisiones. Este ejercicio conserva \textbf{0,5} como umbral final predefinido. La comparación 0,3/0,5/0,7 sirve para entender el efecto de la decisión; no utiliza el test para buscar una cifra más atractiva. La selección de C sí se hace con validación, siguiendo el criterio definido antes.
 \end{Idea}
 En un estudio aplicado, elegir un umbral requiere definir el uso, los costos de los errores y un procedimiento de validación pertinente. No existe un umbral clínico universal que podamos deducir de este pequeño ejemplo.
 \begin{Practica}{Pregunta resuelta}
 \textbf{Si bajo el umbral, ¿aprende el modelo otros pesos?} No. Sólo cambia cómo convertimos sus puntuaciones en categorías. Volver a ejecutar \texttt{fit} es una operación diferente.
 \end{Practica}
 
-\Pagina{BLOQUE 9 · ABRIR LA PRUEBA}{Cuatro casillas para contar}{Modelo elegido y umbral fijado antes de calcular el resultado final.}
-\Figura{celda-09.png}{Matriz de confusión de prueba. Lee primero los ejes: filas de referencia y columnas de predicción.}{77mm}
+\Pagina{BLOQUE 9 · PASOS 9A–9F}{Cuatro casillas para contar}{Modelo elegido y umbral fijado antes de calcular el resultado final.}\label{bloque-9}
+\Figura{celda-09.png}{Salida guardada de 9F. Matriz de confusión de prueba. Lee primero los ejes: filas de referencia y columnas de predicción.}{77mm}
 Una \textbf{matriz de confusión} organiza los resultados en dos direcciones. La fila indica la etiqueta publicada; la columna, la respuesta del modelo. En este cuaderno el orden es 0, 1. Positivo significa \textbf{clase 1 del conjunto}.
 \par\begin{tabularx}{\linewidth}{@{}Ycc@{}}\toprule
  & \textbf{Predice 0} & \textbf{Predice 1}\\\midrule
@@ -212,23 +339,23 @@ Una \textbf{matriz de confusión} organiza los resultados en dos direcciones. La
 \textbf{Referencia 1} & FN = 14 & VP = 376\\\bottomrule
 \end{tabularx}\par
 \textbf{Verdadero negativo (VN):} coincide en 0. \textbf{Verdadero positivo (VP):} coincide en 1. \textbf{Falso positivo (FP):} predice 1 donde la referencia es 0. \textbf{Falso negativo (FN):} predice 0 donde la referencia es 1. Los cuatro conteos suman las 624 imágenes de prueba.
-\begin{Codigo}{Contar manteniendo un orden explícito}
-matriz = confusion_matrix(y_test, pred_test, labels=[0, 1])
-vn, fp, fn, vp = matriz.ravel()
+\begin{Codigo}{9E · extracto: construir la matriz de prueba}
+matriz_test = confusion_matrix(y_test, pred_test, labels=[0, 1])
+vn, fp, fn, vp = [int(v) for v in matriz_test.ravel()]
 \end{Codigo}
 \texttt{ravel} recorre la matriz por filas: arriba izquierda, arriba derecha, abajo izquierda, abajo derecha. Por eso el orden de los nombres es importante. Cambiar los ejes o el orden de etiquetas sin cambiar la interpretación produciría métricas equivocadas.
 \begin{Limite}{Una vez visto el test}
 Mirar sus errores puede generar nuevas preguntas, pero no debemos ajustar C o el umbral a esos resultados y presentar la misma prueba como independiente. Una nueva decisión necesita un diseño de evaluación que conserve datos realmente reservados.
 \end{Limite}
 
-\Pagina{BLOQUE 10 · INTERPRETAR LAS MÉTRICAS}{El denominador cambia la pregunta}{Cada porcentaje debe decir qué está contando.}
-\Figura{celda-10.png}{Comparación final con la referencia. La exactitud equilibrada exige atender a ambas clases.}{66mm}
+\Pagina{BLOQUE 10 · PASOS 10A–10G}{El denominador cambia la pregunta}{Cada porcentaje debe decir qué está contando.}\label{bloque-10}
+\Figura{celda-10.png}{Salida guardada de 10G. Comparación final con la referencia. La exactitud equilibrada exige atender a ambas clases.}{66mm}
 \par\begin{tabularx}{\linewidth}{@{}p{34mm}Y@{}}\toprule
 \textbf{Medida} & \textbf{Cálculo e interpretación en esta ejecución}\\\midrule
-Exactitud & \((VN+VP)/624 = (158+376)/624 = 85,6\,\%\). De todas las imágenes, ¿cuántas coincidieron?\\
-Sensibilidad & \(VP/(VP+FN)=376/390=96,4\,\%\). Entre las imágenes de referencia 1, ¿cuántas detectó como 1?\\
-Especificidad & \(VN/(VN+FP)=158/234=67,5\,\%\). Entre las imágenes de referencia 0, ¿cuántas reconoció como 0?\\
-Exactitud equilibrada & \((\text{sensibilidad}+\text{especificidad})/2 = 82,0\,\%\). Promedia la tasa de ambas clases con el mismo peso.\\\bottomrule
+Sensibilidad · 10A & \(VP/(VP+FN)=376/390=96,4\,\%\). Entre las imágenes de referencia 1, ¿cuántas detectó como 1?\\
+Especificidad · 10B & \(VN/(VN+FP)=158/234=67,5\,\%\). Entre las imágenes de referencia 0, ¿cuántas reconoció como 0?\\
+Exactitud · 10C & \((VN+VP)/624 = (158+376)/624 = 85,6\,\%\). De todas las imágenes, ¿cuántas coincidieron?\\
+Exactitud equilibrada · 10D & \((\text{sensibilidad}+\text{especificidad})/2 = 82,0\,\%\). Promedia la tasa de ambas clases con el mismo peso.\\\bottomrule
 \end{tabularx}\par
 \begin{Idea}{Por qué no intercambiar sensibilidad y precisión positiva}
 La sensibilidad parte de los \textbf{positivos de referencia}: \(VP/(VP+FN)\). La precisión positiva parte de los \textbf{positivos predichos}: \(VP/(VP+FP)\). Pueden tener valores muy distintos. Antes de memorizar una fórmula, escribe qué conjunto está en su denominador.
@@ -236,10 +363,10 @@ La sensibilidad parte de los \textbf{positivos de referencia}: \(VP/(VP+FN)\). L
 El modelo obtiene aquí \textbf{82,0\,\%} de exactitud equilibrada; la regla mayoritaria obtiene \textbf{50,0\,\%}. Esta comparación informa sobre la tarea y la muestra concretas. No establece rendimiento clínico ni garantiza resultados similares en otro hospital, edad, equipo o tipo de imagen.
 \Fuente{Las tasas proceden de la ejecución guardada del cuaderno. El test conserva 624 imágenes oficiales, incluidas tres copias exactas adicionales internas. Sin identificadores de pacientes no calculamos intervalos suponiendo independencia por persona.}
 
-\Pagina{BLOQUE 11 · MIRAR LOS ERRORES}{Un resultado global no cuenta todo}{Los ejemplos se eligen con una regla, no por su atractivo visual.}
-\Figura{celda-11.png}{El cuaderno muestra el primer ejemplo disponible de cada casilla de la matriz de confusión; si una casilla está vacía, lo indica.}{85mm}
+\Pagina{BLOQUE 11 · PASOS 11A–11C}{Un resultado global no cuenta todo}{Los ejemplos se eligen con una regla, no por su atractivo visual.}\label{bloque-11}
+\Figura{celda-11.png}{Salida guardada de 11C. El cuaderno muestra el primer ejemplo disponible de cada casilla de la matriz de confusión; si una casilla está vacía, lo indica.}{85mm}
 Una galería ayuda a conectar los conteos con las imágenes. Cada panel incluye referencia, predicción, puntuación e índice. El criterio de selección es determinista: \textbf{la primera imagen de cada grupo en el orden de prueba}. No representa una muestra aleatoria ni los casos más frecuentes o más difíciles.
-\begin{Codigo}{Localizar un tipo de error · ejemplo de falso positivo}
+\begin{Codigo}{Ejemplo conceptual relacionado con 11B · falso positivo}
 indices_fp = np.flatnonzero((y_test == 0) & (pred_test == 1))
 if len(indices_fp):
     primer_fp = indices_fp[0]
@@ -250,9 +377,9 @@ Puedes decir: «La referencia es 0, el modelo produjo 1 y la puntuación fue est
 \end{Practica}
 Un modelo puede aprovechar señales de posición, recorte, contraste o adquisición en lugar de lo que nos interesa. Los errores invitan a investigar esos factores. La galería es una revisión descriptiva posterior; no se usa para cambiar el modelo de este informe.
 
-\Pagina{BLOQUE 12 · DEJAR UN REGISTRO}{Un resultado que se pueda explicar}{Reproducir significa conservar decisiones, datos, código y entorno.}\label{registro-ejecucion}
-\Figura{celda-12.png}{Resumen de la ejecución. Cada etapa tiene una función distinta y un conjunto de datos asignado.}{70mm}
-Una cifra sin contexto no permite repetir ni juzgar un experimento. El bloque 12 reúne el origen de los datos, sus huellas, la regla de limpieza, las opciones probadas, el valor de C seleccionado, el umbral y los resultados. También guarda las versiones de las bibliotecas utilizadas.
+\Pagina{BLOQUE 12 · PASOS 12A–12F}{Un resultado que se pueda explicar}{Reproducir significa conservar decisiones, datos, código y entorno.}\label{registro-ejecucion}\label{bloque-12}
+\Figura{celda-12.png}{Salida guardada de 12F. Resumen de la ejecución. Cada etapa tiene una función distinta y un conjunto de datos asignado.}{55mm}
+Una cifra sin contexto no permite repetir ni juzgar un experimento. 12A registra datos y huellas; 12B, modelo y decisiones; 12C, evaluación y ejemplos; 12D, versiones y límites. 12E escribe \texttt{resultados\_modulo\_ml.json}; 12F dibuja el mapa final. Se conservan así la regla de limpieza, las opciones probadas, C, el umbral y los resultados.
 \begin{Idea}{Ficha breve de esta ejecución}
 \textbf{Datos:} PneumoniaMNIST 28 × 28. \textbf{Entrenamiento:} 4 690 imágenes tras deduplicación exacta. \textbf{Validación:} 516 tras retirar coincidencias con entrenamiento. \textbf{Prueba:} 624 imágenes oficiales. \textbf{Modelo:} regresión logística, ponderación equilibrada de clases. \textbf{C:} 0,1. \textbf{Umbral:} 0,5. \textbf{Exactitud equilibrada de prueba:} 82,0\,\%.
 \end{Idea}
@@ -347,7 +474,7 @@ Usa las salidas guardadas. Muestra galería, representación, comparación con l
 \texttt{assert condición} & Detiene la ejecución si una comprobación no se cumple; no lo borres para esconder un problema.\\\bottomrule
 \end{tabularx}\par
 \Sub{Si algo falla}
-\textbf{No aparece una figura:} algunos pasos sólo preparan variables. Llega al paso de dibujo del bloque y revisa si hay un mensaje de error. \textbf{No existe una variable:} ejecuta desde el paso 1A en orden. \textbf{La descarga se interrumpe:} revisa la conexión y repite el paso de descarga del bloque 1 y los posteriores de comprobación y carga; conserva la verificación de integridad.
+\textbf{No aparece una figura:} algunos pasos sólo preparan variables. Busca «figura» en el mapa de pasos y llega a esa celda; revisa si hay un mensaje de error. \textbf{No existe una variable:} ejecuta desde el paso 1A en orden. \textbf{La descarga se interrumpe:} revisa la conexión y repite 1D y después 1E–1H; conserva la verificación de integridad.
 \textbf{Aparece una advertencia de convergencia:} no la interpretes como un resultado válido sin revisión. Comprueba versión, preparación y límite de iteraciones; una optimización inconclusa puede alterar la comparación. \textbf{Cambiaste una celda:} ejecutar sólo esa celda no actualiza automáticamente las salidas posteriores.
 \begin{Idea}{Cómo practicar con orden}
 Guarda una copia, cambia una sola opción permitida y anota tu predicción antes de ejecutar. Experimenta con entrenamiento y validación. Si utilizas repetidamente la prueba para decidir, la práctica sigue siendo educativa, pero esa prueba ya no mide una decisión independiente.
@@ -361,10 +488,10 @@ Guarda una copia, cambia una sola opción permitida y anota tu predicción antes
 \item \textbf{scikit-learn.} \href{https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html}{Regresión logística}; \href{https://scikit-learn.org/stable/modules/generated/sklearn.dummy.DummyClassifier.html}{referencia DummyClassifier}; \href{https://scikit-learn.org/stable/modules/model_evaluation.html}{métricas de evaluación}; \href{https://scikit-learn.org/stable/common_pitfalls.html}{separación de datos y errores frecuentes}.
 \end{enumerate}
 \Sub{Atribución y modificaciones}
-PneumoniaMNIST y su fuente indicada se distribuyen bajo \href{https://creativecommons.org/licenses/by/4.0/}{Creative Commons Attribution 4.0 (CC BY 4.0)}. Se atribuye la colección derivada a Yang y colaboradores y las imágenes de origen a Kermany, Zhang y Goldbaum. MedMNIST ya realizó el recorte y la reducción a 28 × 28. Este taller conserva el archivo publicado, adapta la selección docente eliminando copias exactas descritas en la página 3, normaliza intensidades y dibuja nuevas figuras. No hay respaldo implícito de los autores a este taller.
+PneumoniaMNIST y su fuente indicada se distribuyen bajo \href{https://creativecommons.org/licenses/by/4.0/}{Creative Commons Attribution 4.0 (CC BY 4.0)}. Se atribuye la colección derivada a Yang y colaboradores y las imágenes de origen a Kermany, Zhang y Goldbaum. MedMNIST ya realizó el recorte y la reducción a 28 × 28. Este taller conserva el archivo publicado, adapta la selección docente eliminando copias exactas descritas en la página \pageref{datos-deduplicacion}, normaliza intensidades y dibuja nuevas figuras. No hay respaldo implícito de los autores a este taller.
 La portada y las figuras de resultados se componen a partir de las imágenes y cálculos del ejercicio; no son imágenes médicas generadas con IA. Los diagramas conceptuales son ilustraciones educativas. Las salidas son una ejecución de referencia, no una certificación diagnóstica.
 \Sub{Conservar y recompilar}
-El cuaderno completo, sus salidas y la guía están en el \href{https://github.com/FisikMedik/taller-imagenes-medicas-python}{repositorio del taller}. El proyecto de edición se distribuye como:\par
+El cuaderno completo, sus salidas y la guía están en el \href{https://github.com/FisikMedik/taller-imagenes-medicas-python}{repositorio del taller}. La \href{https://fisikmedik.github.io/taller-imagenes-medicas-python/presentacion_ml.html}{presentación interactiva} sigue los mismos 12 bloques y 58 pasos; el \href{https://fisikmedik.github.io/taller-imagenes-medicas-python/modulo_ml.html}{tutorial web} muestra el código completo y sus resultados. El proyecto de edición se distribuye como:\par
 \texttt{Fuente\_LaTeX\_modulo\_ML.zip}.\par
 Incluye fuente principal, estilo, figuras, fuentes tipográficas y su licencia. Extrae el ZIP y compila \texttt{Guia\_modulo\_ML.tex} dos veces con \textbf{XeLaTeX}. Mantén las carpetas junto a la fuente.
 \begin{Idea}{Identidad del archivo de datos}
