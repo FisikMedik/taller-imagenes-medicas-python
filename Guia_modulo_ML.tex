@@ -34,14 +34,14 @@ Evaluación & Comparar predicciones con etiquetas reservadas y contar aciertos y
 \end{tabularx}\par
 \Sub{Cómo empezar}
 Abre \href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Modulo_ML_radiografias.ipynb}{el cuaderno del módulo en Google Colab}. Inicia sesión si se solicita. Usa CPU, pulsa el triángulo del primer paso de código (1A) y espera a que termine. Continúa de arriba abajo. Si quieres conservar cambios, elige \textbf{Archivo → Guardar una copia en Drive}; el ejercicio no necesita montar tus archivos de Drive.
-El \textbf{bloque 1} prepara las bibliotecas y carga la copia pública local o la descarga. El cuaderno conserva \textbf{12 bloques temáticos}, divididos ahora en \textbf{58 celdas de código breves}: pasos \textbf{1A, 1B, \ldots, 12F}. El número identifica el bloque; la letra, el paso dentro de él. Cada paso tiene su propia explicación y botón de ejecución. Sigue el orden completo; algunos pasos preparan variables y otros muestran la salida. Un \texttt{NameError} suele indicar que falta un paso anterior. Los mapas siguientes enlazan cada paso y su explicación. Los fragmentos ilustran las operaciones indicadas; el código completo y sus salidas están en el cuaderno. Los ejemplos ficticios se rotulan como tales.
+El \textbf{bloque 1} prepara las bibliotecas y carga la copia pública local o la descarga. El cuaderno conserva \textbf{12 bloques temáticos}, divididos ahora en \textbf{58 celdas de código breves}: pasos \textbf{1A, 1B, \ldots, 12F}. El número identifica el bloque; la letra, el paso dentro de él. Cada celda explica sus comandos. Ejecuta en orden una vez para preparar datos y modelo; después usa los deslizadores y menús junto a las figuras. Los mapas siguientes enlazan cada paso y su explicación. Los fragmentos ilustran las operaciones indicadas; el código completo y sus salidas están en el cuaderno. Los ejemplos ficticios se rotulan como tales.
 \par Las cifras impresas corresponden a la ejecución local documentada en la página \pageref{registro-ejecucion}. Otra versión de las bibliotecas puede producir resultados y una selección de C diferentes; registra los de tu propia ejecución.
 \begin{Practica}{Dos recorridos}
 En una demostración breve, observa imágenes, entrenamiento, matriz de confusión y errores. Para aprender haciendo, reserva la ampliación completa. Este material es opcional y no modifica por sí solo el horario oficial de la escuela.
 \end{Practica}
 
 \Pagina{MAPA DEL CUADERNO · 1 DE 3}{De imágenes a una regla}{Los pasos mantienen el mismo nombre y orden que el notebook y la presentación interactiva.}
-\textbf{Cómo usar este mapa:} el identificador azul abre esa celda en Colab; la última columna lleva a la explicación del manual. Ejecuta siempre los pasos anteriores que preparan sus variables.
+\textbf{Cómo usar este mapa:} el identificador azul abre esa celda en Colab; la última columna lleva a la explicación del manual. Ejecuta en orden una vez; después usa los controles junto a las figuras.
 \begingroup\small\setlength{\tabcolsep}{5pt}\renewcommand{\arraystretch}{1.16}
 \begin{tabularx}{\linewidth}{@{}p{14mm}Yp{17mm}@{}}\toprule
 \textbf{Paso} & \textbf{Título de la celda} & \textbf{Manual}\\\midrule
@@ -73,13 +73,13 @@ En una demostración breve, observa imágenes, entrenamiento, matriz de confusi�
 \href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Modulo_ML_radiografias.ipynb\#scrollTo=codigo-4c}{\textbf{4C}} & Ver la curva y sus ejemplos · figura & p.\,\pageref{bloque-4}\\
 \bottomrule\end{tabularx}\endgroup
 \begin{Idea}{La numeración no depende de cuántas veces ejecutes}
-Los códigos 1A, 6E o 12F son identificadores del material. El número entre corchetes que Colab muestra al ejecutar puede cambiar: no lo uses para localizar el paso. «Figura» marca la celda que dibuja; las anteriores preparan sus datos.
+«Figura» señala el resultado gráfico. En 3D, 4C, 6E, 7D, 8C y 11C aparecen controles junto a la imagen; al soltarlos o elegir una opción se actualiza esa vista.
 \end{Idea}
 \Fuente{Abrir un enlace no ejecuta Python. En una sesión vacía, comienza por 1A. La presentación permite alternar entre «Paso del cuaderno», «Código y salida guardada» y «Explorar el concepto».}
 
 
 \Pagina{MAPA DEL CUADERNO · 2 DE 3}{Aprender y tomar decisiones}{Los pasos mantienen el mismo nombre y orden que el notebook y la presentación interactiva.}
-\textbf{Cómo usar este mapa:} el identificador azul abre esa celda en Colab; la última columna lleva a la explicación del manual. Ejecuta siempre los pasos anteriores que preparan sus variables.
+\textbf{Cómo usar este mapa:} el identificador azul abre esa celda en Colab; la última columna lleva a la explicación del manual. Ejecuta en orden una vez; después usa los controles junto a las figuras.
 \begingroup\small\setlength{\tabcolsep}{5pt}\renewcommand{\arraystretch}{1.16}
 \begin{tabularx}{\linewidth}{@{}p{14mm}Yp{17mm}@{}}\toprule
 \textbf{Paso} & \textbf{Título de la celda} & \textbf{Manual}\\\midrule
@@ -109,13 +109,13 @@ Los códigos 1A, 6E o 12F son identificadores del material. El número entre cor
 \href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Modulo_ML_radiografias.ipynb\#scrollTo=codigo-8d}{\textbf{8D}} & Confirmar las decisiones del informe & p.\,\pageref{bloque-8}\\
 \bottomrule\end{tabularx}\endgroup
 \begin{Idea}{La numeración no depende de cuántas veces ejecutes}
-Los códigos 1A, 6E o 12F son identificadores del material. El número entre corchetes que Colab muestra al ejecutar puede cambiar: no lo uses para localizar el paso. «Figura» marca la celda que dibuja; las anteriores preparan sus datos.
+«Figura» señala el resultado gráfico. En 3D, 4C, 6E, 7D, 8C y 11C aparecen controles junto a la imagen; al soltarlos o elegir una opción se actualiza esa vista.
 \end{Idea}
 \Fuente{Abrir un enlace no ejecuta Python. En una sesión vacía, comienza por 1A. La presentación permite alternar entre «Paso del cuaderno», «Código y salida guardada» y «Explorar el concepto».}
 
 
 \Pagina{MAPA DEL CUADERNO · 3 DE 3}{Evaluar y dejar un registro}{Los pasos mantienen el mismo nombre y orden que el notebook y la presentación interactiva.}
-\textbf{Cómo usar este mapa:} el identificador azul abre esa celda en Colab; la última columna lleva a la explicación del manual. Ejecuta siempre los pasos anteriores que preparan sus variables.
+\textbf{Cómo usar este mapa:} el identificador azul abre esa celda en Colab; la última columna lleva a la explicación del manual. Ejecuta en orden una vez; después usa los controles junto a las figuras.
 \begingroup\small\setlength{\tabcolsep}{5pt}\renewcommand{\arraystretch}{1.16}
 \begin{tabularx}{\linewidth}{@{}p{14mm}Yp{17mm}@{}}\toprule
 \textbf{Paso} & \textbf{Título de la celda} & \textbf{Manual}\\\midrule
@@ -150,7 +150,7 @@ Los códigos 1A, 6E o 12F son identificadores del material. El número entre cor
 \href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Modulo_ML_radiografias.ipynb\#scrollTo=codigo-12f}{\textbf{12F}} & Cerrar con el mapa del experimento · figura & p.\,\pageref{bloque-12}\\
 \bottomrule\end{tabularx}\endgroup
 \begin{Idea}{La numeración no depende de cuántas veces ejecutes}
-Los códigos 1A, 6E o 12F son identificadores del material. El número entre corchetes que Colab muestra al ejecutar puede cambiar: no lo uses para localizar el paso. «Figura» marca la celda que dibuja; las anteriores preparan sus datos.
+«Figura» señala el resultado gráfico. En 3D, 4C, 6E, 7D, 8C y 11C aparecen controles junto a la imagen; al soltarlos o elegir una opción se actualiza esa vista.
 \end{Idea}
 \Fuente{Abrir un enlace no ejecuta Python. En una sesión vacía, comienza por 1A. La presentación permite alternar entre «Paso del cuaderno», «Código y salida guardada» y «Explorar el concepto».}
 
@@ -198,7 +198,7 @@ X_val = imagenes_val.reshape(len(imagenes_val), -1).astype(np.float64) / 255.0
 \texttt{len} cuenta imágenes. El \texttt{-1} pide calcular cuántas columnas hacen falta: 784. \texttt{astype(np.float64)} prepara números decimales. Dividir por 255 convierte el rango 0–255 en 0–1; por ejemplo, 128 pasa a aproximadamente 0,502. Las etiquetas \texttt{y\_train} e \texttt{y\_val} ya quedaron emparejadas con las imágenes en el bloque 2.
 Esta división es una transformación \textbf{fija}: no calcula medias ni aprende de validación o prueba. Si utilizáramos una transformación que aprende estadísticas, habría que ajustarla únicamente con entrenamiento y aplicar después la misma transformación a los demás conjuntos.
 \begin{Idea}{Qué pierde y qué conserva esta elección}
-La fila conserva las posiciones en un orden conocido. Sin embargo, la regresión logística no incorpora vecindarios, desplazamientos ni filtros espaciales como lo hace una red convolucional. Es una referencia sencilla para entender el proceso completo, no una arquitectura avanzada para radiología.
+El control \textbf{Imagen} de 3D pasa \texttt{indice\_imagen} a \texttt{ver\_imagen}. La función selecciona esa fila y actualiza imagen, vector y etiqueta juntos. La representación conserva posiciones; la regresión logística no incorpora vecindarios como una red convolucional.
 \end{Idea}
 \begin{Practica}{Calcula antes de seguir}
 \textbf{Pregunta:} ¿Una imagen de 56 × 56 produciría el doble de características?\\
@@ -226,7 +226,7 @@ Si la tercera entrada baja de 0,60 a 0,10, su contribución baja de 1,20 a 0,20.
 \end{Practica}
 
 \Pagina{BLOQUE 4 · PASOS 4A–4C}{Una suma y una transformación}{La regresión logística es un clasificador pese a su nombre.}\label{bloque-4}
-\Figura{sigmoide_manual.png}{Adaptación ilustrativa de la sigmoide de 4A–4C, con diseño horizontal para la lectura impresa. La línea discontinua marca 0,5.}{45mm}
+\Figura{celda-04.png}{Salida guardada de 4C: el punto inicial z=0 produce 0,5. El deslizador mueve el punto sobre la curva.}{45mm}
 Cada entrada \(x_j\) es la intensidad normalizada de un píxel. El modelo aprende un peso \(w_j\) para cada entrada y un término independiente \(b\). Primero calcula un puntaje:
 \[ z=b+\sum_{j=1}^{784}w_jx_j. \qquad s=\frac{1}{1+e^{-z}}. \]
 El símbolo \(\sum\) significa «sumar las contribuciones». Un peso positivo aumenta \(z\) cuando aumenta su entrada; uno negativo lo reduce. La segunda fórmula es la \textbf{sigmoide}. Con \(z=0\), produce \(s=0,5\); con \(z=2\), aproximadamente \(0,881\); con \(z=-2\), aproximadamente \(0,119\).
@@ -235,7 +235,7 @@ z = 2.0
 s = 1 / (1 + np.exp(-z))
 print(round(s, 3))  # 0.881
 \end{Codigo}
-\texttt{np.exp} calcula la exponencial. La biblioteca ajusta los pesos para reducir una función de error respecto a las etiquetas de entrenamiento, con una penalización que limita su magnitud. \textbf{Aprender} significa ajustar esos números; \textbf{predecir} significa reutilizarlos.
+\texttt{np.exp} calcula la exponencial. En 4C, \texttt{FloatSlider} crea el control \textbf{Suma z}; \texttt{interactive} conecta ese control con el argumento \texttt{suma\_z} de \texttt{ver\_sigmoide} y actualiza el punto. \texttt{continuous\_update=False} espera a soltar el control. Aquí no se aprenden pesos.
 \begin{Idea}{Cómo aparece una decisión}
 Usamos la regla \(s\geq0,5\Rightarrow\) clase 1; si no se cumple, clase 0. Una puntuación de 0,501 y otra de 0,999 terminan en la misma clase, aunque sus valores sean distintos. Por eso conviene distinguir puntuación, umbral y etiqueta predicha.
 \end{Idea}
@@ -272,7 +272,7 @@ candidato.fit(X_train, y_train)
 score_val = balanced_accuracy_score(y_val, candidato.predict(X_val))
 \end{Codigo}
 \texttt{class\_weight="balanced"} da más peso a ejemplos de la clase menos frecuente durante el ajuste; los pesos se calculan con entrenamiento. Esto es distinto de la \textbf{métrica} exactitud equilibrada, que promedia tasas al evaluar. \texttt{lbfgs} es el método numérico de optimización. \texttt{max\_iter} fija un máximo de iteraciones: no obliga a utilizarlas todas ni equivale a entrenar 2 000 imágenes.
-6A fija las opciones; 6B entrena y mide; 6C organiza la tabla; 6D selecciona; 6E dibuja. Seleccionamos el valor con mayor exactitud equilibrada de \textbf{validación}. Si hay un empate, conservamos el menor \(C\). El conjunto de prueba no interviene. En la ejecución documentada se seleccionó \textbf{C = 0,1}, con \textbf{95,0\,\%} de exactitud equilibrada de validación.
+6D selecciona el modelo. En 6E, el menú \textbf{Inspeccionar C} pasa \texttt{C\_vista} a \texttt{ver\_candidatos}: resalta una opción sin cambiar \texttt{C\_elegido}, los pesos ni el informe. Seleccionamos el valor con mayor exactitud equilibrada de \textbf{validación}. Si hay un empate, conservamos el menor \(C\). El conjunto de prueba no interviene. En la ejecución documentada se seleccionó \textbf{C = 0,1}, con \textbf{95,0\,\%} de exactitud equilibrada de validación.
 \begin{Practica}{Lee ambas curvas}
 Si el resultado en entrenamiento mejora mientras validación empeora, el ajuste podría estar adaptándose demasiado a sus ejemplos. Esa es una señal de \textbf{sobreajuste}, no una prueba automática de su causa. La diferencia entre conjuntos también puede depender de composición y variabilidad.
 \end{Practica}
@@ -280,18 +280,18 @@ Si el resultado en entrenamiento mejora mientras validación empeora, el ajuste 
 \Pagina{BLOQUE 7 · PASOS 7A–7D}{De una imagen a una respuesta}{Separar lo que entra, lo que sale y con qué se compara.}\label{bloque-7}
 \Figura{celda-07.png}{Salida guardada de 7D. Ejemplo de validación. El índice identifica una posición del arreglo, no un identificador clínico de paciente.}{70mm}
 El modelo recibe la fila de 784 intensidades. \texttt{predict\_proba} devuelve dos valores, uno por clase. Sus columnas siguen el orden de \texttt{modelo.classes\_}. El cuaderno comprueba la columna correspondiente a la clase 1 y toma su puntuación. La etiqueta de referencia se usa después para comparar; no se entrega como entrada al predecir.
-\begin{Codigo}{7B–7C · extractos: puntuación y decisión}
-columna_1 = int(np.flatnonzero(modelo.classes_ == 1)[0])
-p_val = modelo.predict_proba(X_val)[:, columna_1]
-p_ejemplo = float(p_val[i_val])
-decision = int(p_ejemplo >= 0.5)
+\begin{Codigo}{7D · extracto: la función recibe los dos controles}
+def ver_prediccion(indice_validacion=0, umbral_vista=0.5):
+    puntuacion = float(p_val[indice_validacion])
+    prediccion = int(puntuacion >= umbral_vista)
+    # Continúa dibujando la imagen y su puntuación.
 \end{Codigo}
-Los corchetes seleccionan una fila y una columna. \texttt{flatnonzero} encuentra la posición que cumple la comparación. \texttt{p\_ejemplo >= 0.5} produce verdadero o falso; \texttt{int} lo convierte en 1 o 0. Con la etiqueta publicada podemos observar si hay coincidencia, pero una coincidencia individual no demuestra que el método generalice.
+\texttt{def} define una función; sus argumentos reciben los valores de los controles. Los corchetes seleccionan una puntuación. \texttt{>=} compara con el umbral; \texttt{int} convierte verdadero/falso en 1/0. La función dibuja el resultado sin volver a ajustar los pesos.
 \begin{Idea}{Tres elementos que no debemos mezclar}
 \textbf{Entrada:} los píxeles. \textbf{Predicción:} la respuesta calculada. \textbf{Referencia:} la etiqueta proporcionada por el conjunto. No modifiques la etiqueta para hacerla coincidir con el resultado, ni añadas esa etiqueta a las características.
 \end{Idea}
 \begin{Practica}{Prueba y explica}
-Cambia \texttt{i\_val} en 7A por otro índice válido, ejecuta 7A–7D para actualizar la figura, y describe entrada, puntuación, umbral, predicción y referencia. Si cambia la predicción, \textbf{no significa que el modelo se haya reentrenado}: sus pesos siguen siendo los ajustados antes.
+En 7D, mueve \textbf{Imagen} y \textbf{Umbral} junto a la figura. \texttt{indice\_validacion} selecciona una imagen de validación; \texttt{umbral\_vista} cambia sólo la regla ilustrada. Si cambia la predicción, \textbf{no significa que el modelo se haya reentrenado}: sus pesos siguen siendo los ajustados antes.
 \end{Practica}
 
 \Pagina{BLOQUE 8 · EJEMPLO PREVIO A 8A}{Cuatro casos, cuatro casillas}{Aprende a leer la matriz antes de comparar varios umbrales.}
@@ -314,21 +314,20 @@ C pasa de FN a VP: 0,30 cumple \texttt{>= 0.3}, que incluye la igualdad. La matr
 \end{Practica}
 
 \Pagina{BLOQUE 8 · PASOS 8A–8D}{El umbral mueve los errores}{Experimentamos con validación, sin utilizar prueba para elegir.}\label{bloque-8}
-\Figura{celda-08.png}{Salida guardada de 8C. La misma colección de puntuaciones se convierte en clases con umbrales diferentes. Los pesos del modelo permanecen iguales.}{71mm}
+\Figura{celda-08.png}{Salida inicial de 8C con umbral 0,5. El deslizador actualiza esta matriz de validación; las puntuaciones y los pesos permanecen iguales.}{64mm}
 Al bajar el umbral, más imágenes se clasifican como 1. Esto no puede disminuir el número de positivos predichos si conservamos las mismas puntuaciones. Puede reducir falsos negativos y aumentar falsos positivos. Al subirlo ocurre el intercambio contrario. Los cambios exactos dependen de dónde estén las puntuaciones respecto a cada umbral.
-\begin{Codigo}{8B · extracto: repetir con los umbrales de 8A}
-for umbral in umbrales_demo:
-    pred = (p_val >= umbral).astype(int)
-    matriz = confusion_matrix(y_val, pred, labels=[0, 1])
+\begin{Codigo}{8C · extracto: recalcular al mover el umbral}
+def ver_umbral(umbral_validacion=0.5):
+    prediccion = (p_val >= umbral_validacion).astype(int)
+    matriz = confusion_matrix(y_val, prediccion, labels=[0, 1])
+    # Continúa dibujando la matriz y sus conteos.
 \end{Codigo}
-El bucle \texttt{for} repite las instrucciones para cada valor. \texttt{astype(int)} convierte una colección de comparaciones a ceros y unos. \texttt{labels=[0,1]} conserva el mismo orden de clases, de modo que las celdas de las matrices sean comparables.
+\texttt{umbral\_validacion} recibe el deslizador. \texttt{astype(int)} convierte comparaciones a ceros y unos. \texttt{confusion\_matrix} vuelve a contar con referencias de validación; \texttt{labels=[0,1]} fija el orden de filas y columnas. 8B conserva además la comparación numérica de 0,3/0,5/0,7.
 \begin{Idea}{La regla del informe}
-8A fija los umbrales, 8B cuenta, 8C dibuja y 8D confirma las decisiones. Este ejercicio conserva \textbf{0,5} como umbral final predefinido. La comparación 0,3/0,5/0,7 sirve para entender el efecto de la decisión; no utiliza el test para buscar una cifra más atractiva. La selección de C sí se hace con validación, siguiendo el criterio definido antes.
+El control de 8C sólo explora validación. 8D fija las decisiones del informe. Este ejercicio conserva \textbf{0,5} como umbral final predefinido. La comparación 0,3/0,5/0,7 sirve para entender el efecto de la decisión; no utiliza el test para buscar una cifra más atractiva. La selección de C sí se hace con validación, siguiendo el criterio definido antes.
 \end{Idea}
 En un estudio aplicado, elegir un umbral requiere definir el uso, los costos de los errores y un procedimiento de validación pertinente. No existe un umbral clínico universal que podamos deducir de este pequeño ejemplo.
-\begin{Practica}{Pregunta resuelta}
-\textbf{Si bajo el umbral, ¿aprende el modelo otros pesos?} No. Sólo cambia cómo convertimos sus puntuaciones en categorías. Volver a ejecutar \texttt{fit} es una operación diferente.
-\end{Practica}
+
 
 \Pagina{BLOQUE 9 · PASOS 9A–9F}{Cuatro casillas para contar}{Modelo elegido y umbral fijado antes de calcular el resultado final.}\label{bloque-9}
 \Figura{celda-09.png}{Salida guardada de 9F. Matriz de confusión de prueba. Lee primero los ejes: filas de referencia y columnas de predicción.}{77mm}
@@ -365,7 +364,7 @@ El modelo obtiene aquí \textbf{82,0\,\%} de exactitud equilibrada; la regla may
 
 \Pagina{BLOQUE 11 · PASOS 11A–11C}{Un resultado global no cuenta todo}{Los ejemplos se eligen con una regla, no por su atractivo visual.}\label{bloque-11}
 \Figura{celda-11.png}{Salida guardada de 11C. El cuaderno muestra el primer ejemplo disponible de cada casilla de la matriz de confusión; si una casilla está vacía, lo indica.}{85mm}
-Una galería ayuda a conectar los conteos con las imágenes. Cada panel incluye referencia, predicción, puntuación e índice. El criterio de selección es determinista: \textbf{la primera imagen de cada grupo en el orden de prueba}. No representa una muestra aleatoria ni los casos más frecuentes o más difíciles.
+El menú \textbf{Casilla} de 11C muestra Todas, VN, FP, FN o VP. \texttt{ver\_casilla} filtra la vista; no recalcula ni cambia predicciones. Cada panel incluye referencia, predicción, puntuación e índice. El criterio de selección es determinista: \textbf{la primera imagen de cada grupo en el orden de prueba}. No representa una muestra aleatoria ni los casos más frecuentes o más difíciles.
 \begin{Codigo}{Ejemplo conceptual relacionado con 11B · falso positivo}
 indices_fp = np.flatnonzero((y_test == 0) & (pred_test == 1))
 if len(indices_fp):
@@ -475,7 +474,7 @@ Usa las salidas guardadas. Muestra galería, representación, comparación con l
 \end{tabularx}\par
 \Sub{Si algo falla}
 \textbf{No aparece una figura:} algunos pasos sólo preparan variables. Busca «figura» en el mapa de pasos y llega a esa celda; revisa si hay un mensaje de error. \textbf{No existe una variable:} ejecuta desde el paso 1A en orden. \textbf{La descarga se interrumpe:} revisa la conexión y repite 1D y después 1E–1H; conserva la verificación de integridad.
-\textbf{Aparece una advertencia de convergencia:} no la interpretes como un resultado válido sin revisión. Comprueba versión, preparación y límite de iteraciones; una optimización inconclusa puede alterar la comparación. \textbf{Cambiaste una celda:} ejecutar sólo esa celda no actualiza automáticamente las salidas posteriores.
+\textbf{Aparece una advertencia de convergencia:} no la interpretes como un resultado válido sin revisión. Comprueba versión, preparación y límite de iteraciones; una optimización inconclusa puede alterar la comparación. \textbf{Los controles no aparecen:} ejecuta la celda de la figura. La vista guardada de GitHub y el PDF son estáticos. Cambiar un control en Colab vuelve a calcular esa figura; modificar el código requiere ejecutar la celda.
 \begin{Idea}{Cómo practicar con orden}
 Guarda una copia, cambia una sola opción permitida y anota tu predicción antes de ejecutar. Experimenta con entrenamiento y validación. Si utilizas repetidamente la prueba para decidir, la práctica sigue siendo educativa, pero esa prueba ya no mide una decisión independiente.
 \end{Idea}
