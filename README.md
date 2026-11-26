@@ -34,11 +34,11 @@ No necesitas leer todo el libro antes de asistir. Como lectura previa opcional, 
 | Recurso | Cuándo usarlo | Qué incluye |
 |---|---|---|
 | [Cuaderno en vivo](Taller_en_vivo_60min.ipynb) | Durante la hora del taller | 8 bloques temáticos repartidos en 28 celdas de código breves, galería inicial, resultados intermedios y ejercicios resueltos. |
-| [Presentación](https://FisikMedik.github.io/taller-imagenes-medicas-python/presentacion.html) | Para seguir la explicación o facilitarla | 16 diapositivas, con seis demostraciones web que enlazan controles, código y resultados. PDF y PowerPoint con vistas estáticas y notas. |
+| [Presentación](https://FisikMedik.github.io/taller-imagenes-medicas-python/presentacion.html) | Para seguir la explicación o facilitarla | 16 diapositivas en el orden del cuaderno de 60 minutos, con acceso a sus 28 pasos y seis demostraciones interactivas. PDF y PowerPoint con vistas estáticas y notas. |
 | [Explorador](https://FisikMedik.github.io/taller-imagenes-medicas-python/explorador.html) | Antes, durante o sin Python | Tres cortes, ventana de contraste, histograma y máscara por percentil; sin dependencias web. |
 | [Cuaderno completo](https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Taller_imagenes_medicas.ipynb) | Estudio posterior, en varias sesiones | 24 lecciones detalladas, salidas guardadas, matrices, filtros y ampliaciones. |
 | [Manual ilustrado](Guia_visual_imagenes_medicas.pdf) | Consulta y lectura autónoma | 97 páginas, 8 capítulos, 3 anexos, 15 tutoriales y 31 figuras diferentes. |
-| [Módulo opcional de ML](modulo_ml.html) | 45–60 minutos adicionales o estudio posterior | [Presentación interactiva](https://fisikmedik.github.io/taller-imagenes-medicas-python/presentacion_ml.html) de 8 diapositivas y 6 laboratorios; cuaderno de 12 bloques y 58 pasos breves sobre radiografías, regresión logística, validación y errores. |
+| [Módulo opcional de ML](modulo_ml.html) | 45–60 minutos adicionales o estudio posterior | [Presentación interactiva](https://fisikmedik.github.io/taller-imagenes-medicas-python/presentacion_ml.html) de 14 diapositivas en el orden de los 12 bloques; cuaderno de 12 bloques y 58 pasos breves sobre radiografías, regresión logística, validación y errores. |
 
 El manual explica qué es un píxel, cómo leer una matriz, de dónde procede ICBM152 y qué hace Nilearn. Distingue imagen individual, plantilla, atlas y espacio de referencia. Sus tutoriales combinan código, salida e interpretación. El **[proyecto LaTeX completo](Fuente_LaTeX_manual.zip)** contiene los recursos necesarios para editarlo y recompilarlo; también puedes leer la [fuente principal](Guia_visual_imagenes_medicas.tex).
 
@@ -48,7 +48,7 @@ Las figuras científicas se obtienen de datos y cálculos documentados. La porta
 
 ## Presentación interactiva: sigue el código y su resultado
 
-Abre la **[presentación web](https://fisikmedik.github.io/taller-imagenes-medicas-python/presentacion.html#7)**. En las diapositivas 7–12, pulsa **Siguiente paso**: se resalta una instrucción, se explica su efecto y aparece la salida. Los controles permiten cambiar un valor y comparar. **Restaurar ejemplo** devuelve los parámetros de referencia.
+Abre la **[presentación web](https://fisikmedik.github.io/taller-imagenes-medicas-python/presentacion.html#7)**. En las diapositivas 7–12, pulsa **Instrucción siguiente**: se resalta una instrucción, se explica su efecto y aparece la salida. Los controles permiten cambiar un valor y comparar. **Restaurar ejemplo** devuelve los parámetros de referencia.
 
 | Demostración | Qué puedes probar |
 |---|---|
@@ -65,6 +65,17 @@ Las copias **PDF y PowerPoint son estáticas**. Para mover los controles utiliza
 
 El [explorador](explorador.html) también enlaza controles, instrucciones y cifras. Los cuadernos comienzan con imágenes visibles y dejan las respuestas en apartados desplegables para intentar resolver las preguntas primero.
 
+### Alternar entre presentación y notebook
+
+Las dos presentaciones siguen el orden de sus respectivos cuadernos. La principal recorre los **8 bloques y 28 pasos**; la opcional, los **12 bloques y 58 pasos**. En cada diapositiva, consulta el bloque y el intervalo de pasos indicados.
+
+1. Elige **Paso del cuaderno** para localizar un identificador estable, como **3C**. Ese identificador coincide con el título del paso en Colab; el contador de ejecución entre corchetes puede cambiar al repetir celdas.
+2. Abre **Código y salida guardada** para ver el código exacto y el resultado de referencia de esa celda dentro de la presentación.
+3. Usa **Abrir esta celda en Colab** cuando quieras ejecutar o modificar Python. El enlace abre la celda seleccionada; no ejecuta los pasos previos. Si la sesión está vacía, comienza en **1A** y ejecuta en orden.
+4. Regresa a la pestaña de la presentación para continuar. **Instrucción anterior/siguiente** recorre las líneas de la demostración interactiva; los pasos **1A, 1B…** identifican las celdas del cuaderno.
+
+Las demostraciones y las salidas guardadas están identificadas por separado. Mover un control de la presentación no modifica el notebook ni sus resultados. Si cambias parámetros en Colab, su nueva salida puede diferir de la referencia incluida en la presentación.
+
 ## Módulo opcional: de radiografías a predicciones
 
 Esta ampliación permite **entrenar y evaluar un primer modelo de aprendizaje automático** con imágenes médicas. Reserva **45–60 minutos adicionales**; la sesión principal del programa sigue durando una hora. Si sólo se solicita una demostración de 15 minutos, utiliza las **salidas guardadas de los bloques 1, 6, 9 y 11**. El cuaderno conserva los 12 temas, repartidos en **58 pasos breves de código**. Para ejecutarlo, comienza en el paso **1A** y sigue todos los pasos en orden.
@@ -77,16 +88,24 @@ Entrenamiento ajusta los pesos; validación elige entre tres valores de `C`; pru
 
 ### Presentación interactiva del módulo de ML
 
-La [presentación web de ML](https://fisikmedik.github.io/taller-imagenes-medicas-python/presentacion_ml.html) reúne **8 diapositivas y 6 laboratorios**. Cambia un control y recorre el código paso a paso para relacionar cada instrucción con su resultado:
+La [presentación web de ML](https://fisikmedik.github.io/taller-imagenes-medicas-python/presentacion_ml.html) reúne **14 diapositivas: portada, 12 bloques y cierre**. Sigue el mismo orden que el notebook:
 
-- **Píxel → vector:** localiza un píxel y encuentra su posición entre las 784 características.
-- **Particiones:** compara los conteos originales y los usados tras retirar copias exactas; distingue entrenamiento, validación y prueba.
-- **Regresión logística:** sigue los valores de una imagen, sus pesos, la suma y la sigmoide.
-- **Elección de `C`:** compara resultados guardados de entrenamiento y validación; la prueba queda fuera de la elección.
-- **Umbral y matriz:** mueve la regla de decisión sobre cuatro casos ficticios y sigue dónde se cuenta cada caso.
-- **Errores de prueba:** explora aciertos, falsos positivos y falsos negativos de la evaluación fija; interpreta sus métricas.
+1. Radiografías y preparación de datos.
+2. Particiones y revisión de duplicados.
+3. Imagen y características.
+4. Suma ponderada y sigmoide.
+5. Referencia de clase mayoritaria.
+6. Entrenamiento y elección de `C` con validación.
+7. Una predicción con el modelo entrenado.
+8. Umbral y matrices de validación.
+9. Evaluación fija en prueba.
+10. Métricas y denominadores.
+11. Ejemplos de aciertos y errores.
+12. Registro del experimento y conclusiones.
 
-Las interacciones se calculan en **JavaScript con datos y modelos precalculados**. El código mostrado es Python equivalente; para ejecutarlo y entrenar, abre el cuaderno en Colab. La presentación funciona sin conexión al guardar `presentacion_ml.html`; sus enlaces a Colab y otros recursos sí necesitan internet. El umbral de la prueba permanece fijo en 0.5.
+Cada bloque permite seleccionar sus pasos reales, consultar su código y salida guardada y abrir la celda correspondiente en Colab. Las interacciones conservan la exploración de píxeles, particiones, predicciones, elección de `C`, umbral, métricas y ejemplos, ahora situadas en su lugar dentro del recorrido.
+
+Las demostraciones se calculan en **JavaScript con datos y modelos precalculados**; sus fragmentos se identifican como Python equivalente. El panel del cuaderno muestra **código exacto y salidas guardadas** de la ejecución local. Para ejecutar y entrenar, abre Colab. La presentación funciona sin conexión al guardar `presentacion_ml.html`; sus enlaces a Colab y otros recursos sí necesitan internet. El umbral de la prueba permanece fijo en 0.5.
 
 **Datos:** [PneumoniaMNIST](https://medmnist.com/), una colección pública de radiografías pediátricas reducidas y etiquetadas. El archivo original de [Zenodo](https://zenodo.org/records/10519652) se distribuye intacto bajo **CC BY 4.0**. Para esta adaptación docente se retiran 18 copias exactas adicionales del entrenamiento y 8 imágenes de validación idénticas a entrenamiento: se utilizan **4690 / 516 / 624 imágenes**. La prueba oficial permanece completa, incluidas tres copias adicionales documentadas. El NPZ no contiene identificadores para comprobar separación por pacientes; eliminar copias exactas no certifica esa independencia. Consulta la [procedencia, licencia y auditoría](datos/FUENTES_PneumoniaMNIST.txt).
 
