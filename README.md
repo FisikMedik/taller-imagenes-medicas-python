@@ -38,7 +38,7 @@ No necesitas leer todo el libro antes de asistir. Como lectura previa opcional, 
 | [Explorador](https://FisikMedik.github.io/taller-imagenes-medicas-python/explorador.html) | Antes, durante o sin Python | Tres cortes, ventana de contraste, histograma y máscara por percentil; sin dependencias web. |
 | [Cuaderno completo](https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Taller_imagenes_medicas.ipynb) | Estudio posterior, en varias sesiones | 24 lecciones detalladas, salidas guardadas, matrices, filtros y ampliaciones. |
 | [Manual ilustrado](Guia_visual_imagenes_medicas.pdf) | Consulta y lectura autónoma | 97 páginas, 8 capítulos, 3 anexos, 15 tutoriales y 31 figuras diferentes. |
-| [Módulo opcional de ML](modulo_ml.html) | 45–60 minutos adicionales o estudio posterior | [Presentación interactiva](https://fisikmedik.github.io/taller-imagenes-medicas-python/presentacion_ml.html) de 8 diapositivas y 6 laboratorios; cuaderno de 12 celdas sobre radiografías, regresión logística, validación y errores. |
+| [Módulo opcional de ML](modulo_ml.html) | 45–60 minutos adicionales o estudio posterior | [Presentación interactiva](https://fisikmedik.github.io/taller-imagenes-medicas-python/presentacion_ml.html) de 8 diapositivas y 6 laboratorios; cuaderno de 12 bloques y 58 pasos breves sobre radiografías, regresión logística, validación y errores. |
 
 El manual explica qué es un píxel, cómo leer una matriz, de dónde procede ICBM152 y qué hace Nilearn. Distingue imagen individual, plantilla, atlas y espacio de referencia. Sus tutoriales combinan código, salida e interpretación. El **[proyecto LaTeX completo](Fuente_LaTeX_manual.zip)** contiene los recursos necesarios para editarlo y recompilarlo; también puedes leer la [fuente principal](Guia_visual_imagenes_medicas.tex).
 
@@ -67,7 +67,7 @@ El [explorador](explorador.html) también enlaza controles, instrucciones y cifr
 
 ## Módulo opcional: de radiografías a predicciones
 
-Esta ampliación permite **entrenar y evaluar un primer modelo de aprendizaje automático** con imágenes médicas. Reserva **45–60 minutos adicionales**; la sesión principal del programa sigue durando una hora. Si sólo se solicita una demostración de 15 minutos, utiliza las **salidas guardadas de las celdas 1, 6, 9 y 11**. Para ejecutar el cuaderno, comienza en la primera celda y sigue las doce en orden.
+Esta ampliación permite **entrenar y evaluar un primer modelo de aprendizaje automático** con imágenes médicas. Reserva **45–60 minutos adicionales**; la sesión principal del programa sigue durando una hora. Si sólo se solicita una demostración de 15 minutos, utiliza las **salidas guardadas de los bloques 1, 6, 9 y 11**. El cuaderno conserva los 12 temas, repartidos en **58 pasos breves de código**. Para ejecutarlo, comienza en el paso **1A** y sigue todos los pasos en orden.
 
 **[Abrir la presentación interactiva de ML](https://fisikmedik.github.io/taller-imagenes-medicas-python/presentacion_ml.html)** · **[Leer el tutorial visual sin ejecutar código](modulo_ml.html)** · **[Practicar en Google Colab](https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Modulo_ML_radiografias.ipynb)** · [Descargar el cuaderno](Modulo_ML_radiografias.ipynb) · [Guía ilustrada en PDF](Guia_modulo_ML.pdf)
 
@@ -100,6 +100,12 @@ La preparación inicial descarga el archivo público si no está disponible y ve
 Abre `Modulo_ML_radiografias.ipynb`. Las salidas están guardadas y la [lectura web](modulo_ml.html) incluye sus imágenes para consultar el tutorial sin ejecutar. La guía complementaria tiene **20 páginas**. El [proyecto LaTeX completo](Fuente_LaTeX_modulo_ML.zip), la [fuente principal](Guia_modulo_ML.tex) y los [resultados de referencia](resultados_modulo_ml.json) permiten revisar y reutilizar el material.
 
 **Alcance:** ejercicio educativo sobre etiquetas de un conjunto público. Las imágenes reducidas no sirven para aprender diagnóstico visual, y la puntuación del modelo no es un riesgo clínico calibrado. Estos resultados no demuestran rendimiento en otras personas, edades u hospitales.
+
+### Pasos breves en el cuaderno de ML
+
+La revisión del 26 de noviembre reparte los **12 bloques en 58 celdas de código breves**, con identificadores como **1A**, **6B** y **12F**. Cada paso concentra una tarea, muestra su resultado intermedio y ofrece una explicación cercana al código. El tutorial web usa los mismos pasos y conserva los enlaces de cada bloque.
+
+Los 58 pasos se ejecutaron localmente en orden. Se conservaron las 12 figuras, los modelos y los resultados de referencia de la edición anterior. Las comprobaciones de Colab descritas más abajo corresponden a la **edición original de 12 celdas**.
 
 ## Qué aprenderás
 
@@ -151,7 +157,7 @@ El cuaderno completo de 24 lecciones es material de profundización. No se prete
 3. Pide una predicción antes de cada variación. Mantén una sola modificación por vez y utiliza las pistas antes de mostrar la solución.
 4. Si la instalación se retrasa, continúa con las salidas guardadas y el explorador. Reserva los últimos cinco minutos para las tres preguntas, aunque debas dejar una variación como tarea.
 5. Al cerrar, enlaza con ML: los filtros de este taller se especifican manualmente; una red convolucional aprende filtros a partir de datos y un objetivo. Entrenar y evaluar exige datos independientes, etiquetas pertinentes y separación adecuada por pacientes. Esta plantilla no constituye un conjunto de entrenamiento clínico.
-6. Si se solicita profundizar en aprendizaje automático, abre el [módulo opcional de radiografías](modulo_ml.html). Usa sus salidas guardadas para la demostración breve y acuerda tiempo adicional para la práctica completa; no intentes añadir sus doce celdas a la hora ya programada.
+6. Si se solicita profundizar en aprendizaje automático, abre el [módulo opcional de radiografías](modulo_ml.html). Usa sus salidas guardadas para la demostración breve y acuerda tiempo adicional para la práctica completa; no intentes añadir sus doce bloques a la hora ya programada.
 
 ## Trabajar en tu computadora con Windows
 
@@ -182,9 +188,9 @@ Las 24 celdas se ejecutaron localmente utilizando la plantilla incluida. El ento
 
 `requirements.txt` mantiene intervalos de versiones compatibles; no es una copia congelada de todas las dependencias del entorno de comprobación.
 
-Las **12 celdas del módulo opcional de radiografías** se ejecutaron localmente en CPU, con 12 salidas gráficas y sin advertencias. Se utilizó Python 3.12.14, NumPy 2.5.4, Matplotlib 3.11.2 y scikit-learn 1.9.1. El modelo eligió `C=0.1` mediante validación; el umbral de prueba se fijó previamente en `0.5`. Las figuras y las salidas guardadas corresponden a esa ejecución local documentada. Los conteos, métricas, exclusiones y versiones están en [resultados_modulo_ml.json](resultados_modulo_ml.json).
+La **edición original de 12 celdas del módulo opcional de radiografías** se ejecutó localmente en CPU, con 12 salidas gráficas y sin advertencias. Se utilizó Python 3.12.14, NumPy 2.5.4, Matplotlib 3.11.2 y scikit-learn 1.9.1. El modelo eligió `C=0.1` mediante validación; el umbral de prueba se fijó previamente en `0.5`. Las figuras y las salidas guardadas corresponden a esa ejecución local documentada. Los conteos, métricas, exclusiones y versiones están en [resultados_modulo_ml.json](resultados_modulo_ml.json).
 
-También se ejecutaron correctamente las doce celdas en **Google Colab con CPU el 23 de noviembre de 2026**, con NumPy 2.4.6, Matplotlib 3.10.0 y scikit-learn 1.6.1. En ese entorno, validación eligió `C=1`: obtuvo una exactitud equilibrada de 95.28 %, frente a 95.05 % para `C=0.1`. La prueba produjo `[[162,72],[11,379]]` (filas = referencia, columnas = predicción), con 86.70 % de exactitud y 83.21 % de exactitud equilibrada. La ejecución local produjo `[[158,76],[14,376]]` con `C=0.1`.
+Esa edición original de doce celdas también se ejecutó correctamente en **Google Colab con CPU el 23 de noviembre de 2026**, con NumPy 2.4.6, Matplotlib 3.10.0 y scikit-learn 1.6.1. En ese entorno, validación eligió `C=1`: obtuvo una exactitud equilibrada de 95.28 %, frente a 95.05 % para `C=0.1`. La prueba produjo `[[162,72],[11,379]]` (filas = referencia, columnas = predicción), con 86.70 % de exactitud y 83.21 % de exactitud equilibrada. La ejecución local produjo `[[158,76],[14,376]]` con `C=0.1`.
 
 Los intervalos de [requisitos_ml.txt](requisitos_ml.txt) no congelan un entorno idéntico. Las diferencias entre versiones pueden modificar el ajuste numérico, los resultados y la opción seleccionada cuando sus valores de validación son cercanos. **No cambies el modelo después de mirar prueba para reproducir los números del PDF**: conserva la selección hecha con validación y registra tus versiones y resultados. Estas comprobaciones de ejecución no equivalen a validación clínica ni demuestran independencia entre pacientes.
 
