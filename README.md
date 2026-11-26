@@ -4,7 +4,7 @@
 
 [Todos los materiales](https://fisikmedik.github.io/taller-imagenes-medicas-python/) · [Programa](https://machine-learning-honduras.org/programa/)
 
-**Abrir los visores en el navegador:** [Explorador cerebral](https://fisikmedik.github.io/taller-imagenes-medicas-python/explorador.html) · [Presentación principal](https://fisikmedik.github.io/taller-imagenes-medicas-python/presentacion.html) · [Presentación de ML](https://fisikmedik.github.io/taller-imagenes-medicas-python/presentacion_ml.html) · [Tutorial interactivo de ML](https://fisikmedik.github.io/taller-imagenes-medicas-python/modulo_ml.html)
+**Abrir los visores en el navegador:** [Presentación principal](https://fisikmedik.github.io/taller-imagenes-medicas-python/presentacion.html) · [Presentación de ML](https://fisikmedik.github.io/taller-imagenes-medicas-python/presentacion_ml.html) · [Tutorial interactivo de ML](https://fisikmedik.github.io/taller-imagenes-medicas-python/modulo_ml.html)
 
 Estos enlaces abren los controles listos para usar, sin instalar Python ni iniciar sesión en Colab. En la lista de archivos de GitHub, pulsar un archivo `.html` muestra su código; para usarlo, elige uno de los enlaces anteriores.
 
@@ -58,7 +58,7 @@ En ML puedes explorar una imagen y sus características, la sigmoide, candidatos
 
 Las presentaciones web incluyen ejemplos manipulables y un panel con el código y la salida guardada de cada paso. El botón de Colab abre la celda elegida. Los PDF y PowerPoint son estáticos; las notas de PowerPoint incluyen código y explicaciones.
 
-También tienes un [explorador cerebral sin Python](https://fisikmedik.github.io/taller-imagenes-medicas-python/explorador.html), el [tutorial de ML con resultados](https://fisikmedik.github.io/taller-imagenes-medicas-python/modulo_ml.html) y la [guía de GitHub y Colab](Guia_GitHub_paso_a_paso.pdf).
+También tienes el [tutorial de ML con resultados](https://fisikmedik.github.io/taller-imagenes-medicas-python/modulo_ml.html) y la [guía de GitHub y Colab](Guia_GitHub_paso_a_paso.pdf).
 
 ## Usarlo en tu computadora
 
