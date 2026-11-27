@@ -14,7 +14,7 @@ Un solo cuaderno para comprender píxeles y vóxeles, geometría NIfTI, encabeza
 
 ## Machine learning
 
-Radiografías públicas para comprender cómo se entrena y evalúa un clasificador: píxeles, pesos, puntuación, predicción y errores.
+Radiografías públicas para comprender cómo se entrena y evalúa un clasificador: píxeles, pesos, puntuación, predicción y errores. El cuaderno explica los comandos junto al código y sus resultados. Los controles permiten elegir una imagen y un píxel, explorar la sigmoide y observar cómo el umbral cambia las predicciones y los errores.
 
 **[Presentación de ML](https://fisikmedik.github.io/taller-imagenes-medicas-python/presentacion_ml.html)** · [Abrir cuaderno de ML en Colab](https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Modulo_ML_radiografias.ipynb) · [Descargar cuaderno de ML](Modulo_ML_radiografias.ipynb)
 
