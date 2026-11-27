@@ -15,7 +15,7 @@ Primero observamos; después preguntamos qué números producen esa imagen. Cada
 
 
 \begin{Idea}{Ejecutar y cambiar una imagen}
-Abre el \href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Taller_en_vivo_60min.ipynb}{cuaderno principal en Google Colab}. Usa CPU y ejecuta las celdas desde arriba con el triángulo o Mayús + Enter. Una celda crea las variables que utilizan las siguientes. Para conservar tus cambios, elige Archivo $\rightarrow$ Guardar una copia en Drive.
+Abre el \href{https://colab.research.google.com/github/FisikMedik/taller-imagenes-medicas-python/blob/main/Taller_imagenes_medicas.ipynb}{cuaderno de imágenes médicas en Google Colab}. Usa CPU y ejecuta las celdas desde arriba con el triángulo o Mayús + Enter. Una celda crea las variables que utilizan las siguientes. Para conservar tus cambios, elige Archivo $\rightarrow$ Guardar una copia en Drive.
 
 Cada figura interactiva tiene sus controles al lado. Al mover un deslizador, la función recibe el valor nuevo y recalcula la imagen. Si cambias una línea de Python, ejecuta esa celda para aplicar el cambio. La figura guardada en un PDF conserva los valores iniciales.
 \end{Idea}
@@ -23,7 +23,7 @@ Cada figura interactiva tiene sus controles al lado. Al mover un deslizador, la 
 La referencia utilizada es una plantilla cerebral pública. Los dibujos didácticos, regiones ficticias, matrices pequeñas y ruido simulado están identificados como tales. La portada es una ilustración conceptual generada con IA; las figuras científicas del interior se calculan a partir de datos o modelos matemáticos documentados.
 
 
-El libro reproduce las celdas completas de cálculo y dibujo seleccionadas, con sus salidas textuales. Las ilustraciones se han maquetado para la lectura impresa: algunas amplían el ejemplo mediante diagramas, otros cortes o comparaciones adicionales. El pie identifica qué se está representando; la presentación puede diferir de la salida gráfica del cuaderno.
+Este manual es una referencia de consulta con ejemplos y tutoriales de numeración propia. El cuaderno reúne los conceptos clave en una secuencia más breve; sus números no corresponden a los de este libro. Cada ejemplo impreso conserva su código, su salida y las explicaciones necesarias para interpretarlo. Las ilustraciones incluyen comparaciones adicionales, identificadas en sus pies.
 
 
 \Fuente{Taller impartido el jueves 26 de noviembre de 2026 a las 13:30, hora de Honduras (UTC−6). Material de iniciación; las operaciones mostradas no constituyen una evaluación diagnóstica. Fuentes, licencias y procedencia al final del manual y en el repositorio.}
@@ -345,7 +345,7 @@ Si los números no coinciden, no fuerces la salida para que se parezca al libro.
 
 \Figura{05_afin_indices_mm.png}{La afín real de la plantilla transforma el índice (49, 57, 46) en (0, -20, 20) mm. En esta rejilla ortogonal, cada eje tiene paso de 2 mm y un desplazamiento distinto. RAS orienta las coordenadas positivas hacia derecha, anterior y superior.}{.42}
 
-\begin{Codigo}{Código · leer el archivo y su geometría}
+\begin{Codigo}{Ejemplo 1 · Leer el archivo y su geometría}
 import nibabel as nib
 import numpy as np
 imagen = nib.load("datos/mni152_2mm.nii.gz")
@@ -418,7 +418,7 @@ Respuesta. Hemos identificado el archivo, convertido sus intensidades en un arre
 
 \end{Practica}
 
-\chapter[Código del cuaderno principal]{Operaciones con imágenes, paso a paso}
+\chapter[Ejemplos de código]{Operaciones con imágenes, paso a paso}
 
 \label{cap:envivo}
 
@@ -448,7 +448,7 @@ Una imagen es una matriz de valores. Un volumen añade una tercera dirección; c
 
 Esta celda necesita internet sólo si faltan bibliotecas.
 
-\begin{CodigoVivo}{1A · Código exacto del cuaderno}
+\begin{CodigoVivo}{1A · Código del ejemplo}
 import sys, subprocess, importlib.util
 from pathlib import Path
 from importlib.metadata import version
@@ -483,7 +483,7 @@ Bibliotecas disponibles.
 \item \texttt{\small display(\allowbreak{}.\allowbreak{}.\allowbreak{}.\allowbreak{})\allowbreak{}} muestra esos controles dentro del notebook. \texttt{\small as} asigna un nombre corto; no cambia la biblioteca.
 \end{itemize}
 
-\begin{CodigoVivo}{1B · Código exacto del cuaderno}
+\begin{CodigoVivo}{1B · Código del ejemplo}
 import numpy as np
 import matplotlib.pyplot as plt
 import nibabel as nib
@@ -507,7 +507,7 @@ NumPy: matrices · Matplotlib: figuras · NiBabel: NIfTI · SciPy: filtros · ip
 
 \texttt{\small if ruta.\allowbreak{}exists(\allowbreak{})\allowbreak{}} elige la copia local cuando está disponible. \texttt{\small nib.\allowbreak{}load(\allowbreak{}ruta)\allowbreak{}} abre el NIfTI y conserva sus metadatos. \texttt{\small else} usa \texttt{\small load\_mni152\_template(\allowbreak{}resolution=2)\allowbreak{}}: Nilearn obtiene la plantilla pública con separación de 2 mm. \texttt{\small fuente} guarda cuál de las dos rutas se usó; \texttt{\small version(\allowbreak{}.\allowbreak{}.\allowbreak{}.\allowbreak{})\allowbreak{}} consulta la versión instalada y \texttt{\small print(\allowbreak{}fuente)\allowbreak{}} la muestra.
 
-\begin{CodigoVivo}{1C · Código exacto del cuaderno}
+\begin{CodigoVivo}{1C · Código del ejemplo}
 if ruta.exists():
     imagen = nib.load(ruta)
     fuente = "Copia pública local: datos/mni152_2mm.nii.gz"
@@ -538,7 +538,7 @@ Copia pública local: datos/mni152_2mm.nii.gz
 \item \texttt{\small allclose(\allowbreak{}.\allowbreak{}.\allowbreak{}.\allowbreak{})\allowbreak{}} compara números permitiendo pequeños errores decimales. \texttt{\small isfinite(\allowbreak{}.\allowbreak{}.\allowbreak{}.\allowbreak{})\allowbreak{}.\allowbreak{}all(\allowbreak{})\allowbreak{}} rechaza infinitos y valores ausentes; \texttt{\small min(\allowbreak{})\allowbreak{}} y \texttt{\small max(\allowbreak{})\allowbreak{}} comprueban el rango.
 \end{itemize}
 
-\begin{CodigoVivo}{1D · Código exacto del cuaderno}
+\begin{CodigoVivo}{1D · Código del ejemplo}
 imagen = nib.as_closest_canonical(imagen)
 datos = imagen.get_fdata(dtype=np.float32)
 pasos = np.array(imagen.header.get_zooms()[:3])
@@ -565,7 +565,7 @@ Volumen: (99, 117, 95) · separación entre centros: [2. 2. 2.] mm · orientaci�
 
 \texttt{\small extension} fija los bordes exteriores del dibujo: resta o suma 1 mm, la mitad de un vóxel. \texttt{\small [0]} toma el primer centro y \texttt{\small [-1]}, el último. \texttt{\small z\_min} y \texttt{\small z\_max} serán los límites de los deslizadores.
 
-\begin{CodigoVivo}{1E · Código exacto del cuaderno}
+\begin{CodigoVivo}{1E · Código del ejemplo}
 x = afin[0, 3] + pasos[0] * np.arange(datos.shape[0])
 y = afin[1, 3] + pasos[1] * np.arange(datos.shape[1])
 z = afin[2, 3] + pasos[2] * np.arange(datos.shape[2])
@@ -590,7 +590,7 @@ Planos axiales: -72 a 116 mm, separados 2 mm.
 
 Las listas \texttt{\small extensiones}, \texttt{\small titulos} y \texttt{\small ejes} guardan los límites, nombres y etiquetas de cada vista. \texttt{\small f\textquotedbl{}.\allowbreak{}.\allowbreak{}.\allowbreak{}\{valor\}.\allowbreak{}.\allowbreak{}.\allowbreak{}\textquotedbl{}} inserta un valor dentro del texto.
 
-\begin{CodigoVivo}{1F · Código exacto del cuaderno}
+\begin{CodigoVivo}{1F · Código del ejemplo}
 cortes = [datos[:, :, 46].T, datos[:, 57, :].T, datos[49, :, :].T]
 extensiones = [extension, [x[0]-1, x[-1]+1, z[0]-1, z[-1]+1], [y[0]-1, y[-1]+1, z[0]-1, z[-1]+1]]
 titulos = [f"Axial · z={z[46]:.0f} mm", f"Coronal · y={y[57]:.0f} mm", f"Sagital · x={x[49]:.0f} mm"]
@@ -614,7 +614,7 @@ Planos preparados: Axial · z=20 mm | Coronal · y=-20 mm | Sagital · x=0 mm
 
 \texttt{\small imshow(\allowbreak{}.\allowbreak{}.\allowbreak{}.\allowbreak{})\allowbreak{}} convierte una matriz en imagen: \texttt{\small cmap=\textquotedbl{}gray\textquotedbl{}} usa grises; \texttt{\small origin=\textquotedbl{}lower\textquotedbl{}} sitúa la primera fila abajo; \texttt{\small extent} asigna milímetros; \texttt{\small vmin=0,\allowbreak{} vmax=1} fija la misma escala. \texttt{\small set(\allowbreak{}.\allowbreak{}.\allowbreak{}.\allowbreak{})\allowbreak{}} escribe título y ejes; \texttt{\small plt.\allowbreak{}show(\allowbreak{})\allowbreak{}} muestra la figura. Los mensajes finales registran fuente y versiones.
 
-\begin{CodigoVivo}{1G · Código exacto del cuaderno}
+\begin{CodigoVivo}{1G · Código del ejemplo}
 fig, ax = plt.subplots(1, 3, figsize=(12, 4.4), layout="constrained")
 for panel, matriz, limites, titulo, etiquetas in zip(ax, cortes, extensiones, titulos, ejes):
     panel.imshow(matriz, cmap="gray", origin="lower", extent=limites, vmin=0, vmax=1)
@@ -625,7 +625,7 @@ print("Versiones: " + ", ".join(f"{nombre} {version(nombre)}" for nombre in requ
 \end{CodigoVivo}
 
 
-\Figura{vivo_1g.png}{1G · Mostrar las imágenes. Salida guardada exacta del cuaderno en vivo.}{.38}
+\Figura{vivo_1g.png}{1G · Mostrar las imágenes. Salida guardada de este ejemplo.}{.38}
 
 \begin{Salida}{1G · Salida guardada}
 Copia pública local: datos/mni152_2mm.nii.gz
@@ -654,7 +654,7 @@ La posición elige un plano; el contraste decide cómo se pintan sus valores. Ca
 
 La rejilla avanza de 2 en 2 mm: al pedir \textbf{25 mm}, se muestra \textbf{24 mm} (el menor índice en un empate). No se inventa un corte de 25 mm; el mensaje distingue lo solicitado de lo mostrado.
 
-\begin{CodigoVivo}{2A · Código exacto del cuaderno}
+\begin{CodigoVivo}{2A · Código del ejemplo}
 z_mm = 20  # Posición que deseas consultar, en milímetros.
 k = int(np.abs(z - z_mm).argmin())
 corte = datos[:, :, k].T.copy()
@@ -675,7 +675,7 @@ Solicitado: 20 mm · plano mostrado: 20 mm · índice k=46
 
 \texttt{\small ventana = (\allowbreak{}0.\allowbreak{}35,\allowbreak{} 0.\allowbreak{}90)\allowbreak{}} es una pareja: el primer valor se dibuja negro y el segundo, blanco. Los valores intermedios se reparten en grises. \texttt{\small [0]} y \texttt{\small [1]} seleccionan esos extremos. \texttt{\small assert} comprueba que estén ordenados. La ventana cambia el dibujo, no los valores del corte.
 
-\begin{CodigoVivo}{2B · Código exacto del cuaderno}
+\begin{CodigoVivo}{2B · Código del ejemplo}
 ventana = (0.35, 0.90)
 assert ventana[0] < ventana[1], "El primer extremo debe ser menor que el segundo."
 print("Negro desde", ventana[0], "· blanco desde", ventana[1])
@@ -702,7 +702,7 @@ Negro desde 0.35 · blanco desde 0.9
 \item \texttt{\small widgets.\allowbreak{}interactive(\allowbreak{}.\allowbreak{}.\allowbreak{}.\allowbreak{})\allowbreak{}} conecta los argumentos con controles. \texttt{\small IntSlider} usa enteros y \texttt{\small FloatRangeSlider} elige dos límites numéricos. \texttt{\small value} fija el valor inicial; \texttt{\small min/max/step}, el recorrido. \texttt{\small continuous\_update=False} espera a soltar el deslizador; \texttt{\small display} lo muestra.
 \end{itemize}
 
-\begin{CodigoVivo}{2C · Código exacto del cuaderno}
+\begin{CodigoVivo}{2C · Código del ejemplo}
 def ver_contraste(z_mm, ventana):
     k = int(np.abs(z - z_mm).argmin())
     corte = datos[:, :, k].T
@@ -727,7 +727,7 @@ display(control_contraste)
 \end{CodigoVivo}
 
 
-\Figura{vivo_2c.png}{2C · Comparar y comprobar. Salida guardada exacta del cuaderno en vivo.}{.38}
+\Figura{vivo_2c.png}{2C · Comparar y comprobar. Salida guardada de este ejemplo.}{.38}
 
 \begin{Salida}{2C · Salida guardada}
 Los valores originales se conservan: True
@@ -754,7 +754,7 @@ El eje horizontal contiene intensidades y el vertical cuenta píxeles. Excluir e
 
 Un histograma cuenta valores; no conserva dónde estaba cada píxel.
 
-\begin{CodigoVivo}{3A · Código exacto del cuaderno}
+\begin{CodigoVivo}{3A · Código del ejemplo}
 bins = 20
 soporte = corte > 1e-6
 valores = corte[soporte]
@@ -777,7 +777,7 @@ Total: 11583 · soporte: 4859 · excluidos: 6724
 
 \texttt{\small ver\_histograma(\allowbreak{}.\allowbreak{}.\allowbreak{}.\allowbreak{})\allowbreak{}} extrae el corte y vuelve a calcular el soporte cada vez. \texttt{\small .\allowbreak{}ravel(\allowbreak{})\allowbreak{}} reúne todos los píxeles en una lista; la selección \texttt{\small corte[corte > 1e-6]} excluye el fondo. \texttt{\small hist(\allowbreak{}.\allowbreak{}.\allowbreak{}.\allowbreak{},\allowbreak{} bins=bins,\allowbreak{} range=(\allowbreak{}0,\allowbreak{} 1)\allowbreak{})\allowbreak{}} cuenta valores dentro de intervalos entre 0 y 1. \texttt{\small color} y \texttt{\small edgecolor} colorean barras y bordes. \texttt{\small set(\allowbreak{}.\allowbreak{}.\allowbreak{}.\allowbreak{})\allowbreak{}} rotula los ejes; \texttt{\small suptitle(\allowbreak{}.\allowbreak{}.\allowbreak{}.\allowbreak{})\allowbreak{}} informa la posición. Los dos \texttt{\small IntSlider} controlan posición y número de intervalos.
 
-\begin{CodigoVivo}{3B · Código exacto del cuaderno}
+\begin{CodigoVivo}{3B · Código del ejemplo}
 def ver_histograma(z_mm, bins):
     k = int(np.abs(z - z_mm).argmin())
     corte = datos[:, :, k].T
@@ -800,7 +800,7 @@ display(control_histograma)
 \end{CodigoVivo}
 
 
-\Figura{vivo_3b.png}{3B · Dibujar los histogramas. Salida guardada exacta del cuaderno en vivo.}{.38}
+\Figura{vivo_3b.png}{3B · Dibujar los histogramas. Salida guardada de este ejemplo.}{.38}
 
 \begin{Salida}{3B · Salida guardada}
 Total: 11583 · sin fondo: 4859 · excluidos: 6724
@@ -825,7 +825,7 @@ Un percentil elige un umbral según los valores del corte. Una máscara marca qu
 
 \texttt{\small np.\allowbreak{}percentile(\allowbreak{}valores,\allowbreak{} percentil)\allowbreak{}} ordena conceptualmente las intensidades y encuentra el valor por debajo del cual queda el porcentaje indicado. \texttt{\small percentil = 90} solicita p90; \textbf{no significa intensidad 0.90}. \texttt{\small assert} restringe el porcentaje a 0–100. En \texttt{\small :.\allowbreak{}6f}, el 6 solicita seis decimales al imprimir.
 
-\begin{CodigoVivo}{4A · Código exacto del cuaderno}
+\begin{CodigoVivo}{4A · Código del ejemplo}
 percentil = 90
 assert 0 <= percentil <= 100
 umbral = np.percentile(valores, percentil)
@@ -846,7 +846,7 @@ p90 → intensidad umbral 0.878431
 
 \texttt{\small corte >= umbral} marca las posiciones que alcanzan el umbral. \texttt{\small \&} exige cumplir también el soporte; los paréntesis agrupan la comparación. La máscara guarda \texttt{\small True} o \texttt{\small False} en cada píxel. \texttt{\small .\allowbreak{}sum(\allowbreak{})\allowbreak{}} cuenta los verdaderos como unos. Dividir entre \texttt{\small valores.\allowbreak{}size} y multiplicar por 100 da el porcentaje del soporte seleccionado; los empates pueden hacerlo mayor que 10 \% para p90.
 
-\begin{CodigoVivo}{4B · Código exacto del cuaderno}
+\begin{CodigoVivo}{4B · Código del ejemplo}
 mascara = soporte & (corte >= umbral)
 porcentaje = 100 * mascara.sum() / valores.size
 print(f"Seleccionados: {mascara.sum()} / {valores.size} = {porcentaje:.2f}% del soporte")
@@ -868,7 +868,7 @@ Seleccionados: 523 / 4859 = 10.76% del soporte
 
 \texttt{\small if valores.\allowbreak{}size == 0} detecta un plano de fondo y \texttt{\small return} evita calcular un percentil vacío. \texttt{\small percentile}, \texttt{\small >=}, \texttt{\small \&} y \texttt{\small sum} calculan umbral, máscara y porcentaje. \texttt{\small hist} dibuja los conteos; \texttt{\small axvline} señala el umbral y \texttt{\small legend} muestra su etiqueta. \texttt{\small imshow} dibuja la máscara; \texttt{\small interpolation=\textquotedbl{}nearest\textquotedbl{}} mantiene sus casillas nítidas. \texttt{\small widgets.\allowbreak{}interactive} ejecuta esta función con los dos deslizadores; \texttt{\small value=90} es el percentil inicial.
 
-\begin{CodigoVivo}{4C · Código exacto del cuaderno}
+\begin{CodigoVivo}{4C · Código del ejemplo}
 def ver_percentil(z_mm, percentil):
     k = int(np.abs(z - z_mm).argmin())
     corte = datos[:, :, k].T
@@ -901,7 +901,7 @@ display(control_percentil)
 \end{CodigoVivo}
 
 
-\Figura{vivo_4c.png}{4C · Ver la regla y su resultado. Salida guardada exacta del cuaderno en vivo.}{.38}
+\Figura{vivo_4c.png}{4C · Ver la regla y su resultado. Salida guardada de este ejemplo.}{.38}
 
 \begin{Salida}{4C · Salida guardada}
 Umbral: 0.878431 · seleccionados: 523 / 4859
@@ -926,7 +926,7 @@ La curva une lugares de igual intensidad; la máscara selecciona una región. Ni
 
 \texttt{\small nivel = 0.\allowbreak{}7} fija una intensidad absoluta. \texttt{\small corte >= nivel} selecciona valores de 0.7 o mayores; \texttt{\small \& soporte} excluye el fondo. \texttt{\small region.\allowbreak{}sum(\allowbreak{})\allowbreak{}} cuenta la selección. Una curva representa igualdad con el nivel; una región incluye también valores superiores.
 
-\begin{CodigoVivo}{5A · Código exacto del cuaderno}
+\begin{CodigoVivo}{5A · Código del ejemplo}
 nivel = 0.7
 region = soporte & (corte >= nivel)
 print(f"Nivel {nivel}: {region.sum()} posiciones de la región seleccionada")
@@ -948,7 +948,7 @@ Nivel 0.7: 2820 posiciones de la región seleccionada
 
 \texttt{\small contour(\allowbreak{}x,\allowbreak{} y,\allowbreak{} corte,\allowbreak{} levels=[nivel])\allowbreak{}} calcula una línea de igual intensidad usando coordenadas en milímetros. \texttt{\small colors} y \texttt{\small linewidths} fijan su aspecto; \texttt{\small clabel} escribe el nivel sobre ella. El \texttt{\small if} dibuja curvas sólo si el nivel cruza el rango del corte. La máscara se obtiene con \texttt{\small >=} y se dibuja con \texttt{\small imshow}. \texttt{\small zip} aplica un título a cada panel. \texttt{\small FloatSlider(\allowbreak{}.\allowbreak{}.\allowbreak{}.\allowbreak{},\allowbreak{} step=0.\allowbreak{}05)\allowbreak{}} cambia el nivel de cinco centésimas en cinco centésimas.
 
-\begin{CodigoVivo}{5B · Código exacto del cuaderno}
+\begin{CodigoVivo}{5B · Código del ejemplo}
 def ver_curva(z_mm, nivel):
     k = int(np.abs(z - z_mm).argmin())
     corte = datos[:, :, k].T
@@ -975,7 +975,7 @@ display(control_curva)
 \end{CodigoVivo}
 
 
-\Figura{vivo_5b.png}{5B · Comparar curva y máscara. Salida guardada exacta del cuaderno en vivo.}{.38}
+\Figura{vivo_5b.png}{5B · Comparar curva y máscara. Salida guardada de este ejemplo.}{.38}
 
 \begin{Salida}{5B · Salida guardada}
 Región seleccionada: 2820 píxeles. Si no hay cruce del nivel, no aparece curva.
@@ -1002,7 +1002,7 @@ La media promedia vecinos, Gauss los pondera por distancia y la mediana escoge e
 
 \texttt{\small sigma\_ruido} controla la amplitud del ruido. \texttt{\small sigma\_pixeles} controlará la extensión espacial del filtro gaussiano: son cantidades distintas.
 
-\begin{CodigoVivo}{6A · Código exacto del cuaderno}
+\begin{CodigoVivo}{6A · Código del ejemplo}
 semilla = 2026
 sigma_ruido = 0.06
 sigma_pixeles = 1.2
@@ -1026,7 +1026,7 @@ Ruido añadido: mínimo -0.239, máximo 1.110; corte original conservado.
 
 \texttt{\small uniform\_filter(\allowbreak{}ruidosa,\allowbreak{} size=3)\allowbreak{}} reemplaza cada posición por la media de sus nueve vecinos en una ventana 3 × 3. \texttt{\small mode=\textquotedbl{}reflect\textquotedbl{}} prolonga los valores reflejándolos en los límites para poder filtrar también los bordes de la imagen. La matriz resultante se guarda en \texttt{\small media}; \texttt{\small .\allowbreak{}shape} permite comprobar su tamaño.
 
-\begin{CodigoVivo}{6B · Código exacto del cuaderno}
+\begin{CodigoVivo}{6B · Código del ejemplo}
 media = ndimage.uniform_filter(ruidosa, size=3, mode="reflect")
 print("Media calculada:", media.shape)
 \end{CodigoVivo}
@@ -1045,7 +1045,7 @@ Media calculada: (117, 99)
 
 \texttt{\small gaussian\_filter(\allowbreak{}.\allowbreak{}.\allowbreak{}.\allowbreak{},\allowbreak{} sigma=sigma\_pixeles)\allowbreak{}} calcula un promedio que da más peso a posiciones cercanas. Un sigma mayor mezcla información de una zona más amplia y puede borrar detalles. \texttt{\small sigma\_pixeles * pasos[0]} expresa ese sigma en milímetros: 1.2 píxeles × 2 mm = 2.4 mm. Sigma no es el diámetro total del filtro.
 
-\begin{CodigoVivo}{6C · Código exacto del cuaderno}
+\begin{CodigoVivo}{6C · Código del ejemplo}
 gauss = ndimage.gaussian_filter(ruidosa, sigma=sigma_pixeles, mode="reflect")
 print(f"Gauss calculado: sigma={sigma_pixeles} píxeles, {sigma_pixeles*pasos[0]:.1f} mm por eje")
 \end{CodigoVivo}
@@ -1064,7 +1064,7 @@ Gauss calculado: sigma=1.2 píxeles, 2.4 mm por eje
 
 \texttt{\small median\_filter(\allowbreak{}ruidosa,\allowbreak{} size=3)\allowbreak{}} toma nueve valores vecinos, los ordena y elige el quinto. Con ocho valores 10 y un valor 90, devuelve 10; la media devolvería 18.89. \texttt{\small mode=\textquotedbl{}reflect\textquotedbl{}} trata los límites mediante reflexión. La mediana puede reducir valores aislados extremos, pero también modifica detalles.
 
-\begin{CodigoVivo}{6D · Código exacto del cuaderno}
+\begin{CodigoVivo}{6D · Código del ejemplo}
 mediana = ndimage.median_filter(ruidosa, size=3, mode="reflect")
 print("Mediana calculada:", mediana.shape)
 \end{CodigoVivo}
@@ -1085,7 +1085,7 @@ Mediana calculada: (117, 99)
 
 La función crea de nuevo el generador con semilla 2026: cambiar sólo sigma conserva exactamente el mismo ruido. Los tres filtros reciben la misma \texttt{\small ruidosa}. \texttt{\small subplots(\allowbreak{}2,\allowbreak{} 2)\allowbreak{}} crea cuatro paneles; \texttt{\small ax.\allowbreak{}ravel(\allowbreak{})\allowbreak{}} permite recorrerlos con un \texttt{\small for}. \texttt{\small zip} empareja panel, matriz y título. \texttt{\small vmin=0,\allowbreak{} vmax=1} conserva una escala común, aunque el ruido produzca valores fuera de ella. Los dos \texttt{\small FloatSlider} ajustan sigma y desviación del ruido; sus \texttt{\small value} indican los valores iniciales.
 
-\begin{CodigoVivo}{6E · Código exacto del cuaderno}
+\begin{CodigoVivo}{6E · Código del ejemplo}
 def ver_filtros(z_mm, sigma_px, ruido_sd):
     k = int(np.abs(z - z_mm).argmin())
     corte = datos[:, :, k].T
@@ -1114,7 +1114,7 @@ display(control_filtros)
 \end{CodigoVivo}
 
 
-\Figura{vivo_6e.png}{6E · Comparar las cuatro imágenes. Salida guardada exacta del cuaderno en vivo.}{.38}
+\Figura{vivo_6e.png}{6E · Comparar las cuatro imágenes. Salida guardada de este ejemplo.}{.38}
 
 \begin{Salida}{6E · Salida guardada}
 Sigma Gauss: 2.4 mm por eje · ruido SD: 0.06
@@ -1139,7 +1139,7 @@ Un borde es un cambio local, no simplemente una zona brillante. El ruido tambié
 
 \texttt{\small def magnitud\_sobel(\allowbreak{}matriz)\allowbreak{}} define una operación que acepta una imagen. \texttt{\small sobel(\allowbreak{}.\allowbreak{}.\allowbreak{}.\allowbreak{},\allowbreak{} axis=1)\allowbreak{}} mide cambios al recorrer columnas; \texttt{\small axis=0}, al recorrer filas. \texttt{\small **2} eleva al cuadrado y \texttt{\small np.\allowbreak{}sqrt(\allowbreak{}dx**2 + dy**2)\allowbreak{}} combina ambas respuestas en una magnitud sin signo. \texttt{\small return} devuelve esa matriz. La llamada \texttt{\small magnitud\_sobel(\allowbreak{}ruidosa)\allowbreak{}} aplica la operación a la imagen con ruido.
 
-\begin{CodigoVivo}{7A · Código exacto del cuaderno}
+\begin{CodigoVivo}{7A · Código del ejemplo}
 def magnitud_sobel(matriz):
     dx = ndimage.sobel(matriz, axis=1, mode="reflect")
     dy = ndimage.sobel(matriz, axis=0, mode="reflect")
@@ -1163,7 +1163,7 @@ Magnitud antes de suavizar: (117, 99)
 
 \texttt{\small magnitud\_sobel(\allowbreak{}gauss)\allowbreak{}} ejecuta las mismas restas y combinación sobre la imagen suavizada. Sólo cambia la entrada: así podemos atribuir las diferencias al suavizado, manteniendo el operador. \texttt{\small gradiente\_suave.\allowbreak{}shape} comprueba que el resultado mantiene la forma de la imagen.
 
-\begin{CodigoVivo}{7B · Código exacto del cuaderno}
+\begin{CodigoVivo}{7B · Código del ejemplo}
 gradiente_suave = magnitud_sobel(gauss)
 print("Magnitud después de Gauss:", gradiente_suave.shape)
 \end{CodigoVivo}
@@ -1182,7 +1182,7 @@ Magnitud después de Gauss: (117, 99)
 
 \texttt{\small max(\allowbreak{}.\allowbreak{}.\allowbreak{}.\allowbreak{})\allowbreak{}} elige un máximo común para colorear ambas magnitudes; \texttt{\small 1e-12} evita una escala de ancho cero. \texttt{\small float(\allowbreak{}.\allowbreak{}.\allowbreak{}.\allowbreak{})\allowbreak{}} convierte los máximos en números simples. \texttt{\small gradiente >= umbral\_borde} convierte una respuesta continua en una máscara. \texttt{\small mapas} y \texttt{\small titulos} reúnen magnitudes y máscaras en el mismo orden: antes, después, selección antes y selección después.
 
-\begin{CodigoVivo}{7C · Código exacto del cuaderno}
+\begin{CodigoVivo}{7C · Código del ejemplo}
 maximo_comun = max(float(gradiente.max()), float(gradiente_suave.max()), 1e-12)
 umbral_borde = 0.6
 mapas = [gradiente, gradiente_suave, gradiente >= umbral_borde, gradiente_suave >= umbral_borde]
@@ -1206,7 +1206,7 @@ Escala común: 0–3.647 · umbral de respuesta: 0.6
 
 \texttt{\small magnitud\_sobel} aplica el mismo operador antes y después. \texttt{\small max(\allowbreak{}.\allowbreak{}.\allowbreak{}.\allowbreak{})\allowbreak{}} conserva una escala común. \texttt{\small enumerate(\allowbreak{}ax.\allowbreak{}ravel(\allowbreak{})\allowbreak{})\allowbreak{}} devuelve el número \texttt{\small i} y cada panel; \texttt{\small .\allowbreak{}.\allowbreak{}.\allowbreak{} if i < 2 else .\allowbreak{}.\allowbreak{}.\allowbreak{}} usa colores continuos arriba y blanco/negro abajo. \texttt{\small colorbar(\allowbreak{}.\allowbreak{}.\allowbreak{}.\allowbreak{})\allowbreak{}} añade la escala de respuesta Sobel. Las sumas del mensaje cuentan posiciones seleccionadas. \texttt{\small value=0.\allowbreak{}6} es el umbral inicial; el control no cambia las figuras de otros bloques.
 
-\begin{CodigoVivo}{7D · Código exacto del cuaderno}
+\begin{CodigoVivo}{7D · Código del ejemplo}
 def ver_bordes(z_mm, sigma_px, ruido_sd, umbral):
     k = int(np.abs(z - z_mm).argmin())
     corte = datos[:, :, k].T
@@ -1239,7 +1239,7 @@ display(control_bordes)
 \end{CodigoVivo}
 
 
-\Figura{vivo_7d.png}{7D · Ver magnitudes y selecciones. Salida guardada exacta del cuaderno en vivo.}{.40}
+\Figura{vivo_7d.png}{7D · Ver magnitudes y selecciones. Salida guardada de este ejemplo.}{.40}
 
 \begin{Salida}{7D · Salida guardada}
 Umbral 0.6: seleccionados antes/después = 2471 / 1495
@@ -1264,7 +1264,7 @@ El mapa final reúne las operaciones realizadas y sirve para explicar qué cambi
 
 \texttt{\small etapas} es una lista de textos. \texttt{\small \textbackslash{}n} produce un salto de línea dentro de cada tarjeta. \texttt{\small replace(\allowbreak{}\textquotedbl{}\textbackslash{}n\textquotedbl{},\allowbreak{} \textquotedbl{} \textquotedbl{})\allowbreak{}} cambia esos saltos por espacios para el mensaje. \texttt{\small \textquotedbl{} $\rightarrow$ \textquotedbl{}.\allowbreak{}join(\allowbreak{}.\allowbreak{}.\allowbreak{}.\allowbreak{})\allowbreak{}} reúne los textos con una flecha entre ellos.
 
-\begin{CodigoVivo}{8A · Código exacto del cuaderno}
+\begin{CodigoVivo}{8A · Código del ejemplo}
 etapas = ["Datos públicos\ny geometría", "Mirar cortes\ny contraste", "Contar y\nseleccionar", "Comparar filtros\ny cambios", "Explicar límites\ny evaluar"]
 print(" → ".join(etapa.replace("\n", " ") for etapa in etapas))
 \end{CodigoVivo}
@@ -1283,7 +1283,7 @@ Datos públicos y geometría → Mirar cortes y contraste → Contar y seleccion
 
 \texttt{\small subplots(\allowbreak{}.\allowbreak{}.\allowbreak{}.\allowbreak{})\allowbreak{}} prepara el lienzo; \texttt{\small set(\allowbreak{}xlim=.\allowbreak{}.\allowbreak{}.\allowbreak{},\allowbreak{} ylim=.\allowbreak{}.\allowbreak{}.\allowbreak{})\allowbreak{}} fija sus límites y \texttt{\small axis(\allowbreak{}\textquotedbl{}off\textquotedbl{})\allowbreak{}} oculta los ejes. \texttt{\small enumerate(\allowbreak{}etapas)\allowbreak{}} asigna una posición a cada texto. \texttt{\small ax.\allowbreak{}text(\allowbreak{}.\allowbreak{}.\allowbreak{}.\allowbreak{})\allowbreak{}} escribe las tarjetas: \texttt{\small ha/va} centran el texto y \texttt{\small bbox} dibuja su recuadro. \texttt{\small if indice < .\allowbreak{}.\allowbreak{}.\allowbreak{}} evita una flecha después de la última tarjeta. \texttt{\small annotate(\allowbreak{}.\allowbreak{}.\allowbreak{}.\allowbreak{})\allowbreak{}} dibuja cada flecha desde \texttt{\small xytext} hasta \texttt{\small xy}; \texttt{\small plt.\allowbreak{}show(\allowbreak{})\allowbreak{}} muestra el mapa.
 
-\begin{CodigoVivo}{8B · Código exacto del cuaderno}
+\begin{CodigoVivo}{8B · Código del ejemplo}
 fig, ax = plt.subplots(figsize=(12, 2.4), layout="constrained")
 ax.set(xlim=(-0.6, 4.6), ylim=(-0.6, 0.6))
 ax.axis("off")
@@ -1295,7 +1295,7 @@ plt.show()
 \end{CodigoVivo}
 
 
-\Figura{vivo_8b.png}{8B · Dibujar el mapa final. Salida guardada exacta del cuaderno en vivo.}{.38}
+\Figura{vivo_8b.png}{8B · Dibujar el mapa final. Salida guardada de este ejemplo.}{.38}
 
 \clearpage
 
@@ -1313,13 +1313,13 @@ plt.show()
 \textbf{¿Puedo repartir cortes de una misma persona entre entrenamiento y prueba?} Para evaluar generalización a personas nuevas, sus imágenes deben permanecer en el mismo grupo; compartirlas entre grupos puede hacer que el modelo reconozca características ya vistas.
 \end{Practica}
 
-\chapter[Píxeles y cortes]{Ampliación: de los números a los cortes}
+\chapter[Píxeles y cortes]{De los números a los cortes}
 
 \label{cap:cortes}
 
 \section{De una tabla de números a una imagen: leer y cambiar un píxel}
 
-\Fuente{Tutorial 1 · Ampliación: lecciones del cuaderno completo: 2, 3}
+\Fuente{Tutorial 1 · Ejemplos del manual: 2, 3}
 
 Antes de reconocer un cerebro, conviene construir una imagen que podamos entender por completo. La matriz juguete tiene seis filas y seis columnas: contiene treinta y seis números. Cada casilla ocupará una posición en la pantalla y su valor decidirá el tono que veremos. Con la escala elegida, cero se representa en negro y cinco en blanco; los valores intermedios reciben grises intermedios. Píxel nombra ese elemento de una imagen bidimensional. No significa que el objeto real esté hecho de pequeños cuadrados: es la forma en que lo representamos mediante muestras.
 
@@ -1337,12 +1337,12 @@ Para modificar un píxel conservando una referencia, primero hacemos una copia. 
 
 \begin{Idea}{Antes de ejecutar}
 
-Ejecutar la celda 1 para disponer de np y plt. La celda 2 crea juguete; la celda 3 necesita esa matriz. No se utiliza información de pacientes.
+Importar NumPy con \texttt{import numpy as np} y Matplotlib con \texttt{import matplotlib.pyplot as plt}. El ejemplo 2 crea juguete; el ejemplo 3 necesita esa matriz. No se utiliza información de pacientes.
 
 
 \end{Idea}
 
-\begin{Codigo}{Celda 2 · Una imagen pequeña es una tabla de números}
+\begin{Codigo}{Ejemplo 2 · Una imagen pequeña es una tabla de números}
 juguete = np.array([[0,0,0,0,0,0], [0,1,1,2,2,0], [0,1,3,4,2,0], [0,1,3,5,2,0], [0,1,1,2,2,0], [0,0,0,0,0,0]], dtype=float)
 fig, ax = plt.subplots(figsize=(5, 4.5), layout="constrained")
 ax.imshow(juguete, cmap="gray", vmin=0, vmax=5, interpolation="nearest")
@@ -1375,7 +1375,7 @@ plt.show()
 
 \end{itemize}
 
-\begin{Codigo}{Celda 3 · Leer y cambiar un píxel}
+\begin{Codigo}{Ejemplo 3 · Leer y cambiar un píxel}
 fila = 2
 columna = 3
 print("Valor original:", juguete[fila, columna])
@@ -1428,14 +1428,14 @@ El original sigue valiendo: 4.0
 
 \Etiqueta{Interpreta el resultado}
 
-En la primera figura se puede recorrer cada casilla y anticipar su gris. En la comparación de la celda 3, la casilla que antes valía cuatro pasa a negro en la copia. El resto permanece igual porque no lo hemos seleccionado. Las dos líneas de salida dicen que el valor original sigue siendo 4.0: el punto decimal indica el tipo numérico usado, no una diferencia respecto de cuatro. La evidencia de la modificación está en la imagen de la copia y en la asignación explícita.
+En la primera figura se puede recorrer cada casilla y anticipar su gris. En la comparación de el ejemplo 3, la casilla que antes valía cuatro pasa a negro en la copia. El resto permanece igual porque no lo hemos seleccionado. Las dos líneas de salida dicen que el valor original sigue siendo 4.0: el punto decimal indica el tipo numérico usado, no una diferencia respecto de cuatro. La evidencia de la modificación está en la imagen de la copia y en la asignación explícita.
 
 
 \needspace{6\baselineskip}
 
 \begin{Practica}{Cambia una sola cosa}
 
-En la celda 3 cambia fila a 3 y columna a 3. Predice el valor antes de ejecutar; después confirma qué cuadrado desaparece en la copia. Restablece los valores originales al terminar.
+En el ejemplo 3 cambia fila a 3 y columna a 3. Predice el valor antes de ejecutar; después confirma qué cuadrado desaparece en la copia. Restablece los valores originales al terminar.
 
 
 \end{Practica}
@@ -1456,7 +1456,7 @@ Respuesta. Selecciona la cuarta fila y la cuarta columna, porque los índices co
 
 \section{Del píxel al vóxel: localizar un corte en un volumen}
 
-\Fuente{Tutorial 2 · Ampliación: lecciones del cuaderno completo: 4, 5, 6}
+\Fuente{Tutorial 2 · Ejemplos del manual: 4, 5, 6}
 
 Una imagen tridimensional añade una tercera dirección a la tabla anterior. Podemos imaginar una pila ordenada de cortes, pero el archivo guarda una sola matriz con tres índices. Un vóxel representa un elemento de volumen. En la plantilla del taller hay 99 muestras en el primer eje, 117 en el segundo y 95 en el tercero. Esta forma describe cuántos elementos existen; todavía no informa cuánto espacio ocupa cada uno. Por eso necesitamos tanto la matriz como la información geométrica que acompaña al archivo.
 
@@ -1467,19 +1467,19 @@ El espaciado indica la distancia entre centros de muestras consecutivas. Aquí e
 La matriz afín conecta direcciones de la tabla con posiciones físicas. En este archivo, x = 2i - 98, y = 2j - 134 y z = 2k - 72, con coordenadas en milímetros. Por ejemplo, el índice (49, 57, 46) corresponde a (0, -20, 20). Los desplazamientos negativos no son errores: expresan posiciones respecto del origen del sistema de referencia. Las letras R, A y S indican hacia dónde aumentan los índices: derecha, anterior y superior. No describen necesariamente el orden de lectura de una pantalla clínica.
 
 
-Un corte axial fija k y muestra x frente a y; uno coronal fija j y muestra x frente a z; uno sagital fija i y muestra y frente a z. La transposición .T adapta filas y columnas al dibujo elegido. La conversión inicial a una orientación canónica facilita este ejemplo, pero no registra dos cerebros entre sí ni garantiza que cualquier archivo carezca de inclinación. El cuaderno comprueba que la parte espacial de esta afín es diagonal. Si una imagen distinta no cumple esa condición, estas fórmulas simplificadas y sus extensiones deben revisarse.
+Un corte axial fija k y muestra x frente a y; uno coronal fija j y muestra x frente a z; uno sagital fija i y muestra y frente a z. La transposición .T adapta filas y columnas al dibujo elegido. La conversión inicial a una orientación canónica facilita este ejemplo, pero no registra dos cerebros entre sí ni garantiza que cualquier archivo carezca de inclinación. El ejemplo comprueba que la parte espacial de esta afín es diagonal. Si una imagen distinta no cumple esa condición, estas fórmulas simplificadas y sus extensiones deben revisarse.
 
 
 \needspace{6\baselineskip}
 
 \begin{Idea}{Antes de ejecutar}
 
-Ejecutar la celda 1 para cargar imagen y datos. La celda 4 crea pasos, affine, x, y, z y extension; las celdas 5 y 6 reutilizan esa geometría.
+Ejecutar el ejemplo 1 para cargar imagen y datos. El ejemplo 4 crea pasos, affine, x, y, z y extension; los ejemplos 5 y 6 reutilizan esa geometría.
 
 
 \end{Idea}
 
-\begin{Codigo}{Celda 4 · Del píxel al volumen y los milímetros}
+\begin{Codigo}{Ejemplo 4 · Del píxel al volumen y los milímetros}
 forma = datos.shape
 pasos = np.array(imagen.header.get_zooms()[:3])
 affine = imagen.affine
@@ -1534,7 +1534,7 @@ Affine:
 Índice (49,57,46) en mm: [  0. -20.  20.]
 \end{Salida}
 
-\begin{Codigo}{Celda 5 · Tres cortes con orientación física}
+\begin{Codigo}{Ejemplo 5 · Tres cortes con orientación física}
 i, j, k = 49, 57, 46
 cortes = [datos[:, :, k].T, datos[:, j, :].T, datos[i, :, :].T]
 extensiones = [extension, [x[0]-1,x[-1]+1,z[0]-1,z[-1]+1], [y[0]-1,y[-1]+1,z[0]-1,z[-1]+1]]
@@ -1573,7 +1573,7 @@ plt.show()
 
 \end{itemize}
 
-\begin{Codigo}{Celda 6 · Mover un corte}
+\begin{Codigo}{Ejemplo 6 · Mover un corte}
 k_nuevo = 56
 assert 0 <= k_nuevo < forma[2]
 fig, ax = plt.subplots(1, 2, figsize=(9, 4.6), layout="constrained")
@@ -1623,7 +1623,7 @@ La salida permite auditar lo que se ve: forma, tamaño del vóxel, orientación 
 
 \begin{Practica}{Cambia una sola cosa}
 
-En la celda 6 cambia el segundo corte de 56 a 51 y predice el desplazamiento respecto del 46. Ejecuta y comprueba que son diez milímetros. Mantén los índices dentro de la forma del volumen.
+En el ejemplo 6 cambia el segundo corte de 56 a 51 y predice el desplazamiento respecto del 46. Ejecuta y comprueba que son diez milímetros. Mantén los índices dentro de la forma del volumen.
 
 
 \end{Practica}
@@ -1646,7 +1646,7 @@ Respuesta. Porque los índices localizan muestras dentro de la matriz y la afín
 
 \section{Contraste: cambiar la ventana por la que miramos los mismos datos}
 
-\Fuente{Tutorial 3 · Ampliación: lecciones del cuaderno completo: 7}
+\Fuente{Tutorial 3 · Ejemplos del manual: 7}
 
 Una matriz no viene acompañada de un único brillo obligatorio. Para verla necesitamos una regla que transforme números en colores. La ventana de visualización fija un extremo inferior y uno superior: en gris, el inferior aparece negro y el superior blanco. Los valores comprendidos entre ambos se reparten a lo largo de la escala. Elegir esta ventana es comparable a ajustar una regla de lectura. Puede hacer visibles pequeñas diferencias o esconderlas, aunque la matriz almacenada permanezca exactamente igual.
 
@@ -1664,12 +1664,12 @@ Es esencial separar tres operaciones: elegir una ventana para mostrar, reescalar
 
 \begin{Idea}{Antes de ejecutar}
 
-Ejecutar las celdas 1 y 4. Esta celda crea corte a partir del plano axial 46 y será la referencia de todos los análisis bidimensionales posteriores.
+Ejecutar los ejemplos 1 y 4. Esta celda crea corte a partir del plano axial 46 y será la referencia de todos los análisis bidimensionales posteriores.
 
 
 \end{Idea}
 
-\begin{Codigo}{Celda 7 · Cambiar el contraste sin cambiar los datos}
+\begin{Codigo}{Ejemplo 7 · Cambiar el contraste sin cambiar los datos}
 corte = datos[:, :, 46].T.copy()
 ventanas = [(0, 1), (0.35, 0.9), (0.6, 0.8)]
 fig, ax = plt.subplots(1, 3, figsize=(12, 4.5), layout="constrained")
@@ -1738,7 +1738,7 @@ Respuesta. No. Cambió la correspondencia entre intensidad y gris. Para demostra
 
 \section{Construir un histograma a mano y comprobarlo con Python}
 
-\Fuente{Tutorial 4 · Ampliación: lecciones del cuaderno completo: 8}
+\Fuente{Tutorial 4 · Ejemplos del manual: 8}
 
 Un histograma responde cuántos valores caen dentro de cada intervalo. Empecemos sin computadora: recorre la matriz pequeña, marca cada cero y cuenta veinte. Repite para los unos y los doses; hay seis de cada uno. Después aparecen dos treses, un cuatro y un cinco. La suma veinte más seis más seis más dos más uno más uno da treinta y seis, exactamente la cantidad de casillas. Esa igualdad es una comprobación sencilla de que no hemos olvidado ni contado dos veces un píxel.
 
@@ -1756,12 +1756,12 @@ Un resumen siempre deja algo fuera. Si intercambiáramos dos píxeles de la matr
 
 \begin{Idea}{Antes de ejecutar}
 
-Ejecutar la celda 2 para disponer de juguete. El histograma corresponde a sus 36 píxeles, no al cerebro.
+Ejecutar el ejemplo 2 para disponer de juguete. El histograma corresponde a sus 36 píxeles, no al cerebro.
 
 
 \end{Idea}
 
-\begin{Codigo}{Celda 8 · Construir un histograma contando píxeles}
+\begin{Codigo}{Ejemplo 8 · Construir un histograma contando píxeles}
 valores_juguete = juguete.ravel()
 limites_juguete = np.arange(-0.5, 6.5, 1)
 conteos, limites = np.histogram(valores_juguete, bins=limites_juguete)
@@ -1838,12 +1838,12 @@ Respuesta. Sí. El histograma cuenta valores, pero descarta sus posiciones. Reor
 
 \section{Histograma de la resonancia: decidir qué contamos y con cuántos intervalos}
 
-\Fuente{Tutorial 5 · Ampliación: lecciones del cuaderno completo: 9, 10}
+\Fuente{Tutorial 5 · Ejemplos del manual: 9, 10}
 
 El salto desde la matriz pequeña a la resonancia no cambia la pregunta: seguimos contando valores. Lo que cambia es el número de muestras y la variedad de intensidades. El corte axial tiene 117 filas y 99 columnas, es decir, 11 583 píxeles. Muchos pertenecen al fondo exterior de la plantilla. Si contamos toda la matriz, el gran grupo cercano a cero puede dominar el gráfico y comprimir visualmente las diferencias entre las intensidades del objeto que deseamos explorar.
 
 
-El cuaderno define soporte = corte > 1e-6. El número 1e-6 significa una millonésima y aquí sirve para excluir ceros y valores diminutos del fondo. Al aplicar esta regla quedan 4 859 píxeles y se excluyen 6 724. Es una selección práctica para esta plantilla preprocesada; no es un algoritmo validado que encuentre cerebro en cualquier estudio. Una imagen con ruido, fondo distinto o tejidos de baja intensidad podría necesitar otra estrategia. Siempre debemos describir la regla y el conjunto al que se aplicó.
+El ejemplo define soporte = corte > 1e-6. El número 1e-6 significa una millonésima y aquí sirve para excluir ceros y valores diminutos del fondo. Al aplicar esta regla quedan 4 859 píxeles y se excluyen 6 724. Es una selección práctica para esta plantilla preprocesada; no es un algoritmo validado que encuentre cerebro en cualquier estudio. Una imagen con ruido, fondo distinto o tejidos de baja intensidad podría necesitar otra estrategia. Siempre debemos describir la regla y el conjunto al que se aplicó.
 
 
 La expresión corte[soporte] extrae los valores de las posiciones seleccionadas y los reúne para contarlos. En este ejercicio todos proceden de un solo corte bidimensional, no de los 95 planos del volumen. Esta precisión afecta cualquier porcentaje posterior: el denominador será el tamaño de ese soporte de corte. El histograma que incluye todo y el que excluye fondo responden preguntas distintas, aunque partan de la misma matriz. No es correcto compararlos sin anunciar qué muestras entran en cada uno.
@@ -1856,12 +1856,12 @@ Después mantenemos esos mismos valores y cambiamos el número de intervalos. Ve
 
 \begin{Idea}{Antes de ejecutar}
 
-Ejecutar las celdas 1, 4 y 7 para obtener corte. La celda 9 crea soporte y valores, que también usarán los percentiles.
+Ejecutar los ejemplos 1, 4 y 7 para obtener corte. El ejemplo 9 crea soporte y valores, que también usarán los percentiles.
 
 
 \end{Idea}
 
-\begin{Codigo}{Celda 9 · Leer el histograma de una resonancia}
+\begin{Codigo}{Ejemplo 9 · Leer el histograma de una resonancia}
 soporte = corte > 1e-6
 valores = corte[soporte]
 fig, ax = plt.subplots(figsize=(8, 4), layout="constrained")
@@ -1895,7 +1895,7 @@ print("Píxeles del corte:", corte.size, "| analizados:", valores.size, "| exclu
 Píxeles del corte: 11583 | analizados: 4859 | excluidos: 6724
 \end{Salida}
 
-\begin{Codigo}{Celda 10 · Comparar veinte y ochenta intervalos}
+\begin{Codigo}{Ejemplo 10 · Comparar veinte y ochenta intervalos}
 cuentas20, _ = np.histogram(valores, bins=20, range=(0, 1))
 cuentas80, _ = np.histogram(valores, bins=80, range=(0, 1))
 tope = 1.12 * max(cuentas20.max(), cuentas80.max())
@@ -1932,7 +1932,7 @@ plt.show()
 
 \Etiqueta{Interpreta el resultado}
 
-Primero observa la gran contribución del fondo y después el detalle que se distingue al excluirlo. La figura impresa utiliza 20 intervalos en ambos paneles y diferentes escalas verticales para que se aprecie cada distribución; compara sus ejes antes de comparar alturas. La salida textual documenta total, analizados y excluidos. En la salida gráfica de la celda 10 se comparan además 20 y 80 intervalos, manteniendo iguales límites de ejes. La suma de los conteos del soporte sigue siendo 4 859, pues todos sus valores están dentro del rango representado.
+Primero observa la gran contribución del fondo y después el detalle que se distingue al excluirlo. La figura impresa utiliza 20 intervalos en ambos paneles y diferentes escalas verticales para que se aprecie cada distribución; compara sus ejes antes de comparar alturas. La salida textual documenta total, analizados y excluidos. En la salida gráfica de el ejemplo 10 se comparan además 20 y 80 intervalos, manteniendo iguales límites de ejes. La suma de los conteos del soporte sigue siendo 4 859, pues todos sus valores están dentro del rango representado.
 
 
 \needspace{6\baselineskip}
@@ -1960,7 +1960,7 @@ Respuesta. No. La regla excluye intensidades casi nulas de esta plantilla, pero 
 
 \section{De un percentil a una máscara: convertir una regla en una selección visible}
 
-\Fuente{Tutorial 6 · Ampliación: lecciones del cuaderno completo: 11}
+\Fuente{Tutorial 6 · Ejemplos del manual: 11}
 
 Un percentil resume la posición de un valor dentro de una lista ordenada. Para entender el percentil noventa, imagina ordenar las intensidades del soporte desde la menor hasta la mayor y buscar un punto cercano al noventa por ciento de ese recorrido. El resultado es un valor de intensidad, llamado aquí umbral. El número noventa describe una posición porcentual; no afirma que el umbral sea 0.90. En esta plantilla el valor obtenido ronda 0.878431 porque depende de la distribución concreta que acabamos de contar.
 
@@ -1978,12 +1978,12 @@ No debemos esperar que el percentil noventa seleccione exactamente el diez por c
 
 \begin{Idea}{Antes de ejecutar}
 
-Ejecutar la celda 9 para disponer de soporte y valores. Conservar el corte axial original; este tutorial no usa la imagen con ruido.
+Ejecutar el ejemplo 9 para disponer de soporte y valores. Conservar el corte axial original; este tutorial no usa la imagen con ruido.
 
 
 \end{Idea}
 
-\begin{Codigo}{Celda 11 · De un percentil a una máscara por umbral}
+\begin{Codigo}{Ejemplo 11 · De un percentil a una máscara por umbral}
 percentil = 90
 assert 0 <= percentil <= 100
 umbral = np.percentile(valores, percentil)
@@ -2074,7 +2074,7 @@ Respuesta. Porque la condición solo describe una intensidad relativa. No contie
 
 \section{Curvas de nivel: seguir una misma intensidad en una colina sencilla}
 
-\Fuente{Tutorial 7 · Ampliación: lecciones del cuaderno completo: 12}
+\Fuente{Tutorial 7 · Ejemplos del manual: 12}
 
 Una curva de nivel une posiciones donde una función tiene el mismo valor. Un mapa topográfico usa curvas de igual altura; en una imagen podemos usar curvas de igual intensidad. Para aprender la idea sin distracciones anatómicas, creamos una colina matemática: el centro tiene valor uno y los valores disminuyen suavemente al alejarnos. La dibujamos desde arriba con colores y elegimos cuatro niveles: 0.2, 0.4, 0.6 y 0.8. Cada línea seguirá uno de esos valores, aunque pase entre las muestras de la cuadrícula.
 
@@ -2092,12 +2092,12 @@ Una curva de igual intensidad no es automáticamente un borde. La primera respon
 
 \begin{Idea}{Antes de ejecutar}
 
-Ejecutar la celda 1 para np y plt. La colina se crea dentro de esta celda y no necesita la resonancia.
+Importar NumPy con \texttt{import numpy as np} y Matplotlib con \texttt{import matplotlib.pyplot as plt}. La colina se crea dentro de esta celda y no necesita la resonancia.
 
 
 \end{Idea}
 
-\begin{Codigo}{Celda 12 · Curvas de nivel en una superficie sencilla}
+\begin{Codigo}{Ejemplo 12 · Curvas de nivel en una superficie sencilla}
 eje = np.linspace(-3, 3, 61)
 X, Y = np.meshgrid(eje, eje)
 colina = np.exp(-(X**2 + Y**2)/2)
@@ -2168,7 +2168,7 @@ Respuesta. No. 0.8 indica intensidad, no rapidez de cambio. Una región clara pu
 
 \section{Curvas de nivel sobre la plantilla cerebral: líneas de igualdad y regiones por umbral}
 
-\Fuente{Tutorial 8 · Ampliación: lecciones del cuaderno completo: 13, 14}
+\Fuente{Tutorial 8 · Ejemplos del manual: 13, 14}
 
 Ahora aplicamos la misma operación al corte cerebral de la plantilla. El fondo gris muestra intensidades de la resonancia y encima dibujamos curvas correspondientes a 0.4, 0.6 y 0.8. La pregunta es idéntica a la de la colina: ¿por dónde pasan esos valores? Lo nuevo es la complejidad del campo de intensidades. Un mismo nivel puede aparecer en muchas regiones separadas; sus curvas pueden formar varios lazos separados o aproximarse a otras. Esta complejidad no modifica la definición matemática.
 
@@ -2186,12 +2186,12 @@ La segunda comparación fija el nivel en 0.7. A un lado se dibuja la curva de ig
 
 \begin{Idea}{Antes de ejecutar}
 
-Ejecutar las celdas 1, 4, 7 y 9. Se usan el corte real de la plantilla, las coordenadas físicas x e y y su soporte.
+Ejecutar los ejemplos 1, 4, 7 y 9. Se usan el corte real de la plantilla, las coordenadas físicas x e y y su soporte.
 
 
 \end{Idea}
 
-\begin{Codigo}{Celda 13 · Curvas de nivel sobre la resonancia}
+\begin{Codigo}{Ejemplo 13 · Curvas de nivel sobre la resonancia}
 niveles_mri = [0.4, 0.6, 0.8]
 colores_nivel = ["#29d3dc", "#f5b642", "#f06b52"]
 fig, ax = plt.subplots(figsize=(6.2, 5.3), layout="constrained")
@@ -2230,7 +2230,7 @@ plt.show()
 
 \end{itemize}
 
-\begin{Codigo}{Celda 14 · Una curva no es lo mismo que una máscara}
+\begin{Codigo}{Ejemplo 14 · Una curva no es lo mismo que una máscara}
 nivel = 0.7
 region = soporte & (corte >= nivel)
 fig, ax = plt.subplots(1, 2, figsize=(9, 4.8), layout="constrained")
@@ -2281,7 +2281,7 @@ Recorre una de las líneas de color y localiza varios grupos desconectados del m
 
 \begin{Practica}{Cambia una sola cosa}
 
-Cambia nivel de 0.7 a 0.8 en la celda 14. Predice que la región seleccionada se reducirá o conservará su tamaño, aunque las líneas puedan cambiar de forma y de cantidad. Usa el mismo corte y los mismos ejes.
+Cambia nivel de 0.7 a 0.8 en el ejemplo 14. Predice que la región seleccionada se reducirá o conservará su tamaño, aunque las líneas puedan cambiar de forma y de cantidad. Usa el mismo corte y los mismos ejes.
 
 
 \end{Practica}
@@ -2304,7 +2304,7 @@ Respuesta. contour interpola una trayectoria donde se cumple la igualdad entre m
 
 \section{Crear ruido controlado para comparar operaciones con una entrada conocida}
 
-\Fuente{Tutorial 9 · Ampliación: lecciones del cuaderno completo: 15}
+\Fuente{Tutorial 9 · Ejemplos del manual: 15}
 
 Para estudiar un filtro necesitamos saber qué imagen recibió. En este experimento conservamos el corte original y creamos otra versión sumándole pequeñas variaciones aleatorias. De esta forma conocemos el punto de partida y podemos atribuir las diferencias a la perturbación añadida y al procesamiento posterior. El ruido hace visible una dificultad habitual: cambios locales que no pertenecen al patrón que deseamos observar. Aquí es una herramienta pedagógica controlada, no una reproducción exacta de cómo se genera el ruido en un equipo de resonancia.
 
@@ -2322,12 +2322,12 @@ Sumar ruido puede producir valores negativos o superiores a uno. El cuaderno los
 
 \begin{Idea}{Antes de ejecutar}
 
-Ejecutar las celdas 1, 4 y 7. La variable ruidosa se construye a partir de corte y será la entrada compartida de las celdas 16–21.
+Ejecutar los ejemplos 1, 4 y 7. La variable ruidosa se construye a partir de corte y será la entrada compartida de los ejemplos 16–21.
 
 
 \end{Idea}
 
-\begin{Codigo}{Celda 15 · Añadir ruido artificial de manera reproducible}
+\begin{Codigo}{Ejemplo 15 · Añadir ruido artificial de manera reproducible}
 semilla = 2026
 sigma_ruido = 0.06
 rng = np.random.default_rng(semilla)
@@ -2377,7 +2377,7 @@ Mínimo y máximo de la matriz ruidosa: -0.239 1.11
 
 \Etiqueta{Interpreta el resultado}
 
-La salida gráfica de la celda 15 compara el corte cerebral original con su copia perturbada bajo la misma ventana. La salida textual informa aproximadamente -0.239 y 1.11 como mínimo y máximo de la matriz ruidosa: no se ha aplicado un recorte numérico a cero y uno. La figura impresa añade un experimento distinto, con un objeto ficticio, para hacer visibles el ruido y la pérdida de detalles tras suavizar. No atribuyas los extremos numéricos del corte cerebral a ese objeto. En ambos casos, varios valores pueden verse igualmente negros o blancos por la ventana fija; consulta los números para conocer los datos.
+La salida gráfica de el ejemplo 15 compara el corte cerebral original con su copia perturbada bajo la misma ventana. La salida textual informa aproximadamente -0.239 y 1.11 como mínimo y máximo de la matriz ruidosa: no se ha aplicado un recorte numérico a cero y uno. La figura impresa añade un experimento distinto, con un objeto ficticio, para hacer visibles el ruido y la pérdida de detalles tras suavizar. No atribuyas los extremos numéricos del corte cerebral a ese objeto. En ambos casos, varios valores pueden verse igualmente negros o blancos por la ventana fija; consulta los números para conocer los datos.
 
 
 \needspace{6\baselineskip}
@@ -2405,7 +2405,7 @@ Respuesta. La semilla permite que todos reciban la misma perturbación y que pod
 
 \section{Filtro de media: calcular una vecindad y comprender el desenfoque}
 
-\Fuente{Tutorial 10 · Ampliación: lecciones del cuaderno completo: 23, 18}
+\Fuente{Tutorial 10 · Ejemplos del manual: 23, 18}
 
 Un filtro local calcula un nuevo valor usando una vecindad alrededor de cada posición. En un filtro de media de tres por tres intervienen nueve números. Se suman y se divide entre nueve; el resultado sustituye al valor central en la imagen de salida. Después la ventana se desplaza y se repite el procedimiento. La entrada se conserva como referencia. Imaginar una pequeña ventana que recorre la matriz ayuda a entender cómo una regla sencilla puede transformar todos los píxeles de una imagen.
 
@@ -2423,12 +2423,12 @@ En la resonancia usamos uniform\_filter con tamaño tres. Como corte es bidimens
 
 \begin{Idea}{Antes de ejecutar}
 
-Para la cuenta manual basta la celda 1. La comparación sobre RM de la celda 18 necesita además corte, ruidosa y las celdas 16–17 para ndimage, gauss y mediana. 
+Para la cuenta manual se necesita \texttt{import numpy as np}. La comparación sobre RM de el ejemplo 18 necesita además corte, ruidosa y los ejemplos 16–17 para ndimage, gauss y mediana. 
 
 
 \end{Idea}
 
-\begin{Codigo}{Celda 23 · Ampliación para calcular media y mediana a mano}
+\begin{Codigo}{Ejemplo 23 · Cálculo de media y mediana a mano}
 vecindad = np.array([[10,10,10],[10,90,10],[10,10,10]], dtype=float)
 promedio_manual = vecindad.mean()
 mediana_manual = np.median(vecindad)
@@ -2473,7 +2473,7 @@ plt.show()
 
 \end{itemize}
 
-\begin{Codigo}{Celda 18 · Comparar media Gauss y mediana con la misma entrada}
+\begin{Codigo}{Ejemplo 18 · Comparar media Gauss y mediana con la misma entrada}
 media = ndimage.uniform_filter(ruidosa, size=3, mode="reflect")
 matrices = [ruidosa, media, gauss, mediana]
 titulos = ["Entrada con ruido", "Media 3 × 3", f"Gauss σ={sigma_pixeles} px", f"Mediana {tamano} × {tamano}"]
@@ -2512,7 +2512,7 @@ plt.show()
 
 \Etiqueta{Interpreta el resultado}
 
-La figura de la cuenta manual muestra los nueve valores y permite comprobar 170/9 con lápiz. El diagrama de pesos que sigue explica cómo se reparte la contribución de cada vecino: una media uniforme usa pesos iguales y el gaussiano da más peso a posiciones cercanas. En la salida gráfica de la celda 18, compara además sobre el cerebro una región relativamente uniforme y otra con estructuras pequeñas. La primera puede verse menos granulada; en la segunda, algunas separaciones pueden perder nitidez. Ambas consecuencias nacen de mezclar información vecina.
+La figura de la cuenta manual muestra los nueve valores y permite comprobar 170/9 con lápiz. El diagrama de pesos que sigue explica cómo se reparte la contribución de cada vecino: una media uniforme usa pesos iguales y el gaussiano da más peso a posiciones cercanas. En la salida gráfica de el ejemplo 18, compara además sobre el cerebro una región relativamente uniforme y otra con estructuras pequeñas. La primera puede verse menos granulada; en la segunda, algunas separaciones pueden perder nitidez. Ambas consecuencias nacen de mezclar información vecina.
 
 
 \needspace{6\baselineskip}
@@ -2540,7 +2540,7 @@ Respuesta. El punto participa en varias ventanas: sus vecinos bajos reducen la m
 
 \section{Filtro gaussiano: dar más peso a los vecinos cercanos}
 
-\Fuente{Tutorial 11 · Ampliación: lecciones del cuaderno completo: 16}
+\Fuente{Tutorial 11 · Ejemplos del manual: 16}
 
 El filtro gaussiano también combina valores vecinos, pero no concede el mismo peso a todos. Las posiciones más cercanas al centro influyen más y las más lejanas influyen menos, siguiendo una distribución con forma de campana. Esos pesos se normalizan para que una región constante permanezca constante. La idea puede entenderse sin derivar la fórmula: en lugar de repartir nueve votos idénticos, usamos un promedio ponderado cuya influencia disminuye suavemente con la distancia. El cálculo se repite a lo largo de la imagen.
 
@@ -2558,12 +2558,12 @@ Aplicamos el filtro al corte bidimensional ruidoso. No está mezclando cortes ve
 
 \begin{Idea}{Antes de ejecutar}
 
-Ejecutar la celda 15 para disponer de ruidosa y la celda 4 para pasos. Esta celda importa ndimage, que reutilizan varios tutoriales posteriores.
+Ejecutar el ejemplo 15 para disponer de ruidosa y el ejemplo 4 para pasos. Esta celda importa ndimage, que reutilizan varios tutoriales posteriores.
 
 
 \end{Idea}
 
-\begin{Codigo}{Celda 16 · Suavizar con un filtro gaussiano}
+\begin{Codigo}{Ejemplo 16 · Suavizar con un filtro gaussiano}
 from scipy import ndimage
 sigma_pixeles = 1.2
 assert 0 < sigma_pixeles <= 4
@@ -2643,7 +2643,7 @@ Respuesta. No. Sigma 1.2 representa muestras: equivale a 1.2 mm con pasos de 1 m
 
 \section{Mediana y ruido de impulsos: ordenar antes de elegir}
 
-\Fuente{Tutorial 12 · Ampliación: lecciones del cuaderno completo: 17, 24}
+\Fuente{Tutorial 12 · Ejemplos del manual: 17, 24}
 
 La mediana se obtiene ordenando una lista y escogiendo su valor central. Para nueve números, elegimos el quinto después de ordenarlos. En la vecindad con ocho valores diez y un noventa, el quinto valor es diez. Esto explica por qué la mediana no reacciona al extremo igual que la media: no suma todas las intensidades para producir una fracción. Es una operación no lineal basada en el orden. Un valor muy alto puede cambiar de magnitud sin cambiar quién ocupa la posición central.
 
@@ -2651,7 +2651,7 @@ La mediana se obtiene ordenando una lista y escogiendo su valor central. Para nu
 El filtro de mediana aplica esa regla a una vecindad en cada posición de la imagen. Con tamaño tres en nuestro corte usa nueve valores y produce un nuevo centro; luego avanza. Suele resultar útil frente a valores aislados muy distintos de su entorno, pero no identifica por sí mismo qué es un error. Una estructura verdadera pequeña o delgada también puede quedar en minoría dentro de la ventana y ser reemplazada. Aumentar el tamaño puede eliminar más puntos aislados y también alterar más detalles reales.
 
 
-Para observar un caso diferente del ruido normal aditivo, la ampliación crea impulsos. Parte del corte original, escoge sin repetición aproximadamente el dos por ciento de sus posiciones y sustituye una mitad por cero y la otra por uno. En este corte se eligen 232 posiciones de 11 583. La sustitución no garantiza que las 232 cambien numéricamente: una posición de fondo que ya era cero sigue siendo cero al asignarle cero. El mensaje del cuaderno hace explícita esta distinción entre intervenir una posición y alterar su valor.
+Para observar un caso diferente del ruido normal aditivo, este ejemplo crea impulsos. Parte del corte original, escoge sin repetición aproximadamente el dos por ciento de sus posiciones y sustituye una mitad por cero y la otra por uno. En este corte se eligen 232 posiciones de 11 583. La sustitución no garantiza que las 232 cambien numéricamente: una posición de fondo que ya era cero sigue siendo cero al asignarle cero. El mensaje del ejemplo hace explícita esta distinción entre intervenir una posición y alterar su valor.
 
 
 Después aplicamos media, Gauss y mediana a la misma imagen con impulsos. La comparación se interpreta dentro de ese experimento, sin mezclarla con la imagen de ruido aditivo. Los filtros reciben igual entrada y se muestran con igual ventana; eso permite atribuir diferencias a las operaciones elegidas. Sin embargo, los tamaños utilizados no equivalen a una optimización de cada método. Las figuras ilustran por qué el tipo de perturbación importa y por qué no existe una única operación que podamos llamar la mejor para cualquier imagen.
@@ -2661,12 +2661,12 @@ Después aplicamos media, Gauss y mediana a la misma imagen con impulsos. La com
 
 \begin{Idea}{Antes de ejecutar}
 
-Ejecutar las celdas 15 y 16 para ruidosa y ndimage. La ampliación de impulsos usa corte limpio, no ruidosa, y crea su propio generador. La cuenta manual de la celda 23 complementa este tutorial.
+Ejecutar los ejemplos 15 y 16 para ruidosa y ndimage. El ejemplo de impulsos usa corte limpio, no ruidosa, y crea su propio generador. La cuenta manual de el ejemplo 23 complementa este tutorial.
 
 
 \end{Idea}
 
-\begin{Codigo}{Celda 17 · Usar la mediana de una vecindad}
+\begin{Codigo}{Ejemplo 17 · Usar la mediana de una vecindad}
 tamano = 3
 assert tamano in [3, 5, 7]
 mediana = ndimage.median_filter(ruidosa, size=tamano, mode="reflect")
@@ -2699,7 +2699,7 @@ plt.show()
 
 \end{itemize}
 
-\begin{Codigo}{Celda 24 · Ampliación para observar ruido de impulsos}
+\begin{Codigo}{Ejemplo 24 · Ejemplo de ruido de impulsos}
 rng_impulsos = np.random.default_rng(2026)
 numero_impulsos = round(0.02 * corte.size)
 posiciones_impulsos = rng_impulsos.choice(corte.size, size=numero_impulsos, replace=False)
@@ -2770,7 +2770,7 @@ En la mediana sobre ruido aditivo, observa qué fluctuaciones desaparecen y si c
 
 \begin{Practica}{Cambia una sola cosa}
 
-En la celda 17 cambia el tamaño de tres a cinco y compara el detalle conservado. En la ampliación, cambia 0.02 a 0.05 para aumentar posiciones sustituidas; regenera todos los resultados desde esa misma entrada.
+En el ejemplo 17 cambia el tamaño de tres a cinco y compara el detalle conservado. En el ejemplo de impulsos, cambia 0.02 a 0.05 para aumentar posiciones sustituidas; regenera todos los resultados desde esa misma entrada.
 
 
 \end{Practica}
@@ -2793,7 +2793,7 @@ Respuesta. La media incluye directamente el extremo en la suma. La mediana elige
 
 \section{Antes de Sobel: leer un perfil y medir diferencias entre vecinos}
 
-\Fuente{Tutorial 13 · Ampliación: lecciones del cuaderno completo: 19}
+\Fuente{Tutorial 13 · Ejemplos del manual: 19}
 
 Un perfil es una secuencia de intensidades a lo largo de una dirección. En lugar de observar toda la imagen de una vez, imaginamos recorrer una fila y anotar sus valores. Nuestro perfil artificial comienza con cinco ceros y continúa con cinco unos. El gráfico superior permite reconocer una zona constante baja, un salto y una zona constante alta. La pregunta ahora no es qué parte tiene mayor intensidad, sino entre qué vecinos cambia el valor. Esta diferencia de pregunta separa brillo de borde.
 
@@ -2811,12 +2811,12 @@ Esta idea anticipa el gradiente, que reúne cambios direccionales. En una imagen
 
 \begin{Idea}{Antes de ejecutar}
 
-Ejecutar la celda 1 para np y plt. El perfil artificial es independiente del cerebro y permite explicar el cambio local con diez muestras.
+Importar NumPy con \texttt{import numpy as np} y Matplotlib con \texttt{import matplotlib.pyplot as plt}. El perfil artificial es independiente del cerebro y permite explicar el cambio local con diez muestras.
 
 
 \end{Idea}
 
-\begin{Codigo}{Celda 19 · Un borde es un cambio entre vecinos}
+\begin{Codigo}{Ejemplo 19 · Un borde es un cambio entre vecinos}
 perfil = np.array([0,0,0,0,0,1,1,1,1,1], dtype=float)
 diferencias = np.diff(perfil)
 posiciones = np.arange(perfil.size)
@@ -2887,7 +2887,7 @@ Respuesta. Porque diez muestras forman nueve pares consecutivos. La primera dife
 
 \section{Sobel y suavizado: comparar respuestas de borde con una escala común}
 
-\Fuente{Tutorial 14 · Ampliación: lecciones del cuaderno completo: 20, 21}
+\Fuente{Tutorial 14 · Ejemplos del manual: 20, 21}
 
 Sobel aproxima cambios espaciales mediante una combinación de diferencias y pesos locales. Calculamos una respuesta horizontal dx y otra vertical dy. En nuestra matriz corte, axis=1 recorre columnas, relacionadas con x, y axis=0 recorre filas, relacionadas con y. No debemos trasladar esos números de eje a cualquier arreglo sin comprobar su organización. Las respuestas pueden ser positivas o negativas según el sentido del cambio. La primera figura muestra sus valores absolutos para comparar magnitudes sin que los signos dominen los colores.
 
@@ -2905,12 +2905,12 @@ La segunda etapa aplica un filtro gaussiano de sigma 1.2 a la misma ruidosa y ca
 
 \begin{Idea}{Antes de ejecutar}
 
-Ejecutar las celdas 15 y 16 para la entrada ruidosa y ndimage. La celda 20 crea gradiente; la celda 21 compara ese resultado con Sobel después de un Gauss fijo de sigma 1.2.
+Ejecutar los ejemplos 15 y 16 para la entrada ruidosa y ndimage. El ejemplo 20 crea gradiente; el ejemplo 21 compara ese resultado con Sobel después de un Gauss fijo de sigma 1.2.
 
 
 \end{Idea}
 
-\begin{Codigo}{Celda 20 · Medir cambios con Sobel en dos direcciones}
+\begin{Codigo}{Ejemplo 20 · Medir cambios con Sobel en dos direcciones}
 dx = ndimage.sobel(ruidosa, axis=1, mode="reflect")
 dy = ndimage.sobel(ruidosa, axis=0, mode="reflect")
 gradiente = np.sqrt(dx**2 + dy**2)
@@ -2949,7 +2949,7 @@ plt.show()
 
 \end{itemize}
 
-\begin{Codigo}{Celda 21 · Suavizar antes de detectar bordes}
+\begin{Codigo}{Ejemplo 21 · Suavizar antes de detectar bordes}
 suave_bordes = ndimage.gaussian_filter(ruidosa, sigma=1.2, mode="reflect")
 dx_suave = ndimage.sobel(suave_bordes, axis=1, mode="reflect")
 dy_suave = ndimage.sobel(suave_bordes, axis=0, mode="reflect")
@@ -3047,7 +3047,7 @@ Respuesta. Cada normalización convertiría su máximo propio en uno y podría o
 
 \section{Integrar el recorrido y preparar una pregunta de aprendizaje automático}
 
-\Fuente{Tutorial 15 · Ampliación: lecciones del cuaderno completo: 22}
+\Fuente{Tutorial 15 · Ejemplos del manual: 22}
 
 El recorrido comienza con una matriz y una geometría, elige una forma de visualizarla, describe intensidades, construye selecciones y aplica operaciones locales. Cada etapa responde una pregunta distinta. El histograma resume distribución; la máscara conserva posiciones que cumplen una regla; las curvas siguen valores iguales; el gradiente describe cambios. Al integrarlas no conviene sustituir una definición por otra. El primer aprendizaje útil para machine learning es poder decir qué representa cada variable, cómo se obtuvo y qué información se perdió o transformó.
 
@@ -3065,12 +3065,12 @@ También hay que evitar que la información de prueba influya en decisiones apre
 
 \begin{Idea}{Antes de ejecutar}
 
-Revisar los tutoriales anteriores. Esta celda dibuja el recorrido conceptual; no entrena un modelo ni estima métricas clínicas. El anexo de privacidad del cuaderno acompaña este cierre.
+Revisar los tutoriales anteriores. Esta celda dibuja el recorrido conceptual; no entrena un modelo ni estima métricas clínicas. Antes de utilizar imágenes reales, revisa la desidentificación de metadatos y píxeles.
 
 
 \end{Idea}
 
-\begin{Codigo}{Celda 22 · Reconstruir el recorrido completo}
+\begin{Codigo}{Ejemplo 22 · Reconstruir el recorrido completo}
 pasos_pipeline = ["Datos y permisos\nfuente y geometría", "Ver y describir\ncortes e histograma", "Elegir una operación\nventana o filtro", "Crear una medida\numbral o gradiente", "Comprobar y explicar\nparámetros y límites"]
 fig, ax = plt.subplots(figsize=(12, 2.7), layout="constrained")
 ax.set(xlim=(0,5), ylim=(0,1))

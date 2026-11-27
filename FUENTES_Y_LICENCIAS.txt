@@ -67,9 +67,17 @@ https://machine-learning-honduras.org/programa/
 https://indico.ictp.it/event/11536/
 
 BIBLIOTECAS
-Nilearn, NumPy, Matplotlib, NiBabel y SciPy se instalan desde sus distribuidores;
+Nilearn, NumPy, Matplotlib, NiBabel, SciPy y pydicom se instalan desde sus distribuidores;
 no se incluyen copias de sus paquetes en esta entrega. Cada biblioteca mantiene
 su propia licencia. La licencia del software no sustituye la licencia del atlas.
+
+ENCABEZADO DICOM DEL CUADERNO
+El ejemplo se construye con pydicom.Dataset y valores ficticios. No procede
+de un paciente ni constituye un archivo clínico completo. Ilustra etiquetas,
+tipos de valor y atributos que describen la geometría y modalidad de una imagen.
+La lectura de metadatos no anonimiza un archivo.
+https://pydicom.github.io/pydicom/stable/tutorials/dataset_basics.html
+https://pydicom.github.io/pydicom/stable/reference/generated/pydicom.filereader.dcmread.html
 
 AMPLIACIÓN VISUAL REVISADA EL 16 DE NOVIEMBRE DE 2026
 https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.hist.html
