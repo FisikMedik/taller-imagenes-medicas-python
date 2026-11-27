@@ -8,7 +8,7 @@ Conserva esta carpeta junto a `Taller_imagenes_medicas.ipynb` para utilizar la c
 
 La procedencia, las referencias y el aviso íntegro de McGill están en [FUENTES_Y_LICENCIAS.txt](../FUENTES_Y_LICENCIAS.txt). Ese aviso debe acompañar a los datos cuando los distribuyas.
 
-## Radiografías del módulo opcional de aprendizaje automático
+## Radiografías del módulo de machine learning
 
 `pneumoniamnist.npz` es la copia original de PneumoniaMNIST de 28 × 28 píxeles, distribuida por MedMNIST en Zenodo (registro 10519652). Contiene radiografías pediátricas con etiquetas y particiones oficiales de entrenamiento, validación y prueba. Su licencia es CC BY 4.0; conserva la atribución a MedMNIST y a la fuente de Kermany y colaboradores.
 
