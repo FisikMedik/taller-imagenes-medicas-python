@@ -58,8 +58,6 @@ En ML puedes explorar una imagen y sus características, la sigmoide, candidatos
 
 Las presentaciones web muestran las demostraciones junto a sus controles. Puedes avanzar una instrucción y observar su cálculo y su resultado. El código completo y las salidas del cuaderno están disponibles en un desplegable; el botón de Colab abre la celda elegida. Los PDF y PowerPoint son estáticos; las notas de PowerPoint incluyen código y explicaciones.
 
-La [guía de GitHub y Colab](Guia_GitHub_paso_a_paso.pdf) explica cómo abrir y guardar los materiales.
-
 ## Usarlo en tu computadora
 
 Descarga **Code → Download ZIP**, extrae el contenido y abre una terminal en esa carpeta. Con Python instalado, en Windows:
